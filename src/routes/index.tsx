@@ -43,9 +43,11 @@ function Home() {
   const activeDisasters = mockDisasters.filter((d) => d.active).slice(0, 4);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
+      <SkipLink />
       <DemoBanner />
       <SiteHeader />
+      <main id="main-content">
 
       {/* Hero */}
       <section className="relative overflow-hidden">
