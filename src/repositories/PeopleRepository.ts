@@ -15,6 +15,8 @@ export interface SearchFilters {
 // Contrato del repositorio — implementable en el futuro contra Supabase.
 export interface IPeopleRepository {
   searchPublic(filters: SearchFilters): Promise<PublicPersonCard[]>;
+  getPublicById(id: string): Promise<PublicPersonCard | null>;
+  getDisasterById(id: string): Promise<Disaster | null>;
   listDisasters(): Promise<Disaster[]>;
   listCountries(): Promise<Country[]>;
 }
@@ -32,6 +34,12 @@ class MockPeopleRepository implements IPeopleRepository {
       if (f.ageMax != null && (p.approximateAge ?? 999) > f.ageMax) return false;
       return true;
     });
+  }
+  async getPublicById(id: string) {
+    return mockPeople.find((p) => p.id === id) ?? null;
+  }
+  async getDisasterById(id: string) {
+    return mockDisasters.find((d) => d.id === id) ?? null;
   }
   async listDisasters() {
     return mockDisasters;

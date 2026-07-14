@@ -1,4 +1,5 @@
 import { MapPin, Calendar, User } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import type { PublicPersonCard } from "../domain/types";
 import { useT } from "../i18n/LocaleProvider";
 import type { MessageKey } from "../i18n/messages";
@@ -16,7 +17,12 @@ export function PersonCard({ person }: { person: PublicPersonCard }) {
   const genderKey = `gender.${person.gender}` as MessageKey;
 
   return (
-    <article className="group flex flex-col rounded-xl border border-border bg-card p-4 shadow-sm transition hover:shadow-md">
+    <Link
+      to="/person/$id"
+      params={{ id: person.id }}
+      className="group flex flex-col rounded-xl border border-border bg-card p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    >
+      <article className="contents">
       <div className="mb-3 flex items-start justify-between gap-2">
         <div>
           <h3 className="font-semibold text-card-foreground">
@@ -54,6 +60,7 @@ export function PersonCard({ person }: { person: PublicPersonCard }) {
           </div>
         )}
       </dl>
-    </article>
+      </article>
+    </Link>
   );
 }
