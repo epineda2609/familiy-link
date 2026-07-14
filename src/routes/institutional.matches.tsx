@@ -88,7 +88,10 @@ function MatchesPage() {
   const approve = async (id: string) => {
     const m = matches.find((x) => x.id === id);
     await matchingRepository.approve(id, reviewer, notes[id]);
-    if (m) logMatch("match.approve", m, notes[id]);
+    if (m) {
+      logMatch("match.approve", m, notes[id]);
+      dispatchReunion(m);
+    }
     refresh();
   };
   const reject = async (id: string) => {
