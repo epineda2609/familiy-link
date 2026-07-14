@@ -20,6 +20,9 @@ import type { PublicPersonCard, PersonStatus } from "../domain/types";
 import type { MessageKey } from "../i18n/messages";
 import { auditLog } from "../audit/auditLog";
 import { integrations } from "../integrations/simulatedIntegrations";
+import { toast } from "../components/Toast";
+import { EmptyState } from "../components/EmptyState";
+import { Inbox } from "lucide-react";
 
 export const Route = createFileRoute("/institutional/matches")({
   head: () => ({
@@ -117,19 +120,30 @@ function MatchesPage() {
     if (m) {
       logMatch("match.approve", m, notes[id]);
       dispatchReunion(m);
+      toast.success(
+        t("toast.match.approved"),
+        `${m.personA?.displayName ?? "?"} ↔ ${m.personB?.displayName ?? "?"}`,
+      );
+      toast.info(t("toast.match.dispatched"));
     }
     refresh();
   };
   const reject = async (id: string) => {
     const m = matches.find((x) => x.id === id);
     await matchingRepository.reject(id, reviewer, notes[id]);
-    if (m) logMatch("match.reject", m, notes[id]);
+    if (m) {
+      logMatch("match.reject", m, notes[id]);
+      toast.info(t("toast.match.rejected"));
+    }
     refresh();
   };
   const reset = async (id: string) => {
     const m = matches.find((x) => x.id === id);
     await matchingRepository.reset(id);
-    if (m) logMatch("match.reset", m);
+    if (m) {
+      logMatch("match.reset", m);
+      toast.info(t("toast.match.reset"));
+    }
     refresh();
   };
 
@@ -171,11 +185,13 @@ function MatchesPage() {
       )}
 
       {filtered.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border bg-card p-10 text-center text-sm text-muted-foreground">
-          {t("match.empty")}
-        </div>
+        <EmptyState
+          icon={Inbox}
+          title={t("empty.matches.title")}
+          description={t("empty.matches.desc")}
+        />
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-4 animate-in fade-in duration-300">
           {filtered.map((m) => (
             <MatchCard
               key={m.id}

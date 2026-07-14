@@ -24,6 +24,9 @@ import {
   useIntegrationRegistry,
 } from "../integrations/useIntegrations";
 import { auditLog } from "../audit/auditLog";
+import { toast } from "../components/Toast";
+import { EmptyState } from "../components/EmptyState";
+import { Inbox } from "lucide-react";
 import type { MessageKey } from "../i18n/messages";
 
 export const Route = createFileRoute("/institutional/integrations")({
@@ -78,11 +81,13 @@ function IntegrationsPage() {
       targetId: r.id,
       targetLabel: `Resync ${r.name}`,
     });
+    toast.success(t("toast.integration.resync"), r.name);
   };
 
   const toggle = (r: IntegrationDescriptor) => {
     if (!isAdmin) return;
     integrations.toggle(r.id);
+    toast.info(t("toast.integration.toggled"), r.name);
   };
 
   const sendTest = () => {
@@ -101,6 +106,7 @@ function IntegrationsPage() {
       subject: "Mensaje de prueba",
       body: testMessage,
     });
+    toast.success(t("toast.integration.testSent"), testTarget);
     setTestTarget("");
     setTestMessage("");
   };
@@ -249,8 +255,10 @@ function IntegrationsPage() {
           <button
             type="button"
             onClick={() => {
-              if (window.confirm(t("integrations.log.clearConfirm")))
+              if (window.confirm(t("integrations.log.clearConfirm"))) {
                 integrations.clearLog();
+                toast.info(t("toast.log.cleared"));
+              }
             }}
             className="inline-flex items-center gap-1 rounded-md border border-destructive/40 bg-destructive/5 px-2 py-1 text-xs font-medium text-destructive transition hover:bg-destructive/10"
           >
@@ -261,11 +269,13 @@ function IntegrationsPage() {
       </div>
 
       {dispatches.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border bg-card p-10 text-center text-sm text-muted-foreground">
-          {t("integrations.log.empty")}
-        </div>
+        <EmptyState
+          icon={Inbox}
+          title={t("empty.integrations.title")}
+          description={t("empty.integrations.desc")}
+        />
       ) : (
-        <ul className="space-y-2">
+        <ul className="space-y-2 animate-in fade-in duration-300">
           {dispatches.map((d) => {
             const Icon = channelIcon[d.channel];
             const tone =

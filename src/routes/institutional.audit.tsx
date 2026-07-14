@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Download, Trash2, ScrollText } from "lucide-react";
+import { Download, Trash2, ScrollText, ClipboardList } from "lucide-react";
 import { useT } from "../i18n/LocaleProvider";
 import { useInstitutionalSession } from "../auth/InstitutionalSession";
 import { auditLog, type AuditAction } from "../audit/auditLog";
 import { useAuditLog } from "../audit/useAuditLog";
+import { toast } from "../components/Toast";
+import { EmptyState } from "../components/EmptyState";
 import type { MessageKey } from "../i18n/messages";
 
 export const Route = createFileRoute("/institutional/audit")({
@@ -76,11 +78,15 @@ function AuditPage() {
     a.download = `basuf-audit-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
+    toast.success(t("toast.audit.exported"), `${entries.length}`);
   };
 
   const clear = () => {
     if (!isAdmin) return;
-    if (window.confirm(t("audit.clear.confirm"))) auditLog.clear();
+    if (window.confirm(t("audit.clear.confirm"))) {
+      auditLog.clear();
+      toast.info(t("toast.audit.cleared"));
+    }
   };
 
   return (
@@ -163,11 +169,13 @@ function AuditPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border bg-card p-10 text-center text-sm text-muted-foreground">
-          {t("audit.empty")}
-        </div>
+        <EmptyState
+          icon={ClipboardList}
+          title={t("empty.audit.title")}
+          description={t("empty.audit.desc")}
+        />
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-border bg-card shadow-sm">
+        <div className="overflow-x-auto rounded-xl border border-border bg-card shadow-sm animate-in fade-in duration-300">
           <table className="min-w-full text-sm">
             <thead className="border-b border-border bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
