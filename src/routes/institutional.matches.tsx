@@ -75,14 +75,12 @@ function MatchesPage() {
     note?: string,
   ) => {
     if (!actor) return;
-    import("../audit/auditLog").then(({ auditLog }) => {
-      auditLog.record({
-        actor,
-        action,
-        targetId: m.id,
-        targetLabel: `${m.personA?.displayName ?? "?"} ↔ ${m.personB?.displayName ?? "?"}`,
-        metadata: { score: String(m.score), note },
-      });
+    auditLog.record({
+      actor,
+      action,
+      targetId: m.id,
+      targetLabel: `${m.personA?.displayName ?? "?"} ↔ ${m.personB?.displayName ?? "?"}`,
+      metadata: { score: String(m.score), note },
     });
   };
 
