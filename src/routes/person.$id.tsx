@@ -13,6 +13,7 @@ import {
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
+import { SkipLink } from "../components/SkipLink";
 import { useT } from "../i18n/LocaleProvider";
 import { peopleRepository } from "../repositories/PeopleRepository";
 import type {
@@ -101,6 +102,7 @@ function PersonDetailPage() {
 
   return (
     <div className="min-h-dvh bg-background">
+      <SkipLink />
       <DemoBanner />
       <SiteHeader />
 

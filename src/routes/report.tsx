@@ -4,6 +4,7 @@ import { AlertTriangle, CheckCircle2, Send, ArrowLeft } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
+import { SkipLink } from "../components/SkipLink";
 import { useT } from "../i18n/LocaleProvider";
 import {
   peopleRepository,
@@ -137,7 +138,8 @@ function ReportPage() {
   if (created) {
     return (
       <div className="min-h-dvh bg-background">
-        <DemoBanner />
+        <SkipLink />
+      <DemoBanner />
         <SiteHeader />
         <main id="main-content" className="mx-auto max-w-2xl px-4 py-16">
           <div className="rounded-xl border border-hope/40 bg-hope/10 p-8 text-center">
