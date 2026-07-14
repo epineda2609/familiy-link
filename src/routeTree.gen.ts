@@ -15,6 +15,7 @@ import { Route as InstitutionalRouteImport } from './routes/institutional'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as InstitutionalIndexRouteImport } from './routes/institutional.index'
 import { Route as PersonIdRouteImport } from './routes/person.$id'
+import { Route as InstitutionalMatchesRouteImport } from './routes/institutional.matches'
 
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
@@ -46,12 +47,18 @@ const PersonIdRoute = PersonIdRouteImport.update({
   path: '/person/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InstitutionalMatchesRoute = InstitutionalMatchesRouteImport.update({
+  id: '/matches',
+  path: '/matches',
+  getParentRoute: () => InstitutionalRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/institutional': typeof InstitutionalRouteWithChildren
   '/report': typeof ReportRoute
   '/search': typeof SearchRoute
+  '/institutional/matches': typeof InstitutionalMatchesRoute
   '/person/$id': typeof PersonIdRoute
   '/institutional/': typeof InstitutionalIndexRoute
 }
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/report': typeof ReportRoute
   '/search': typeof SearchRoute
+  '/institutional/matches': typeof InstitutionalMatchesRoute
   '/person/$id': typeof PersonIdRoute
   '/institutional': typeof InstitutionalIndexRoute
 }
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/institutional': typeof InstitutionalRouteWithChildren
   '/report': typeof ReportRoute
   '/search': typeof SearchRoute
+  '/institutional/matches': typeof InstitutionalMatchesRoute
   '/person/$id': typeof PersonIdRoute
   '/institutional/': typeof InstitutionalIndexRoute
 }
@@ -78,16 +87,24 @@ export interface FileRouteTypes {
     | '/institutional'
     | '/report'
     | '/search'
+    | '/institutional/matches'
     | '/person/$id'
     | '/institutional/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/report' | '/search' | '/person/$id' | '/institutional'
+  to:
+    | '/'
+    | '/report'
+    | '/search'
+    | '/institutional/matches'
+    | '/person/$id'
+    | '/institutional'
   id:
     | '__root__'
     | '/'
     | '/institutional'
     | '/report'
     | '/search'
+    | '/institutional/matches'
     | '/person/$id'
     | '/institutional/'
   fileRoutesById: FileRoutesById
@@ -144,14 +161,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PersonIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/institutional/matches': {
+      id: '/institutional/matches'
+      path: '/matches'
+      fullPath: '/institutional/matches'
+      preLoaderRoute: typeof InstitutionalMatchesRouteImport
+      parentRoute: typeof InstitutionalRoute
+    }
   }
 }
 
 interface InstitutionalRouteChildren {
+  InstitutionalMatchesRoute: typeof InstitutionalMatchesRoute
   InstitutionalIndexRoute: typeof InstitutionalIndexRoute
 }
 
 const InstitutionalRouteChildren: InstitutionalRouteChildren = {
+  InstitutionalMatchesRoute: InstitutionalMatchesRoute,
   InstitutionalIndexRoute: InstitutionalIndexRoute,
 }
 
