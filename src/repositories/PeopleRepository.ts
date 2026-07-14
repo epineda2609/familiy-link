@@ -35,6 +35,12 @@ class MockPeopleRepository implements IPeopleRepository {
       return true;
     });
   }
+  async getPublicById(id: string) {
+    return mockPeople.find((p) => p.id === id) ?? null;
+  }
+  async getDisasterById(id: string) {
+    return mockDisasters.find((d) => d.id === id) ?? null;
+  }
   async listDisasters() {
     return mockDisasters;
   }
