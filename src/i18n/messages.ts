@@ -1,0 +1,139 @@
+// BASUF — Textos ES/PT (i18n ligero, sin dependencias).
+export type Locale = "es" | "pt";
+
+export const messages = {
+  es: {
+    "app.name": "BASUF",
+    "app.tagline": "Brother And Sister Uniendo Familias",
+    "app.mission":
+      "Una red humanitaria para reconectar a personas separadas por catástrofes.",
+    "demo.banner":
+      "Entorno de demostración — Todos los datos mostrados son ficticios.",
+    "nav.home": "Inicio",
+    "nav.search": "Buscar",
+    "nav.report": "Reportar",
+    "nav.about": "Sobre BASUF",
+    "nav.institutional": "Panel institucional",
+    "nav.language": "Idioma",
+    "home.hero.title": "Reunir familias es posible.",
+    "home.hero.subtitle":
+      "BASUF ayuda a localizar personas desaparecidas por sismos, guerras e inundaciones en Latinoamérica.",
+    "home.cta.search": "Buscar a alguien",
+    "home.cta.report": "Reportar persona",
+    "home.stats.cases": "Casos registrados",
+    "home.stats.reunions": "Reencuentros",
+    "home.stats.orgs": "Organizaciones aliadas",
+    "home.stats.countries": "Países cubiertos",
+    "home.disasters.title": "Emergencias activas",
+    "home.disasters.subtitle":
+      "Contextos donde BASUF está coordinando búsquedas.",
+    "home.how.title": "Cómo funciona",
+    "home.how.step1.title": "Reporta o busca",
+    "home.how.step1.desc":
+      "Registra a una persona desaparecida o busca coincidencias en la red.",
+    "home.how.step2.title": "Coincidencias verificadas",
+    "home.how.step2.desc":
+      "El sistema propone posibles coincidencias y las organizaciones aliadas las validan.",
+    "home.how.step3.title": "Reencuentro seguro",
+    "home.how.step3.desc":
+      "Coordinamos el contacto respetando privacidad y protocolos humanitarios.",
+    "search.title": "Buscar personas",
+    "search.subtitle":
+      "Usa filtros para encontrar coincidencias. Los datos sensibles no se muestran en el panel público.",
+    "search.field.name": "Nombre o apodo",
+    "search.field.name.ph": "Ej. María, Juan Pérez…",
+    "search.field.country": "País",
+    "search.field.disaster": "Catástrofe",
+    "search.field.status": "Estado",
+    "search.field.ageRange": "Rango de edad",
+    "search.field.gender": "Género",
+    "search.field.any": "Cualquiera",
+    "search.submit": "Buscar",
+    "search.reset": "Limpiar",
+    "search.results": "Resultados",
+    "search.noResults":
+      "No se encontraron coincidencias. Intenta ampliar los filtros.",
+    "status.missing": "Desaparecida",
+    "status.searching": "En búsqueda",
+    "status.found": "Localizada",
+    "status.reunited": "Reunida",
+    "disaster.earthquake": "Sismo",
+    "disaster.war": "Conflicto armado",
+    "disaster.flood": "Inundación",
+    "gender.f": "Femenino",
+    "gender.m": "Masculino",
+    "gender.o": "Otro / No especificado",
+    "footer.privacy": "Privacidad",
+    "footer.protocols": "Protocolos humanitarios",
+    "footer.contact": "Contacto",
+    "footer.rights": "Prototipo humanitario — Uso restringido.",
+  },
+  pt: {
+    "app.name": "BASUF",
+    "app.tagline": "Brother And Sister Unindo Famílias",
+    "app.mission":
+      "Uma rede humanitária para reconectar pessoas separadas por catástrofes.",
+    "demo.banner":
+      "Ambiente de demonstração — Todos os dados exibidos são fictícios.",
+    "nav.home": "Início",
+    "nav.search": "Buscar",
+    "nav.report": "Reportar",
+    "nav.about": "Sobre a BASUF",
+    "nav.institutional": "Painel institucional",
+    "nav.language": "Idioma",
+    "home.hero.title": "Reunir famílias é possível.",
+    "home.hero.subtitle":
+      "A BASUF ajuda a localizar pessoas desaparecidas por terremotos, guerras e enchentes na América Latina.",
+    "home.cta.search": "Buscar alguém",
+    "home.cta.report": "Reportar pessoa",
+    "home.stats.cases": "Casos registrados",
+    "home.stats.reunions": "Reencontros",
+    "home.stats.orgs": "Organizações parceiras",
+    "home.stats.countries": "Países cobertos",
+    "home.disasters.title": "Emergências ativas",
+    "home.disasters.subtitle":
+      "Contextos onde a BASUF está coordenando buscas.",
+    "home.how.title": "Como funciona",
+    "home.how.step1.title": "Reporte ou busque",
+    "home.how.step1.desc":
+      "Registre uma pessoa desaparecida ou busque correspondências na rede.",
+    "home.how.step2.title": "Correspondências verificadas",
+    "home.how.step2.desc":
+      "O sistema sugere possíveis correspondências e organizações parceiras as validam.",
+    "home.how.step3.title": "Reencontro seguro",
+    "home.how.step3.desc":
+      "Coordenamos o contato respeitando privacidade e protocolos humanitários.",
+    "search.title": "Buscar pessoas",
+    "search.subtitle":
+      "Use filtros para encontrar correspondências. Dados sensíveis não são exibidos no painel público.",
+    "search.field.name": "Nome ou apelido",
+    "search.field.name.ph": "Ex. Maria, João Pereira…",
+    "search.field.country": "País",
+    "search.field.disaster": "Catástrofe",
+    "search.field.status": "Estado",
+    "search.field.ageRange": "Faixa etária",
+    "search.field.gender": "Gênero",
+    "search.field.any": "Qualquer",
+    "search.submit": "Buscar",
+    "search.reset": "Limpar",
+    "search.results": "Resultados",
+    "search.noResults":
+      "Nenhuma correspondência encontrada. Tente ampliar os filtros.",
+    "status.missing": "Desaparecida",
+    "status.searching": "Em busca",
+    "status.found": "Localizada",
+    "status.reunited": "Reunida",
+    "disaster.earthquake": "Terremoto",
+    "disaster.war": "Conflito armado",
+    "disaster.flood": "Enchente",
+    "gender.f": "Feminino",
+    "gender.m": "Masculino",
+    "gender.o": "Outro / Não especificado",
+    "footer.privacy": "Privacidade",
+    "footer.protocols": "Protocolos humanitários",
+    "footer.contact": "Contato",
+    "footer.rights": "Protótipo humanitário — Uso restrito.",
+  },
+} as const;
+
+export type MessageKey = keyof (typeof messages)["es"];

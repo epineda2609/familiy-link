@@ -1,0 +1,112 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { DemoBanner } from "../components/DemoBanner";
+import { SiteHeader } from "../components/SiteHeader";
+import { SiteFooter } from "../components/SiteFooter";
+import { SearchForm } from "../components/SearchForm";
+import { PersonCard } from "../components/PersonCard";
+import { useT } from "../i18n/LocaleProvider";
+import {
+  peopleRepository,
+  type SearchFilters,
+} from "../repositories/PeopleRepository";
+import type { PublicPersonCard, Disaster, Country } from "../domain/types";
+
+export const Route = createFileRoute("/search")({
+  head: () => ({
+    meta: [
+      { title: "Buscar personas — BASUF" },
+      {
+        name: "description",
+        content:
+          "Buscador humanitario de personas desaparecidas en Latinoamérica. Datos sensibles restringidos.",
+      },
+      { property: "og:title", content: "Buscar personas — BASUF" },
+      {
+        property: "og:description",
+        content:
+          "Filtros por país, catástrofe, estado y edad. Prototipo con datos de demostración.",
+      },
+    ],
+  }),
+  component: SearchPage,
+});
+
+const emptyFilters: SearchFilters = {};
+
+function SearchPage() {
+  const { t } = useT();
+  const [filters, setFilters] = useState<SearchFilters>(emptyFilters);
+  const [applied, setApplied] = useState<SearchFilters>(emptyFilters);
+  const [results, setResults] = useState<PublicPersonCard[]>([]);
+  const [disasters, setDisasters] = useState<Disaster[]>([]);
+  const [countries, setCountries] = useState<Country[]>([]);
+
+  useEffect(() => {
+    peopleRepository.listDisasters().then(setDisasters);
+    peopleRepository.listCountries().then(setCountries);
+  }, []);
+
+  useEffect(() => {
+    let alive = true;
+    peopleRepository.searchPublic(applied).then((r) => {
+      if (alive) setResults(r);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [applied]);
+
+  return (
+    <div className="min-h-screen bg-background">
+      <DemoBanner />
+      <SiteHeader />
+
+      <main className="mx-auto max-w-7xl px-4 py-10">
+        <header className="mb-6">
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            {t("search.title")}
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+            {t("search.subtitle")}
+          </p>
+        </header>
+
+        <SearchForm
+          value={filters}
+          onChange={setFilters}
+          onSubmit={() => setApplied(filters)}
+          onReset={() => {
+            setFilters(emptyFilters);
+            setApplied(emptyFilters);
+          }}
+          countries={countries}
+          disasters={disasters}
+        />
+
+        <section className="mt-8">
+          <div className="mb-4 flex items-baseline justify-between">
+            <h2 className="text-lg font-semibold">{t("search.results")}</h2>
+            <span className="text-sm text-muted-foreground">
+              {results.length}
+            </span>
+          </div>
+
+          {results.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-border bg-card p-10 text-center text-sm text-muted-foreground">
+              {t("search.noResults")}
+            </div>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {results.map((p) => (
+                <PersonCard key={p.id} person={p} />
+              ))}
+            </div>
+          )}
+        </section>
+      </main>
+
+      <SiteFooter />
+    </div>
+  );
+}
