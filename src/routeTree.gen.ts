@@ -16,6 +16,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as InstitutionalIndexRouteImport } from './routes/institutional.index'
 import { Route as PersonIdRouteImport } from './routes/person.$id'
 import { Route as InstitutionalMatchesRouteImport } from './routes/institutional.matches'
+import { Route as InstitutionalIntegrationsRouteImport } from './routes/institutional.integrations'
 import { Route as InstitutionalAuditRouteImport } from './routes/institutional.audit'
 
 const SearchRoute = SearchRouteImport.update({
@@ -53,6 +54,12 @@ const InstitutionalMatchesRoute = InstitutionalMatchesRouteImport.update({
   path: '/matches',
   getParentRoute: () => InstitutionalRoute,
 } as any)
+const InstitutionalIntegrationsRoute =
+  InstitutionalIntegrationsRouteImport.update({
+    id: '/integrations',
+    path: '/integrations',
+    getParentRoute: () => InstitutionalRoute,
+  } as any)
 const InstitutionalAuditRoute = InstitutionalAuditRouteImport.update({
   id: '/audit',
   path: '/audit',
@@ -65,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/report': typeof ReportRoute
   '/search': typeof SearchRoute
   '/institutional/audit': typeof InstitutionalAuditRoute
+  '/institutional/integrations': typeof InstitutionalIntegrationsRoute
   '/institutional/matches': typeof InstitutionalMatchesRoute
   '/person/$id': typeof PersonIdRoute
   '/institutional/': typeof InstitutionalIndexRoute
@@ -74,6 +82,7 @@ export interface FileRoutesByTo {
   '/report': typeof ReportRoute
   '/search': typeof SearchRoute
   '/institutional/audit': typeof InstitutionalAuditRoute
+  '/institutional/integrations': typeof InstitutionalIntegrationsRoute
   '/institutional/matches': typeof InstitutionalMatchesRoute
   '/person/$id': typeof PersonIdRoute
   '/institutional': typeof InstitutionalIndexRoute
@@ -85,6 +94,7 @@ export interface FileRoutesById {
   '/report': typeof ReportRoute
   '/search': typeof SearchRoute
   '/institutional/audit': typeof InstitutionalAuditRoute
+  '/institutional/integrations': typeof InstitutionalIntegrationsRoute
   '/institutional/matches': typeof InstitutionalMatchesRoute
   '/person/$id': typeof PersonIdRoute
   '/institutional/': typeof InstitutionalIndexRoute
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/report'
     | '/search'
     | '/institutional/audit'
+    | '/institutional/integrations'
     | '/institutional/matches'
     | '/person/$id'
     | '/institutional/'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/report'
     | '/search'
     | '/institutional/audit'
+    | '/institutional/integrations'
     | '/institutional/matches'
     | '/person/$id'
     | '/institutional'
@@ -116,6 +128,7 @@ export interface FileRouteTypes {
     | '/report'
     | '/search'
     | '/institutional/audit'
+    | '/institutional/integrations'
     | '/institutional/matches'
     | '/person/$id'
     | '/institutional/'
@@ -180,6 +193,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstitutionalMatchesRouteImport
       parentRoute: typeof InstitutionalRoute
     }
+    '/institutional/integrations': {
+      id: '/institutional/integrations'
+      path: '/integrations'
+      fullPath: '/institutional/integrations'
+      preLoaderRoute: typeof InstitutionalIntegrationsRouteImport
+      parentRoute: typeof InstitutionalRoute
+    }
     '/institutional/audit': {
       id: '/institutional/audit'
       path: '/audit'
@@ -192,12 +212,14 @@ declare module '@tanstack/react-router' {
 
 interface InstitutionalRouteChildren {
   InstitutionalAuditRoute: typeof InstitutionalAuditRoute
+  InstitutionalIntegrationsRoute: typeof InstitutionalIntegrationsRoute
   InstitutionalMatchesRoute: typeof InstitutionalMatchesRoute
   InstitutionalIndexRoute: typeof InstitutionalIndexRoute
 }
 
 const InstitutionalRouteChildren: InstitutionalRouteChildren = {
   InstitutionalAuditRoute: InstitutionalAuditRoute,
+  InstitutionalIntegrationsRoute: InstitutionalIntegrationsRoute,
   InstitutionalMatchesRoute: InstitutionalMatchesRoute,
   InstitutionalIndexRoute: InstitutionalIndexRoute,
 }
