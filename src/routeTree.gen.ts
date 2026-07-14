@@ -18,6 +18,7 @@ import { Route as PersonIdRouteImport } from './routes/person.$id'
 import { Route as InstitutionalMatchesRouteImport } from './routes/institutional.matches'
 import { Route as InstitutionalIntegrationsRouteImport } from './routes/institutional.integrations'
 import { Route as InstitutionalAuditRouteImport } from './routes/institutional.audit'
+import { Route as InstitutionalIntegrationsRouteImport } from './routes/institutional.integrations'
 
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
