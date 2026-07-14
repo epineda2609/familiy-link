@@ -62,6 +62,24 @@ class MockPeopleRepository implements IPeopleRepository {
   async listCountries() {
     return mockCountries;
   }
+  async createReport(input: ReportPersonInput) {
+    const id = `p-local-${Date.now()}`;
+    const record: PublicPersonCard = {
+      id,
+      displayName: input.displayName,
+      approximateAge: input.approximateAge,
+      gender: input.gender,
+      status: "missing",
+      disasterId: input.disasterId,
+      country: input.country,
+      lastSeenLocation: input.lastSeenLocation,
+      lastSeenAt: input.lastSeenAt,
+      distinctiveFeatures: input.distinctiveFeatures,
+      reportedAt: new Date().toISOString().slice(0, 10),
+    };
+    mockPeople.unshift(record);
+    return record;
+  }
 }
 
 export const peopleRepository: IPeopleRepository = new MockPeopleRepository();
