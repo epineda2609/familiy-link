@@ -18,6 +18,7 @@ import {
 import type { MatchStatus } from "../data/mock/matches";
 import type { PublicPersonCard, PersonStatus } from "../domain/types";
 import type { MessageKey } from "../i18n/messages";
+import { auditLog } from "../audit/auditLog";
 
 export const Route = createFileRoute("/institutional/matches")({
   head: () => ({
@@ -64,16 +65,41 @@ function MatchesPage() {
     [matches, statusFilter],
   );
 
+  const actor = session
+    ? { operatorName: session.operatorName, orgName: session.orgName, role: session.role }
+    : null;
+
+  const logMatch = (
+    action: "match.approve" | "match.reject" | "match.reset",
+    m: EnrichedMatch,
+    note?: string,
+  ) => {
+    if (!actor) return;
+    auditLog.record({
+      actor,
+      action,
+      targetId: m.id,
+      targetLabel: `${m.personA?.displayName ?? "?"} ↔ ${m.personB?.displayName ?? "?"}`,
+      metadata: { score: String(m.score), note },
+    });
+  };
+
   const approve = async (id: string) => {
+    const m = matches.find((x) => x.id === id);
     await matchingRepository.approve(id, reviewer, notes[id]);
+    if (m) logMatch("match.approve", m, notes[id]);
     refresh();
   };
   const reject = async (id: string) => {
+    const m = matches.find((x) => x.id === id);
     await matchingRepository.reject(id, reviewer, notes[id]);
+    if (m) logMatch("match.reject", m, notes[id]);
     refresh();
   };
   const reset = async (id: string) => {
+    const m = matches.find((x) => x.id === id);
     await matchingRepository.reset(id);
+    if (m) logMatch("match.reset", m);
     refresh();
   };
 

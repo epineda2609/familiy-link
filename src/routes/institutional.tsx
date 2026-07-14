@@ -8,6 +8,7 @@ import {
   AlertTriangle,
   LayoutDashboard,
   GitCompareArrows,
+  ScrollText,
 } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
@@ -206,6 +207,14 @@ function Shell() {
           >
             <GitCompareArrows className="h-4 w-4" aria-hidden />
             {t("inst.tab.matches")}
+          </Link>
+          <Link
+            to="/institutional/audit"
+            className={tabCls}
+            activeProps={{ className: `${tabCls} ${activeTabCls}` }}
+          >
+            <ScrollText className="h-4 w-4" aria-hidden />
+            {t("inst.tab.audit")}
           </Link>
         </nav>
 

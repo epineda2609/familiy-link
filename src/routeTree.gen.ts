@@ -16,6 +16,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as InstitutionalIndexRouteImport } from './routes/institutional.index'
 import { Route as PersonIdRouteImport } from './routes/person.$id'
 import { Route as InstitutionalMatchesRouteImport } from './routes/institutional.matches'
+import { Route as InstitutionalAuditRouteImport } from './routes/institutional.audit'
 
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
@@ -52,12 +53,18 @@ const InstitutionalMatchesRoute = InstitutionalMatchesRouteImport.update({
   path: '/matches',
   getParentRoute: () => InstitutionalRoute,
 } as any)
+const InstitutionalAuditRoute = InstitutionalAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => InstitutionalRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/institutional': typeof InstitutionalRouteWithChildren
   '/report': typeof ReportRoute
   '/search': typeof SearchRoute
+  '/institutional/audit': typeof InstitutionalAuditRoute
   '/institutional/matches': typeof InstitutionalMatchesRoute
   '/person/$id': typeof PersonIdRoute
   '/institutional/': typeof InstitutionalIndexRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/report': typeof ReportRoute
   '/search': typeof SearchRoute
+  '/institutional/audit': typeof InstitutionalAuditRoute
   '/institutional/matches': typeof InstitutionalMatchesRoute
   '/person/$id': typeof PersonIdRoute
   '/institutional': typeof InstitutionalIndexRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/institutional': typeof InstitutionalRouteWithChildren
   '/report': typeof ReportRoute
   '/search': typeof SearchRoute
+  '/institutional/audit': typeof InstitutionalAuditRoute
   '/institutional/matches': typeof InstitutionalMatchesRoute
   '/person/$id': typeof PersonIdRoute
   '/institutional/': typeof InstitutionalIndexRoute
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/institutional'
     | '/report'
     | '/search'
+    | '/institutional/audit'
     | '/institutional/matches'
     | '/person/$id'
     | '/institutional/'
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/report'
     | '/search'
+    | '/institutional/audit'
     | '/institutional/matches'
     | '/person/$id'
     | '/institutional'
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
     | '/institutional'
     | '/report'
     | '/search'
+    | '/institutional/audit'
     | '/institutional/matches'
     | '/person/$id'
     | '/institutional/'
@@ -168,15 +180,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstitutionalMatchesRouteImport
       parentRoute: typeof InstitutionalRoute
     }
+    '/institutional/audit': {
+      id: '/institutional/audit'
+      path: '/audit'
+      fullPath: '/institutional/audit'
+      preLoaderRoute: typeof InstitutionalAuditRouteImport
+      parentRoute: typeof InstitutionalRoute
+    }
   }
 }
 
 interface InstitutionalRouteChildren {
+  InstitutionalAuditRoute: typeof InstitutionalAuditRoute
   InstitutionalMatchesRoute: typeof InstitutionalMatchesRoute
   InstitutionalIndexRoute: typeof InstitutionalIndexRoute
 }
 
 const InstitutionalRouteChildren: InstitutionalRouteChildren = {
+  InstitutionalAuditRoute: InstitutionalAuditRoute,
   InstitutionalMatchesRoute: InstitutionalMatchesRoute,
   InstitutionalIndexRoute: InstitutionalIndexRoute,
 }

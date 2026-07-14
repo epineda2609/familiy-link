@@ -5,6 +5,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { auditLog } from "../audit/auditLog";
 
 export type InstitutionalRole = "admin" | "reviewer" | "viewer";
 
@@ -46,9 +47,27 @@ export function InstitutionalSessionProvider({ children }: { children: ReactNode
     } catch {
       /* ignore */
     }
+    auditLog.record({
+      actor: {
+        operatorName: next.operatorName,
+        orgName: next.orgName,
+        role: next.role,
+      },
+      action: "auth.signIn",
+    });
   };
 
   const signOut = () => {
+    if (session) {
+      auditLog.record({
+        actor: {
+          operatorName: session.operatorName,
+          orgName: session.orgName,
+          role: session.role,
+        },
+        action: "auth.signOut",
+      });
+    }
     setSession(null);
     try {
       window.localStorage.removeItem(STORAGE_KEY);
