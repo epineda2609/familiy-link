@@ -154,6 +154,27 @@ export const messages = {
     "footer.protocols": "Protocolos humanitários",
     "footer.contact": "Contato",
     "footer.rights": "Protótipo humanitário — Uso restrito.",
+    "person.back": "Voltar aos resultados",
+    "person.notFound.title": "Ficha não encontrada",
+    "person.notFound.desc":
+      "A ficha solicitada não existe ou foi retirada do painel público.",
+    "person.section.identity": "Identidade pública",
+    "person.section.lastSeen": "Último avistamento",
+    "person.section.features": "Sinais distintivos",
+    "person.section.context": "Contexto humanitário",
+    "person.field.age": "Idade aproximada",
+    "person.field.gender": "Gênero",
+    "person.field.status": "Estado",
+    "person.field.country": "País",
+    "person.field.disaster": "Catástrofe",
+    "person.field.location": "Local",
+    "person.field.date": "Data",
+    "person.field.reportedAt": "Reportado em",
+    "person.privacy.title": "Aviso de privacidade",
+    "person.privacy.desc":
+      "Esta ficha exibe apenas informações públicas autorizadas. Dados sensíveis, fotografias restritas e contatos estão reservados a organizações parceiras verificadas.",
+    "person.actions.report": "Tenho informações",
+    "person.actions.share": "Compartilhar ficha",
   },
 } as const;
 
