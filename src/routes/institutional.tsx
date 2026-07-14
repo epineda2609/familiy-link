@@ -8,6 +8,7 @@ import {
   AlertTriangle,
   LayoutDashboard,
   GitCompareArrows,
+  ScrollText,
 } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
