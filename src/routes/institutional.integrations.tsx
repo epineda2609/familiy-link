@@ -24,6 +24,9 @@ import {
   useIntegrationRegistry,
 } from "../integrations/useIntegrations";
 import { auditLog } from "../audit/auditLog";
+import { toast } from "../components/Toast";
+import { EmptyState } from "../components/EmptyState";
+import { Inbox } from "lucide-react";
 import type { MessageKey } from "../i18n/messages";
 
 export const Route = createFileRoute("/institutional/integrations")({
@@ -78,11 +81,13 @@ function IntegrationsPage() {
       targetId: r.id,
       targetLabel: `Resync ${r.name}`,
     });
+    toast.success(t("toast.integration.resync"), r.name);
   };
 
   const toggle = (r: IntegrationDescriptor) => {
     if (!isAdmin) return;
     integrations.toggle(r.id);
+    toast.info(t("toast.integration.toggled"), r.name);
   };
 
   const sendTest = () => {
@@ -101,6 +106,7 @@ function IntegrationsPage() {
       subject: "Mensaje de prueba",
       body: testMessage,
     });
+    toast.success(t("toast.integration.testSent"), testTarget);
     setTestTarget("");
     setTestMessage("");
   };
