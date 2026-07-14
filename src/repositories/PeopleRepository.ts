@@ -13,12 +13,27 @@ export interface SearchFilters {
 }
 
 // Contrato del repositorio — implementable en el futuro contra Supabase.
+export interface ReportPersonInput {
+  displayName: string;
+  approximateAge?: number;
+  gender: "f" | "m" | "o";
+  country: string;
+  disasterId: string;
+  lastSeenLocation?: string;
+  lastSeenAt?: string;
+  distinctiveFeatures?: string;
+  reporterName: string;
+  reporterContact: string;
+  consent: boolean;
+}
+
 export interface IPeopleRepository {
   searchPublic(filters: SearchFilters): Promise<PublicPersonCard[]>;
   getPublicById(id: string): Promise<PublicPersonCard | null>;
   getDisasterById(id: string): Promise<Disaster | null>;
   listDisasters(): Promise<Disaster[]>;
   listCountries(): Promise<Country[]>;
+  createReport(input: ReportPersonInput): Promise<PublicPersonCard>;
 }
 
 class MockPeopleRepository implements IPeopleRepository {
