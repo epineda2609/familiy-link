@@ -15,6 +15,8 @@ export interface SearchFilters {
 // Contrato del repositorio — implementable en el futuro contra Supabase.
 export interface IPeopleRepository {
   searchPublic(filters: SearchFilters): Promise<PublicPersonCard[]>;
+  getPublicById(id: string): Promise<PublicPersonCard | null>;
+  getDisasterById(id: string): Promise<Disaster | null>;
   listDisasters(): Promise<Disaster[]>;
   listCountries(): Promise<Country[]>;
 }
