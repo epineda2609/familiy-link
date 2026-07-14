@@ -3,6 +3,7 @@ import { Search, UserPlus, Waves, Flame, Zap, ArrowRight } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
+import { SkipLink } from "../components/SkipLink";
 import { useT } from "../i18n/LocaleProvider";
 import { mockDisasters } from "../data/mock/disasters";
 import type { DisasterType } from "../domain/types";
