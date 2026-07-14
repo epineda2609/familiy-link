@@ -87,14 +87,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Red humanitaria para reconectar familias separadas por sismos, guerras e inundaciones en Latinoamérica.",
       },
       { name: "author", content: "BASUF" },
-      { property: "og:title", content: "BASUF — Uniendo familias" },
+      { property: "og:title", content: "BASUF — Brother And Sister Uniendo Familias" },
       {
         property: "og:description",
         content:
-          "Red humanitaria para reconectar familias separadas por catástrofes en LATAM.",
+          "Red humanitaria para reconectar familias separadas por sismos, guerras e inundaciones en Latinoamérica.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "BASUF — Brother And Sister Uniendo Familias" },
+      { name: "twitter:description", content: "Red humanitaria para reconectar familias separadas por sismos, guerras e inundaciones en Latinoamérica." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b21e5a8c-5569-46f3-9a73-805e4b8456a7/id-preview-6db3f914--3fb0e8d2-11f1-4b27-86e9-caa5feb596ac.lovable.app-1784065799883.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b21e5a8c-5569-46f3-9a73-805e4b8456a7/id-preview-6db3f914--3fb0e8d2-11f1-4b27-86e9-caa5feb596ac.lovable.app-1784065799883.png" },
     ],
     links: [
       {

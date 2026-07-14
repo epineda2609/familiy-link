@@ -20,12 +20,12 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "BASUF — Uniendo familias tras la catástrofe",
+        content: "BASUF — Brother And Sister Uniendo Familias",
       },
       {
         property: "og:description",
         content:
-          "Reporta, busca y ayuda a reencontrar personas desaparecidas por catástrofes en LATAM.",
+          "Red humanitaria para reconectar familias separadas por sismos, guerras e inundaciones en Latinoamérica.",
       },
     ],
   }),
