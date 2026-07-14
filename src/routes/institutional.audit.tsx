@@ -169,11 +169,13 @@ function AuditPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border bg-card p-10 text-center text-sm text-muted-foreground">
-          {t("audit.empty")}
-        </div>
+        <EmptyState
+          icon={ClipboardList}
+          title={t("empty.audit.title")}
+          description={t("empty.audit.desc")}
+        />
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-border bg-card shadow-sm">
+        <div className="overflow-x-auto rounded-xl border border-border bg-card shadow-sm animate-in fade-in duration-300">
           <table className="min-w-full text-sm">
             <thead className="border-b border-border bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
