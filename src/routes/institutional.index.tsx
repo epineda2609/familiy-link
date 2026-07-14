@@ -13,6 +13,7 @@ import type { Disaster, PersonStatus } from "../domain/types";
 import type { MessageKey } from "../i18n/messages";
 import { auditLog } from "../audit/auditLog";
 import type { AuditActor } from "../audit/auditLog";
+import { toast } from "../components/Toast";
 
 export const Route = createFileRoute("/institutional/")({
   head: () => ({
@@ -92,6 +93,10 @@ function DashboardPage() {
       targetLabel: c.displayName,
       metadata: { from: prev, to: next },
     });
+    toast.success(
+      t("toast.case.statusChanged"),
+      `${c.displayName}: ${t(`status.${next}` as MessageKey)}`,
+    );
     refresh();
   };
   const toggleVerified = async (c: InstitutionalCase) => {
@@ -104,6 +109,10 @@ function DashboardPage() {
       targetId: c.id,
       targetLabel: c.displayName,
     });
+    toast.success(
+      nextVerified ? t("toast.case.verified") : t("toast.case.unverified"),
+      c.displayName,
+    );
     refresh();
   };
   const revealSensitive = (c: InstitutionalCase) => {
@@ -112,6 +121,7 @@ function DashboardPage() {
       const next = new Set(prev);
       if (next.has(c.id)) {
         next.delete(c.id);
+        toast.info(t("toast.sensitive.hidden"), c.displayName);
       } else {
         next.add(c.id);
         auditLog.record({
@@ -120,6 +130,7 @@ function DashboardPage() {
           targetId: c.id,
           targetLabel: c.displayName,
         });
+        toast.info(t("toast.sensitive.revealed"), c.displayName);
       }
       return next;
     });
