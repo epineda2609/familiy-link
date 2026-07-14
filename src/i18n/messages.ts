@@ -422,6 +422,39 @@ export const messages = {
       "Ao aprovar, ambos os casos serão marcados como reunidos.",
     "match.readonly.notice":
       "Papel somente leitura: você não pode aprovar nem rejeitar correspondências.",
+    "inst.sensitive.reveal": "Ver contato",
+    "inst.sensitive.hide": "Ocultar contato",
+    "inst.sensitive.notice":
+      "Os dados sensíveis estão mascarados. Cada revelação fica registrada no log de auditoria.",
+    "inst.tab.audit": "Auditoria",
+    "audit.title": "Registro de auditoria",
+    "audit.subtitle":
+      "Histórico imutável de ações sensíveis realizadas no painel institucional.",
+    "audit.filter.action": "Ação",
+    "audit.filter.operator": "Operador",
+    "audit.filter.all": "Todas",
+    "audit.col.time": "Data e hora",
+    "audit.col.actor": "Operador",
+    "audit.col.action": "Ação",
+    "audit.col.target": "Alvo",
+    "audit.col.metadata": "Detalhes",
+    "audit.empty": "Não há entradas com estes filtros.",
+    "audit.count": "{n} entradas",
+    "audit.clear": "Limpar registro",
+    "audit.clear.confirm":
+      "Limpar todo o registro de auditoria? Esta ação não pode ser desfeita na demo.",
+    "audit.export": "Exportar JSON",
+    "audit.adminOnly":
+      "Apenas administradores podem limpar o registro de auditoria.",
+    "audit.action.auth.signIn": "Início de sessão",
+    "audit.action.auth.signOut": "Encerramento de sessão",
+    "audit.action.case.statusChange": "Mudança de estado",
+    "audit.action.case.verify": "Verificação de caso",
+    "audit.action.case.unverify": "Verificação removida",
+    "audit.action.sensitive.reveal": "Revelação de dados sensíveis",
+    "audit.action.match.approve": "Correspondência aprovada",
+    "audit.action.match.reject": "Correspondência rejeitada",
+    "audit.action.match.reset": "Correspondência reaberta",
   },
 } as const;
 
