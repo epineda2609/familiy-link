@@ -60,6 +60,7 @@ export function PersonCard({ person }: { person: PublicPersonCard }) {
           </div>
         )}
       </dl>
-    </article>
+      </article>
+    </Link>
   );
 }
