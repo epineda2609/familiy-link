@@ -210,6 +210,41 @@ export const messages = {
       "Esta ficha exibe apenas informações públicas autorizadas. Dados sensíveis, fotografias restritas e contatos estão reservados a organizações parceiras verificadas.",
     "person.actions.report": "Tenho informações",
     "person.actions.share": "Compartilhar ficha",
+    "report.title": "Reportar pessoa desaparecida",
+    "report.subtitle":
+      "Os dados que você fornecer ajudarão a coordenar buscas. Apenas informações públicas serão exibidas na ficha.",
+    "report.section.person": "Sobre a pessoa",
+    "report.section.lastSeen": "Último contato",
+    "report.section.reporter": "Sobre você",
+    "report.section.consent": "Consentimento",
+    "report.field.displayName": "Nome ou apelido público",
+    "report.field.approximateAge": "Idade aproximada",
+    "report.field.gender": "Gênero",
+    "report.field.country": "País",
+    "report.field.disaster": "Catástrofe",
+    "report.field.lastSeenLocation": "Local do último avistamento",
+    "report.field.lastSeenAt": "Data do último avistamento",
+    "report.field.features": "Sinais distintivos visíveis",
+    "report.field.features.hint":
+      "Roupas, marcas visíveis, objetos. Não inclua dados sensíveis.",
+    "report.field.reporterName": "Seu nome",
+    "report.field.reporterContact": "Contato (e-mail ou telefone)",
+    "report.field.consent":
+      "Autorizo a BASUF a publicar estas informações públicas para facilitar a busca.",
+    "report.field.required": "Obrigatório",
+    "report.field.select": "Selecione…",
+    "report.submit": "Enviar reporte",
+    "report.cancel": "Cancelar",
+    "report.error.title": "Revise os campos",
+    "report.error.desc": "Há campos obrigatórios não preenchidos.",
+    "report.success.title": "Reporte recebido",
+    "report.success.desc":
+      "Obrigado. Em uma implementação real, organizações parceiras revisarão e validarão este reporte antes de publicá-lo.",
+    "report.success.viewCase": "Ver ficha criada",
+    "report.success.newReport": "Enviar outro reporte",
+    "report.notice.title": "Aviso importante",
+    "report.notice.desc":
+      "Este é um ambiente de demonstração. Não envie informações reais nem dados sensíveis.",
   },
 } as const;
 
