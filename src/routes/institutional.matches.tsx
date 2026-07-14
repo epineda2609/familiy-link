@@ -18,6 +18,7 @@ import {
 import type { MatchStatus } from "../data/mock/matches";
 import type { PublicPersonCard, PersonStatus } from "../domain/types";
 import type { MessageKey } from "../i18n/messages";
+import { auditLog } from "../audit/auditLog";
 
 export const Route = createFileRoute("/institutional/matches")({
   head: () => ({
