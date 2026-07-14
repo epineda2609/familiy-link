@@ -100,7 +100,7 @@ function PersonDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <DemoBanner />
       <SiteHeader />
 
@@ -263,7 +263,7 @@ function Row({
 function PersonNotFound() {
   const { t } = useT();
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <DemoBanner />
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-4 py-16 text-center">

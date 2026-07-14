@@ -136,7 +136,7 @@ function ReportPage() {
 
   if (created) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-dvh bg-background">
         <DemoBanner />
         <SiteHeader />
         <main className="mx-auto max-w-2xl px-4 py-16">
@@ -175,7 +175,7 @@ function ReportPage() {
   const hasErrors = Object.keys(errors).length > 0;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <DemoBanner />
       <SiteHeader />
 

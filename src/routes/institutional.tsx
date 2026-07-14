@@ -58,7 +58,7 @@ function SignInGate() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <DemoBanner />
       <SiteHeader />
       <main className="mx-auto max-w-lg px-4 py-14">
@@ -152,7 +152,7 @@ function Shell() {
   const activeTabCls = "border-border bg-card text-foreground shadow-sm";
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <DemoBanner />
       <SiteHeader />
 
