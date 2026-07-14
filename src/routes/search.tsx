@@ -6,6 +6,8 @@ import { SiteFooter } from "../components/SiteFooter";
 import { SkipLink } from "../components/SkipLink";
 import { SearchForm } from "../components/SearchForm";
 import { PersonCard } from "../components/PersonCard";
+import { EmptyState } from "../components/EmptyState";
+import { SearchX } from "lucide-react";
 import { useT } from "../i18n/LocaleProvider";
 import {
   peopleRepository,
@@ -95,11 +97,16 @@ function SearchPage() {
           </div>
 
           {results.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-border bg-card p-10 text-center text-sm text-muted-foreground">
-              {t("search.noResults")}
-            </div>
+            <EmptyState
+              icon={SearchX}
+              title={t("empty.search.title")}
+              description={t("empty.search.desc")}
+            />
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div
+              key={JSON.stringify(applied)}
+              className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 animate-in fade-in duration-300"
+            >
               {results.map((p) => (
                 <PersonCard key={p.id} person={p} />
               ))}
