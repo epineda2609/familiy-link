@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Download, Trash2, ScrollText } from "lucide-react";
+import { Download, Trash2, ScrollText, ClipboardList } from "lucide-react";
 import { useT } from "../i18n/LocaleProvider";
 import { useInstitutionalSession } from "../auth/InstitutionalSession";
 import { auditLog, type AuditAction } from "../audit/auditLog";
 import { useAuditLog } from "../audit/useAuditLog";
+import { toast } from "../components/Toast";
+import { EmptyState } from "../components/EmptyState";
 import type { MessageKey } from "../i18n/messages";
 
 export const Route = createFileRoute("/institutional/audit")({
@@ -76,11 +78,15 @@ function AuditPage() {
     a.download = `basuf-audit-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
+    toast.success(t("toast.audit.exported"), `${entries.length}`);
   };
 
   const clear = () => {
     if (!isAdmin) return;
-    if (window.confirm(t("audit.clear.confirm"))) auditLog.clear();
+    if (window.confirm(t("audit.clear.confirm"))) {
+      auditLog.clear();
+      toast.info(t("toast.audit.cleared"));
+    }
   };
 
   return (
