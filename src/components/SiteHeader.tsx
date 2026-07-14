@@ -43,6 +43,13 @@ export function SiteHeader() {
           >
             {t("nav.search")}
           </Link>
+          <Link
+            to="/report"
+            className={linkCls}
+            activeProps={{ className: `${linkCls} ${activeCls}` }}
+          >
+            {t("nav.report")}
+          </Link>
         </nav>
 
         <div className="flex items-center gap-2">
