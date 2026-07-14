@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   GitCompareArrows,
   ScrollText,
+  Radio,
 } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
@@ -215,6 +216,14 @@ function Shell() {
           >
             <ScrollText className="h-4 w-4" aria-hidden />
             {t("inst.tab.audit")}
+          </Link>
+          <Link
+            to="/institutional/integrations"
+            className={tabCls}
+            activeProps={{ className: `${tabCls} ${activeTabCls}` }}
+          >
+            <Radio className="h-4 w-4" aria-hidden />
+            {t("inst.tab.integrations")}
           </Link>
         </nav>
 

@@ -19,6 +19,7 @@ import type { MatchStatus } from "../data/mock/matches";
 import type { PublicPersonCard, PersonStatus } from "../domain/types";
 import type { MessageKey } from "../i18n/messages";
 import { auditLog } from "../audit/auditLog";
+import { integrations } from "../integrations/simulatedIntegrations";
 
 export const Route = createFileRoute("/institutional/matches")({
   head: () => ({
@@ -84,10 +85,39 @@ function MatchesPage() {
     });
   };
 
+  const dispatchReunion = (m: EnrichedMatch) => {
+    const persons = [m.personA, m.personB].filter(Boolean) as NonNullable<
+      EnrichedMatch["personA"]
+    >[];
+    persons.forEach((p) => {
+      integrations.dispatch({
+        integrationId: "whatsapp-humanitarian",
+        channel: "whatsapp",
+        recipientLabel: `Reportante de ${p.displayName}`,
+        subject: "Coincidencia aprobada",
+        body: `Se aprobó una coincidencia para ${p.displayName}. Un revisor humano coordinará el contacto.`,
+        relatedCaseId: p.id,
+        relatedMatchId: m.id,
+      });
+      integrations.dispatch({
+        integrationId: "sms-broadcast",
+        channel: "sms",
+        recipientLabel: `Contacto de ${p.displayName}`,
+        subject: "BASUF",
+        body: `BASUF: coincidencia aprobada para ${p.displayName}. Espera contacto de un aliado.`,
+        relatedCaseId: p.id,
+        relatedMatchId: m.id,
+      });
+    });
+  };
+
   const approve = async (id: string) => {
     const m = matches.find((x) => x.id === id);
     await matchingRepository.approve(id, reviewer, notes[id]);
-    if (m) logMatch("match.approve", m, notes[id]);
+    if (m) {
+      logMatch("match.approve", m, notes[id]);
+      dispatchReunion(m);
+    }
     refresh();
   };
   const reject = async (id: string) => {
