@@ -1,4 +1,5 @@
 import { MapPin, Calendar, User } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import type { PublicPersonCard } from "../domain/types";
 import { useT } from "../i18n/LocaleProvider";
 import type { MessageKey } from "../i18n/messages";
