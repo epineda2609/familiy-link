@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { LocaleProvider } from "../i18n/LocaleProvider";
+import { InstitutionalSessionProvider } from "../auth/InstitutionalSession";
 
 function NotFoundComponent() {
   return (
