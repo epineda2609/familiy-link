@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ReportRouteImport } from './routes/report'
+import { Route as InstitutionalRouteImport } from './routes/institutional'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as InstitutionalIndexRouteImport } from './routes/institutional.index'
 import { Route as PersonIdRouteImport } from './routes/person.$id'
@@ -25,15 +26,20 @@ const ReportRoute = ReportRouteImport.update({
   path: '/report',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InstitutionalRoute = InstitutionalRouteImport.update({
+  id: '/institutional',
+  path: '/institutional',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InstitutionalIndexRoute = InstitutionalIndexRouteImport.update({
-  id: '/institutional/',
-  path: '/institutional/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => InstitutionalRoute,
 } as any)
 const PersonIdRoute = PersonIdRouteImport.update({
   id: '/person/$id',
@@ -43,6 +49,7 @@ const PersonIdRoute = PersonIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/institutional': typeof InstitutionalRouteWithChildren
   '/report': typeof ReportRoute
   '/search': typeof SearchRoute
   '/person/$id': typeof PersonIdRoute
@@ -58,6 +65,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/institutional': typeof InstitutionalRouteWithChildren
   '/report': typeof ReportRoute
   '/search': typeof SearchRoute
   '/person/$id': typeof PersonIdRoute
@@ -65,12 +73,19 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/report' | '/search' | '/person/$id' | '/institutional/'
+  fullPaths:
+    | '/'
+    | '/institutional'
+    | '/report'
+    | '/search'
+    | '/person/$id'
+    | '/institutional/'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/report' | '/search' | '/person/$id' | '/institutional'
   id:
     | '__root__'
     | '/'
+    | '/institutional'
     | '/report'
     | '/search'
     | '/person/$id'
@@ -79,10 +94,10 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  InstitutionalRoute: typeof InstitutionalRouteWithChildren
   ReportRoute: typeof ReportRoute
   SearchRoute: typeof SearchRoute
   PersonIdRoute: typeof PersonIdRoute
-  InstitutionalIndexRoute: typeof InstitutionalIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -101,6 +116,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/institutional': {
+      id: '/institutional'
+      path: '/institutional'
+      fullPath: '/institutional'
+      preLoaderRoute: typeof InstitutionalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -110,10 +132,10 @@ declare module '@tanstack/react-router' {
     }
     '/institutional/': {
       id: '/institutional/'
-      path: '/institutional'
+      path: '/'
       fullPath: '/institutional/'
       preLoaderRoute: typeof InstitutionalIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof InstitutionalRoute
     }
     '/person/$id': {
       id: '/person/$id'
@@ -125,12 +147,24 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface InstitutionalRouteChildren {
+  InstitutionalIndexRoute: typeof InstitutionalIndexRoute
+}
+
+const InstitutionalRouteChildren: InstitutionalRouteChildren = {
+  InstitutionalIndexRoute: InstitutionalIndexRoute,
+}
+
+const InstitutionalRouteWithChildren = InstitutionalRoute._addFileChildren(
+  InstitutionalRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  InstitutionalRoute: InstitutionalRouteWithChildren,
   ReportRoute: ReportRoute,
   SearchRoute: SearchRoute,
   PersonIdRoute: PersonIdRoute,
-  InstitutionalIndexRoute: InstitutionalIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
