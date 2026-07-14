@@ -5,6 +5,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { auditLog } from "../audit/auditLog";
 
 export type InstitutionalRole = "admin" | "reviewer" | "viewer";
 
