@@ -273,6 +273,10 @@ export const messages = {
     "nav.about": "Sobre a BASUF",
     "nav.institutional": "Painel institucional",
     "nav.language": "Idioma",
+    "nav.primary": "Navegação principal",
+    "nav.open": "Abrir menu",
+    "nav.close": "Fechar menu",
+    "a11y.skipToContent": "Ir para o conteúdo",
     "home.hero.title": "Reunir famílias é possível.",
     "home.hero.subtitle":
       "A BASUF ajuda a localizar pessoas desaparecidas por terremotos, guerras e enchentes na América Latina.",
