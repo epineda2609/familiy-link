@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { LocaleProvider } from "../i18n/LocaleProvider";
 import { InstitutionalSessionProvider } from "../auth/InstitutionalSession";
+import { ToastViewport } from "../components/Toast";
 
 function NotFoundComponent() {
   return (
@@ -132,6 +133,7 @@ function RootComponent() {
         <InstitutionalSessionProvider>
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
+          <ToastViewport />
         </InstitutionalSessionProvider>
       </LocaleProvider>
     </QueryClientProvider>
