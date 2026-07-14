@@ -26,7 +26,7 @@ import { peopleRepository } from "../repositories/PeopleRepository";
 import type { Disaster, PersonStatus } from "../domain/types";
 import type { MessageKey } from "../i18n/messages";
 
-export const Route = createFileRoute("/institutional")({
+export const Route = createFileRoute("/institutional/")({
   head: () => ({
     meta: [
       { title: "Panel institucional — BASUF" },
