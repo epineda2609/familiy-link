@@ -139,7 +139,7 @@ function ReportPage() {
       <div className="min-h-dvh bg-background">
         <DemoBanner />
         <SiteHeader />
-        <main className="mx-auto max-w-2xl px-4 py-16">
+        <main id="main-content" className="mx-auto max-w-2xl px-4 py-16">
           <div className="rounded-xl border border-hope/40 bg-hope/10 p-8 text-center">
             <CheckCircle2 className="mx-auto h-12 w-12 text-hope-foreground" aria-hidden />
             <h1 className="mt-4 text-2xl font-bold">{t("report.success.title")}</h1>
@@ -179,7 +179,7 @@ function ReportPage() {
       <DemoBanner />
       <SiteHeader />
 
-      <main className="mx-auto max-w-3xl px-4 py-8">
+      <main id="main-content" className="mx-auto max-w-3xl px-4 py-8">
         <Link
           to="/"
           className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition hover:text-foreground"

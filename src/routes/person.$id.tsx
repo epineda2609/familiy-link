@@ -104,7 +104,7 @@ function PersonDetailPage() {
       <DemoBanner />
       <SiteHeader />
 
-      <main className="mx-auto max-w-4xl px-4 py-8">
+      <main id="main-content" className="mx-auto max-w-4xl px-4 py-8">
         <Link
           to="/search"
           className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition hover:text-foreground"
@@ -266,7 +266,7 @@ function PersonNotFound() {
     <div className="min-h-dvh bg-background">
       <DemoBanner />
       <SiteHeader />
-      <main className="mx-auto max-w-3xl px-4 py-16 text-center">
+      <main id="main-content" className="mx-auto max-w-3xl px-4 py-16 text-center">
         <h1 className="text-2xl font-bold">{t("person.notFound.title")}</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           {t("person.notFound.desc")}
