@@ -71,15 +71,13 @@ function Home() {
                 <Search className="h-4 w-4" aria-hidden />
                 {t("home.cta.search")}
               </Link>
-              <button
-                type="button"
-                disabled
-                title="Próximamente"
-                className="inline-flex cursor-not-allowed items-center gap-2 rounded-md border border-input bg-card px-5 py-3 text-sm font-semibold text-foreground/70"
+              <Link
+                to="/report"
+                className="inline-flex items-center gap-2 rounded-md border border-input bg-card px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-accent"
               >
                 <UserPlus className="h-4 w-4" aria-hidden />
                 {t("home.cta.report")}
-              </button>
+              </Link>
             </div>
           </div>
         </div>
