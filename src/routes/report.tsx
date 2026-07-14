@@ -4,6 +4,7 @@ import { AlertTriangle, CheckCircle2, Send, ArrowLeft } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
+import { SkipLink } from "../components/SkipLink";
 import { useT } from "../i18n/LocaleProvider";
 import {
   peopleRepository,
@@ -136,10 +137,11 @@ function ReportPage() {
 
   if (created) {
     return (
-      <div className="min-h-screen bg-background">
-        <DemoBanner />
+      <div className="min-h-dvh bg-background">
+        <SkipLink />
+      <DemoBanner />
         <SiteHeader />
-        <main className="mx-auto max-w-2xl px-4 py-16">
+        <main id="main-content" className="mx-auto max-w-2xl px-4 py-16">
           <div className="rounded-xl border border-hope/40 bg-hope/10 p-8 text-center">
             <CheckCircle2 className="mx-auto h-12 w-12 text-hope-foreground" aria-hidden />
             <h1 className="mt-4 text-2xl font-bold">{t("report.success.title")}</h1>
@@ -175,11 +177,11 @@ function ReportPage() {
   const hasErrors = Object.keys(errors).length > 0;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <DemoBanner />
       <SiteHeader />
 
-      <main className="mx-auto max-w-3xl px-4 py-8">
+      <main id="main-content" className="mx-auto max-w-3xl px-4 py-8">
         <Link
           to="/"
           className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition hover:text-foreground"

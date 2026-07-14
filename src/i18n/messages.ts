@@ -15,6 +15,10 @@ export const messages = {
     "nav.about": "Sobre BASUF",
     "nav.institutional": "Panel institucional",
     "nav.language": "Idioma",
+    "nav.primary": "Navegación principal",
+    "nav.open": "Abrir menú",
+    "nav.close": "Cerrar menú",
+    "a11y.skipToContent": "Saltar al contenido",
     "home.hero.title": "Reunir familias es posible.",
     "home.hero.subtitle":
       "BASUF ayuda a localizar personas desaparecidas por sismos, guerras e inundaciones en Latinoamérica.",
@@ -269,6 +273,10 @@ export const messages = {
     "nav.about": "Sobre a BASUF",
     "nav.institutional": "Painel institucional",
     "nav.language": "Idioma",
+    "nav.primary": "Navegação principal",
+    "nav.open": "Abrir menu",
+    "nav.close": "Fechar menu",
+    "a11y.skipToContent": "Ir para o conteúdo",
     "home.hero.title": "Reunir famílias é possível.",
     "home.hero.subtitle":
       "A BASUF ajuda a localizar pessoas desaparecidas por terremotos, guerras e enchentes na América Latina.",

@@ -3,6 +3,7 @@ import { Search, UserPlus, Waves, Flame, Zap, ArrowRight } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
+import { SkipLink } from "../components/SkipLink";
 import { useT } from "../i18n/LocaleProvider";
 import { mockDisasters } from "../data/mock/disasters";
 import type { DisasterType } from "../domain/types";
@@ -42,9 +43,11 @@ function Home() {
   const activeDisasters = mockDisasters.filter((d) => d.active).slice(0, 4);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
+      <SkipLink />
       <DemoBanner />
       <SiteHeader />
+      <main id="main-content">
 
       {/* Hero */}
       <section className="relative overflow-hidden">
@@ -185,6 +188,7 @@ function Home() {
         </div>
       </section>
 
+      </main>
       <SiteFooter />
     </div>
   );

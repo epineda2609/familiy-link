@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
+import { SkipLink } from "../components/SkipLink";
 import { SearchForm } from "../components/SearchForm";
 import { PersonCard } from "../components/PersonCard";
 import { useT } from "../i18n/LocaleProvider";
@@ -58,11 +59,12 @@ function SearchPage() {
   }, [applied]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
+      <SkipLink />
       <DemoBanner />
       <SiteHeader />
 
-      <main className="mx-auto max-w-7xl px-4 py-10">
+      <main id="main-content" className="mx-auto max-w-7xl px-4 py-10">
         <header className="mb-6">
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
             {t("search.title")}

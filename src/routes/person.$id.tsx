@@ -13,6 +13,7 @@ import {
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
+import { SkipLink } from "../components/SkipLink";
 import { useT } from "../i18n/LocaleProvider";
 import { peopleRepository } from "../repositories/PeopleRepository";
 import type {
@@ -100,11 +101,12 @@ function PersonDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
+      <SkipLink />
       <DemoBanner />
       <SiteHeader />
 
-      <main className="mx-auto max-w-4xl px-4 py-8">
+      <main id="main-content" className="mx-auto max-w-4xl px-4 py-8">
         <Link
           to="/search"
           className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition hover:text-foreground"
@@ -263,10 +265,10 @@ function Row({
 function PersonNotFound() {
   const { t } = useT();
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <DemoBanner />
       <SiteHeader />
-      <main className="mx-auto max-w-3xl px-4 py-16 text-center">
+      <main id="main-content" className="mx-auto max-w-3xl px-4 py-16 text-center">
         <h1 className="text-2xl font-bold">{t("person.notFound.title")}</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           {t("person.notFound.desc")}

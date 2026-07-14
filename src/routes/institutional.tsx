@@ -14,6 +14,7 @@ import {
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
+import { SkipLink } from "../components/SkipLink";
 import { useT } from "../i18n/LocaleProvider";
 import {
   useInstitutionalSession,
@@ -58,10 +59,11 @@ function SignInGate() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
+      <SkipLink />
       <DemoBanner />
       <SiteHeader />
-      <main className="mx-auto max-w-lg px-4 py-14">
+      <main id="main-content" className="mx-auto max-w-lg px-4 py-14">
         <div className="rounded-2xl border border-border bg-card p-8 shadow-sm">
           <div className="mb-5 flex items-center gap-3">
             <span className="grid h-11 w-11 place-items-center rounded-lg bg-primary/10 text-primary">
@@ -152,11 +154,11 @@ function Shell() {
   const activeTabCls = "border-border bg-card text-foreground shadow-sm";
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <DemoBanner />
       <SiteHeader />
 
-      <main className="mx-auto max-w-7xl px-4 py-8">
+      <main id="main-content" className="mx-auto max-w-7xl px-4 py-8">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-primary/30 bg-primary/5 p-4">
           <div className="flex items-center gap-3">
             <span className="grid h-10 w-10 place-items-center rounded-lg bg-primary text-primary-foreground">
