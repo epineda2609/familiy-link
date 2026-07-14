@@ -1,0 +1,65 @@
+import type { Disaster } from "../../domain/types";
+
+export const mockDisasters: Disaster[] = [
+  {
+    id: "d-mx-2024-sismo",
+    type: "earthquake",
+    name: "Sismo Costa del Pacífico",
+    country: "MX",
+    region: "Guerrero",
+    startedAt: "2024-11-03",
+    active: true,
+    affectedEstimate: 42000,
+  },
+  {
+    id: "d-cl-2025-sismo",
+    type: "earthquake",
+    name: "Sismo Región de Valparaíso",
+    country: "CL",
+    region: "Valparaíso",
+    startedAt: "2025-03-18",
+    active: true,
+    affectedEstimate: 18500,
+  },
+  {
+    id: "d-br-2025-inund",
+    type: "flood",
+    name: "Enchentes do Rio Grande do Sul",
+    country: "BR",
+    region: "Rio Grande do Sul",
+    startedAt: "2025-05-02",
+    active: true,
+    affectedEstimate: 210000,
+  },
+  {
+    id: "d-co-2024-inund",
+    type: "flood",
+    name: "Inundaciones del Río Cauca",
+    country: "CO",
+    region: "Valle del Cauca",
+    startedAt: "2024-10-14",
+    active: false,
+    affectedEstimate: 9800,
+  },
+  {
+    id: "d-ve-2025-conflict",
+    type: "war",
+    name: "Desplazamiento frontera sur",
+    country: "VE",
+    region: "Zona fronteriza",
+    startedAt: "2025-01-22",
+    active: true,
+    affectedEstimate: 15000,
+  },
+];
+
+export const mockCountries = [
+  { code: "MX", name: "México" },
+  { code: "CL", name: "Chile" },
+  { code: "BR", name: "Brasil" },
+  { code: "CO", name: "Colombia" },
+  { code: "VE", name: "Venezuela" },
+  { code: "PE", name: "Perú" },
+  { code: "AR", name: "Argentina" },
+  { code: "EC", name: "Ecuador" },
+];
