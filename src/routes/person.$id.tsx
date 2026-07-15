@@ -22,6 +22,8 @@ import type {
   Country,
 } from "../domain/types";
 import type { MessageKey } from "../i18n/messages";
+import { CaseNarrative } from "../components/CaseNarrative";
+import { getCaseHistoryByPerson } from "../repositories/CaseTimelineRepository";
 
 export const Route = createFileRoute("/person/$id")({
   loader: async ({ params }) => {
