@@ -94,7 +94,6 @@ function RescuePage() {
         </section>
 
         {/* Lookup */}
-        {/* Lookup */}
         <section className="mx-auto max-w-3xl px-4 py-14">
           <div className="mb-6">
             <WhatHappensNow flow="rescue" />
