@@ -302,5 +302,7 @@ const esDict = {
   "empty.audit.desc": "Las acciones sensibles aparecerán aquí en tiempo real.",
 } as const;
 
-export type MessageDict = typeof es;
+export type MessageDict = Record<keyof typeof esDict, string>;
 export type MessageKey = keyof MessageDict;
+
+export const es: MessageDict = esDict;
