@@ -1,5 +1,5 @@
 // BASUF — Español (locale base, define el shape de MessageKey).
-export const es = {
+const esDict = {
   "app.name": "BASUF",
   "app.tagline": "Brother And Sister Uniendo Familias",
   "app.mission":
