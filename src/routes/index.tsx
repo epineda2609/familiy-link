@@ -51,7 +51,11 @@ const disasterIcon: Record<DisasterType, typeof Waves> = {
 
 function Home() {
   const { t } = useT();
-  const activeDisasters = mockDisasters.filter((d) => d.active).slice(0, 4);
+  const activeDisasters = mockDisasters
+    .filter((d) => d.active)
+    .slice()
+    .sort((a, b) => (a.startedAt < b.startedAt ? 1 : -1))
+    .slice(0, 4);
 
   return (
     <div className="min-h-dvh bg-background">
