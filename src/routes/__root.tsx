@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { LocaleProvider } from "../i18n/LocaleProvider";
+import { OperationalModeProvider } from "../modes/OperationalModeProvider";
 import { InstitutionalSessionProvider } from "../auth/InstitutionalSession";
 import { ToastViewport } from "../components/Toast";
 
@@ -134,11 +135,13 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <LocaleProvider>
-        <InstitutionalSessionProvider>
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
-          <ToastViewport />
-        </InstitutionalSessionProvider>
+        <OperationalModeProvider>
+          <InstitutionalSessionProvider>
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+            <ToastViewport />
+          </InstitutionalSessionProvider>
+        </OperationalModeProvider>
       </LocaleProvider>
     </QueryClientProvider>
   );

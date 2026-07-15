@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as RescueRouteImport } from './routes/rescue'
 import { Route as ReportRouteImport } from './routes/report'
+import { Route as ModesRouteImport } from './routes/modes'
 import { Route as InstitutionalRouteImport } from './routes/institutional'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as InstitutionalIndexRouteImport } from './routes/institutional.index'
@@ -34,6 +35,11 @@ const RescueRoute = RescueRouteImport.update({
 const ReportRoute = ReportRouteImport.update({
   id: '/report',
   path: '/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModesRoute = ModesRouteImport.update({
+  id: '/modes',
+  path: '/modes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InstitutionalRoute = InstitutionalRouteImport.update({
@@ -81,6 +87,7 @@ const InstitutionalAuditRoute = InstitutionalAuditRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/institutional': typeof InstitutionalRouteWithChildren
+  '/modes': typeof ModesRoute
   '/report': typeof ReportRoute
   '/rescue': typeof RescueRouteWithChildren
   '/search': typeof SearchRoute
@@ -93,6 +100,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/modes': typeof ModesRoute
   '/report': typeof ReportRoute
   '/rescue': typeof RescueRouteWithChildren
   '/search': typeof SearchRoute
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/institutional': typeof InstitutionalRouteWithChildren
+  '/modes': typeof ModesRoute
   '/report': typeof ReportRoute
   '/rescue': typeof RescueRouteWithChildren
   '/search': typeof SearchRoute
@@ -122,6 +131,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/institutional'
+    | '/modes'
     | '/report'
     | '/rescue'
     | '/search'
@@ -134,6 +144,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/modes'
     | '/report'
     | '/rescue'
     | '/search'
@@ -147,6 +158,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/institutional'
+    | '/modes'
     | '/report'
     | '/rescue'
     | '/search'
@@ -161,6 +173,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   InstitutionalRoute: typeof InstitutionalRouteWithChildren
+  ModesRoute: typeof ModesRoute
   ReportRoute: typeof ReportRoute
   RescueRoute: typeof RescueRouteWithChildren
   SearchRoute: typeof SearchRoute
@@ -188,6 +201,13 @@ declare module '@tanstack/react-router' {
       path: '/report'
       fullPath: '/report'
       preLoaderRoute: typeof ReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/modes': {
+      id: '/modes'
+      path: '/modes'
+      fullPath: '/modes'
+      preLoaderRoute: typeof ModesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/institutional': {
@@ -281,6 +301,7 @@ const RescueRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   InstitutionalRoute: InstitutionalRouteWithChildren,
+  ModesRoute: ModesRoute,
   ReportRoute: ReportRoute,
   RescueRoute: RescueRouteWithChildren,
   SearchRoute: SearchRoute,
