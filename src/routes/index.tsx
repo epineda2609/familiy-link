@@ -129,70 +129,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Nuestra misión */}
-      <section className="border-t border-border bg-muted/30">
-        <div className="mx-auto max-w-7xl px-4 py-16">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-              {t("mission.title")}
-            </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              {t("mission.subtitle")}
-            </p>
-          </div>
-          <div className="mt-10 grid gap-4 sm:grid-cols-3">
-            {[
-              {
-                Icon: HeartHandshake,
-                title: "mission.pillar.humanity.title",
-                desc: "mission.pillar.humanity.desc",
-                tint: "text-primary",
-                bg: "bg-primary/10",
-              },
-              {
-                Icon: ShieldCheck,
-                title: "mission.pillar.traceability.title",
-                desc: "mission.pillar.traceability.desc",
-                tint: "text-hope-foreground",
-                bg: "bg-hope/20",
-              },
-              {
-                Icon: Sunrise,
-                title: "mission.pillar.hope.title",
-                desc: "mission.pillar.hope.desc",
-                tint: "text-urgent-foreground",
-                bg: "bg-urgent/20",
-              },
-            ].map(({ Icon, title, desc, tint, bg }) => (
-              <article
-                key={title}
-                className="flex flex-col rounded-xl border border-border bg-card p-6 shadow-sm"
-              >
-                <span
-                  className={`mb-4 grid h-11 w-11 place-items-center rounded-lg ${bg} ${tint}`}
-                >
-                  <Icon className="h-5 w-5" aria-hidden />
-                </span>
-                <h3 className="font-semibold leading-tight">
-                  {t(title as MessageKey)}
-                </h3>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  {t(desc as MessageKey)}
-                </p>
-              </article>
-            ))}
-          </div>
 
-          <div className="mt-10 rounded-xl border border-border bg-card p-6 sm:p-8">
-            <h3 className="text-lg font-semibold tracking-tight">
-              {t("mission.originTitle")}
-            </h3>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              {t("mission.originBody")}
-            </p>
-          </div>
-        </div>
-      </section>
 
       {/* Stats */}
       <section className="border-y border-border bg-card">
@@ -324,6 +261,71 @@ function Home() {
               </li>
             ))}
           </ol>
+        </div>
+      </section>
+
+      {/* Nuestra misión */}
+      <section className="border-t border-border bg-muted/30">
+        <div className="mx-auto max-w-7xl px-4 py-16">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+              {t("mission.title")}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {t("mission.subtitle")}
+            </p>
+          </div>
+          <div className="mt-10 grid gap-4 sm:grid-cols-3">
+            {[
+              {
+                Icon: HeartHandshake,
+                title: "mission.pillar.humanity.title",
+                desc: "mission.pillar.humanity.desc",
+                tint: "text-primary",
+                bg: "bg-primary/10",
+              },
+              {
+                Icon: ShieldCheck,
+                title: "mission.pillar.traceability.title",
+                desc: "mission.pillar.traceability.desc",
+                tint: "text-hope-foreground",
+                bg: "bg-hope/20",
+              },
+              {
+                Icon: Sunrise,
+                title: "mission.pillar.hope.title",
+                desc: "mission.pillar.hope.desc",
+                tint: "text-urgent-foreground",
+                bg: "bg-urgent/20",
+              },
+            ].map(({ Icon, title, desc, tint, bg }) => (
+              <article
+                key={title}
+                className="flex flex-col rounded-xl border border-border bg-card p-6 shadow-sm"
+              >
+                <span
+                  className={`mb-4 grid h-11 w-11 place-items-center rounded-lg ${bg} ${tint}`}
+                >
+                  <Icon className="h-5 w-5" aria-hidden />
+                </span>
+                <h3 className="font-semibold leading-tight">
+                  {t(title as MessageKey)}
+                </h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {t(desc as MessageKey)}
+                </p>
+              </article>
+            ))}
+          </div>
+
+          <div className="mt-10 rounded-xl border border-border bg-card p-6 sm:p-8">
+            <h3 className="text-lg font-semibold tracking-tight">
+              {t("mission.originTitle")}
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              {t("mission.originBody")}
+            </p>
+          </div>
         </div>
       </section>
 

@@ -23,6 +23,9 @@ export const mockDisasters: Disaster[] = [
     startedAt: "2024-11-03",
     active: true,
     affectedEstimate: 42000,
+    magnitude: "6.8",
+    fatalities: 210,
+    missing: 1450,
   },
   {
     id: "d-cl-2025-sismo",
@@ -33,6 +36,9 @@ export const mockDisasters: Disaster[] = [
     startedAt: "2025-03-18",
     active: true,
     affectedEstimate: 18500,
+    magnitude: "6.4",
+    fatalities: 87,
+    missing: 620,
   },
   {
     id: "d-br-2025-inund",
@@ -43,6 +49,8 @@ export const mockDisasters: Disaster[] = [
     startedAt: "2025-05-02",
     active: true,
     affectedEstimate: 210000,
+    fatalities: 540,
+    missing: 3200,
   },
   {
     id: "d-co-2024-inund",
@@ -53,6 +61,8 @@ export const mockDisasters: Disaster[] = [
     startedAt: "2024-10-14",
     active: false,
     affectedEstimate: 9800,
+    fatalities: 42,
+    missing: 180,
   },
   {
     id: "d-ve-2025-conflict",
@@ -63,6 +73,8 @@ export const mockDisasters: Disaster[] = [
     startedAt: "2025-01-22",
     active: true,
     affectedEstimate: 15000,
+    fatalities: 95,
+    missing: 2100,
   },
 ];
 
