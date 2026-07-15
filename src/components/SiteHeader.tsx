@@ -3,9 +3,12 @@ import { Heart, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useT } from "../i18n/LocaleProvider";
 import { LanguageSelector } from "./LanguageSelector";
+import { ModeSelector } from "./ModeSelector";
+import { useMode } from "../modes/OperationalModeProvider";
 
 export function SiteHeader() {
   const { t } = useT();
+  const { config } = useMode();
   const [open, setOpen] = useState(false);
 
   const linkCls =
@@ -15,6 +18,35 @@ export function SiteHeader() {
     "block rounded-md px-3 py-2 text-sm font-medium text-foreground/80 hover:bg-accent hover:text-foreground";
 
   const close = () => setOpen(false);
+
+  // Reorder desktop nav items by current mode's CTA priority (top 3).
+  const linkFor = (to: string) => {
+    switch (to) {
+      case "/search":
+        return { to: "/search" as const, label: t("nav.search") };
+      case "/report":
+        return { to: "/report" as const, label: t("nav.report") };
+      case "/rescue":
+        return { to: "/rescue" as const, label: t("nav.rescue") };
+      case "/institutional":
+        return { to: "/institutional" as const, label: t("nav.institutional") };
+      default:
+        return null;
+    }
+  };
+  const priorityLinks = config.ctas
+    .map((c) => linkFor(c.to))
+    .filter((v): v is { to: "/search" | "/report" | "/rescue" | "/institutional"; label: string } => v !== null);
+  const seenTo = new Set(priorityLinks.map((l) => l.to));
+  const rest = (
+    [
+      { to: "/search" as const, label: t("nav.search") },
+      { to: "/rescue" as const, label: t("nav.rescue") },
+      { to: "/report" as const, label: t("nav.report") },
+      { to: "/institutional" as const, label: t("nav.institutional") },
+    ] as const
+  ).filter((l) => !seenTo.has(l.to));
+  const navLinks = [...priorityLinks, ...rest];
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
@@ -42,37 +74,27 @@ export function SiteHeader() {
           >
             {t("nav.home")}
           </Link>
+          {navLinks.map((l) => (
+            <Link
+              key={l.to}
+              to={l.to}
+              className={linkCls}
+              activeProps={{ className: `${linkCls} ${activeCls}` }}
+            >
+              {l.label}
+            </Link>
+          ))}
           <Link
-            to="/search"
+            to="/modes"
             className={linkCls}
             activeProps={{ className: `${linkCls} ${activeCls}` }}
           >
-            {t("nav.search")}
-          </Link>
-          <Link
-            to="/rescue"
-            className={linkCls}
-            activeProps={{ className: `${linkCls} ${activeCls}` }}
-          >
-            {t("nav.rescue")}
-          </Link>
-          <Link
-            to="/report"
-            className={linkCls}
-            activeProps={{ className: `${linkCls} ${activeCls}` }}
-          >
-            {t("nav.report")}
-          </Link>
-          <Link
-            to="/institutional"
-            className={linkCls}
-            activeProps={{ className: `${linkCls} ${activeCls}` }}
-          >
-            {t("nav.institutional")}
+            {t("nav.modes")}
           </Link>
         </nav>
 
         <div className="flex items-center gap-2">
+          <ModeSelector />
           <LanguageSelector />
           <button
             type="button"
@@ -97,17 +119,24 @@ export function SiteHeader() {
             <Link to="/" className={mobileLinkCls} onClick={close} activeOptions={{ exact: true }} activeProps={{ className: `${mobileLinkCls} ${activeCls}` }}>
               {t("nav.home")}
             </Link>
-            <Link to="/search" className={mobileLinkCls} onClick={close} activeProps={{ className: `${mobileLinkCls} ${activeCls}` }}>
-              {t("nav.search")}
-            </Link>
-            <Link to="/rescue" className={mobileLinkCls} onClick={close} activeProps={{ className: `${mobileLinkCls} ${activeCls}` }}>
-              {t("nav.rescue")}
-            </Link>
-            <Link to="/report" className={mobileLinkCls} onClick={close} activeProps={{ className: `${mobileLinkCls} ${activeCls}` }}>
-              {t("nav.report")}
-            </Link>
-            <Link to="/institutional" className={mobileLinkCls} onClick={close} activeProps={{ className: `${mobileLinkCls} ${activeCls}` }}>
-              {t("nav.institutional")}
+            {navLinks.map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                className={mobileLinkCls}
+                onClick={close}
+                activeProps={{ className: `${mobileLinkCls} ${activeCls}` }}
+              >
+                {l.label}
+              </Link>
+            ))}
+            <Link
+              to="/modes"
+              className={mobileLinkCls}
+              onClick={close}
+              activeProps={{ className: `${mobileLinkCls} ${activeCls}` }}
+            >
+              {t("nav.modes")}
             </Link>
           </div>
         </nav>

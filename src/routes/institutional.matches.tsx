@@ -6,7 +6,6 @@ import {
   X,
   RotateCcw,
   ExternalLink,
-  Gauge,
   Users,
 } from "lucide-react";
 import { useT } from "../i18n/LocaleProvider";
@@ -23,6 +22,11 @@ import { integrations } from "../integrations/simulatedIntegrations";
 import { toast } from "../components/Toast";
 import { EmptyState } from "../components/EmptyState";
 import { Inbox } from "lucide-react";
+import { ConfidenceScore } from "../components/matching/ConfidenceScore";
+import { MatchExplanationList } from "../components/matching/MatchExplanation";
+import { ContradictionList } from "../components/matching/ContradictionList";
+import { ReviewBadge } from "../components/matching/ReviewBadge";
+import { RecommendedActionBanner } from "../components/matching/RecommendedAction";
 
 export const Route = createFileRoute("/institutional/matches")({
   head: () => ({
@@ -36,11 +40,6 @@ export const Route = createFileRoute("/institutional/matches")({
 
 const statuses: MatchStatus[] = ["pending", "approved", "rejected"];
 
-const statusStyles: Record<MatchStatus, string> = {
-  pending: "bg-urgent/20 text-urgent-foreground border-urgent/40",
-  approved: "bg-hope/20 text-hope-foreground border-hope/40",
-  rejected: "bg-destructive/10 text-destructive border-destructive/30",
-};
 
 const personStatusPill: Record<PersonStatus, string> = {
   missing: "bg-destructive/10 text-destructive border-destructive/30",
@@ -232,16 +231,13 @@ function MatchCard({
   return (
     <article className="rounded-xl border border-border bg-card p-5 shadow-sm">
       <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <span
-            className={`rounded-full border px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${statusStyles[match.status]}`}
-          >
-            {t(`match.status.${match.status}` as MessageKey)}
+        <div className="flex flex-wrap items-center gap-3">
+          <ReviewBadge state={match.explanation.reviewState} />
+          <span className="rounded-full border border-border bg-muted/40 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+            {t(`match.kind.${match.explanation.kind}` as MessageKey)}
           </span>
-          <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-            <Gauge className="h-3.5 w-3.5" aria-hidden />
-            {t("match.score")}:
-            <strong className="ml-0.5 text-foreground">{match.score}</strong>
+          <span className="text-[11px] text-muted-foreground">
+            {t("match.reportedBy")}: {match.explanation.reportedBy}
           </span>
         </div>
         <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
@@ -249,6 +245,10 @@ function MatchCard({
           {match.id}
         </span>
       </header>
+
+      <div className="mb-4">
+        <ConfidenceScore score={match.explanation.score} />
+      </div>
 
       <div className="grid gap-3 md:grid-cols-[1fr_auto_1fr] md:items-stretch">
         <PersonPanel label={t("match.personA")} person={match.personA} />
@@ -258,20 +258,22 @@ function MatchCard({
         <PersonPanel label={t("match.personB")} person={match.personB} />
       </div>
 
-      <div className="mt-4">
-        <p className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-          {t("match.reasons")}
+      <div className="mt-5">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          {t("match.fields.title")}
         </p>
-        <div className="flex flex-wrap gap-1.5">
-          {match.reasons.map((r) => (
-            <span
-              key={r}
-              className="rounded-full border border-border bg-muted/40 px-2 py-0.5 text-[11px] text-foreground"
-            >
-              {readableReason(r, t)}
-            </span>
-          ))}
-        </div>
+        <MatchExplanationList fields={match.explanation.fields} />
+      </div>
+
+      <div className="mt-5">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          {t("match.contradictions.title")}
+        </p>
+        <ContradictionList items={match.explanation.contradictions} />
+      </div>
+
+      <div className="mt-5">
+        <RecommendedActionBanner action={match.explanation.recommendedAction} />
       </div>
 
       {match.status !== "pending" && (
@@ -394,12 +396,4 @@ function PersonPanel({
   );
 }
 
-function readableReason(code: string, t: (k: MessageKey) => string): string {
-  if (code.startsWith("age_diff_")) {
-    const n = code.slice("age_diff_".length);
-    return `${t("match.reason.age_diff")}: ${n}`;
-  }
-  const key = `match.reason.${code}` as MessageKey;
-  const val = t(key);
-  return val === key ? code : val;
-}
+

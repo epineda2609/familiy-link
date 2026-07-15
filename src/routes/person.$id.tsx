@@ -22,6 +22,8 @@ import type {
   Country,
 } from "../domain/types";
 import type { MessageKey } from "../i18n/messages";
+import { CaseNarrative } from "../components/CaseNarrative";
+import { getCaseHistoryByPerson } from "../repositories/CaseTimelineRepository";
 
 export const Route = createFileRoute("/person/$id")({
   loader: async ({ params }) => {
@@ -233,6 +235,14 @@ function PersonDetailPage() {
             </div>
           </aside>
         </div>
+
+        <section className="mt-10">
+          {(() => {
+            const history = getCaseHistoryByPerson(person.id);
+            if (!history) return null;
+            return <CaseNarrative history={history} defaultView="narrative" />;
+          })()}
+        </section>
       </main>
 
       <SiteFooter />

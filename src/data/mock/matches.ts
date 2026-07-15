@@ -1,22 +1,126 @@
-import type { PersonStatus } from "../../domain/types";
+import type { PersonStatus, PublicPersonCard } from "../../domain/types";
+import {
+  confidenceLevel,
+  type MatchExplanation,
+  type MatchField,
+  type RecommendedAction,
+  type ReviewState,
+} from "../../domain/match";
 import { mockPeople } from "./people";
 
 export type MatchStatus = "pending" | "approved" | "rejected";
 
 export interface MatchCandidate {
   id: string;
-  personA_id: string; // typically "missing" or "searching"
-  personB_id: string; // typically "found" or "searching"
-  score: number; // 0-100
-  reasons: string[]; // i18n-agnostic reason codes
+  personA_id: string;
+  personB_id: string;
+  score: number;
+  reasons: string[];
   status: MatchStatus;
   reviewedBy?: string;
   reviewedAt?: string;
   note?: string;
+  explanation: MatchExplanation;
 }
 
-// Motor de matching simulado — determinístico, sin ML real.
-// Regla: mismo desastre + mismo género + edad ±5 años + estados complementarios.
+function locFirst(s?: string): string {
+  return (s ?? "").toLowerCase().split(",")[0].trim();
+}
+
+function buildFields(a: PublicPersonCard, b: PublicPersonCard): MatchField[] {
+  const fields: MatchField[] = [];
+  // Age
+  const ageA = a.approximateAge;
+  const ageB = b.approximateAge;
+  if (ageA != null && ageB != null) {
+    const diff = Math.abs(ageA - ageB);
+    fields.push({
+      key: "age",
+      valueA: `~${ageA}`,
+      valueB: `~${ageB}`,
+      agreement: diff === 0 ? "match" : diff <= 5 ? "partial" : "contradict",
+    });
+  } else {
+    fields.push({
+      key: "age",
+      valueA: ageA ? `~${ageA}` : "—",
+      valueB: ageB ? `~${ageB}` : "—",
+      agreement: "unknown",
+    });
+  }
+  // Gender
+  fields.push({
+    key: "gender",
+    valueA: a.gender,
+    valueB: b.gender,
+    agreement: a.gender === b.gender ? "match" : "contradict",
+  });
+  // Location
+  const la = locFirst(a.lastSeenLocation);
+  const lb = locFirst(b.lastSeenLocation);
+  if (la && lb) {
+    fields.push({
+      key: "location",
+      valueA: a.lastSeenLocation ?? "—",
+      valueB: b.lastSeenLocation ?? "—",
+      agreement: la === lb ? "match" : "contradict",
+    });
+  } else {
+    fields.push({
+      key: "location",
+      valueA: a.lastSeenLocation ?? "—",
+      valueB: b.lastSeenLocation ?? "—",
+      agreement: "unknown",
+    });
+  }
+  // Disaster
+  fields.push({
+    key: "disaster",
+    valueA: a.disasterId,
+    valueB: b.disasterId,
+    agreement: a.disasterId === b.disasterId ? "match" : "contradict",
+  });
+  // Features
+  const fa = a.distinctiveFeatures?.trim() ?? "";
+  const fb = b.distinctiveFeatures?.trim() ?? "";
+  if (fa && fb) {
+    const overlap = fa
+      .toLowerCase()
+      .split(/[\s,]+/)
+      .some((w) => w.length > 3 && fb.toLowerCase().includes(w));
+    fields.push({
+      key: "features",
+      valueA: fa,
+      valueB: fb,
+      agreement: overlap ? "partial" : "contradict",
+    });
+  } else {
+    fields.push({
+      key: "features",
+      valueA: fa || "—",
+      valueB: fb || "—",
+      agreement: "unknown",
+    });
+  }
+  return fields;
+}
+
+function recommendation(
+  score: number,
+  contradictions: number,
+): { review: ReviewState; action: RecommendedAction } {
+  if (contradictions >= 2) {
+    return { review: "pending", action: "markNoMatch" };
+  }
+  if (score >= 85 && contradictions === 0) {
+    return { review: "pending", action: "approveNow" };
+  }
+  if (score >= 60) {
+    return { review: "pending", action: "requestValidation" };
+  }
+  return { review: "needsAuthority", action: "escalateAuthority" };
+}
+
 function computeCandidates(): MatchCandidate[] {
   const complementary = (a: PersonStatus, b: PersonStatus) =>
     (a === "missing" && (b === "found" || b === "searching")) ||
@@ -43,22 +147,28 @@ function computeCandidates(): MatchCandidate[] {
         `age_diff_${ageDiff}`,
       ];
       let score = 100 - ageDiff * 8;
-      if (
-        a.lastSeenLocation &&
-        b.lastSeenLocation &&
-        a.lastSeenLocation
-          .toLowerCase()
-          .split(",")[0]
-          .trim() ===
-          b.lastSeenLocation
-            .toLowerCase()
-            .split(",")[0]
-            .trim()
-      ) {
+      if (locFirst(a.lastSeenLocation) && locFirst(a.lastSeenLocation) === locFirst(b.lastSeenLocation)) {
         score += 10;
         reasons.push("same_location");
       }
       score = Math.max(0, Math.min(100, score));
+
+      const fields = buildFields(a, b);
+      const contradictions = fields.filter((f) => f.agreement === "contradict");
+      const { review, action } = recommendation(score, contradictions.length);
+
+      // Determine kind: exact if all match; probabilistic if any partial; narrative if features carry weight.
+      const allMatch = fields.every(
+        (f) => f.agreement === "match" || f.agreement === "unknown",
+      );
+      const hasFeaturesSignal = fields.find(
+        (f) => f.key === "features" && f.agreement !== "unknown",
+      );
+      const kind = allMatch
+        ? "exact"
+        : hasFeaturesSignal
+          ? "narrative"
+          : "probabilistic";
 
       out.push({
         id: `m-${a.id}-${b.id}`,
@@ -67,10 +177,18 @@ function computeCandidates(): MatchCandidate[] {
         score,
         reasons,
         status: "pending",
+        explanation: {
+          kind,
+          score,
+          fields,
+          contradictions,
+          reportedBy: `BASUF · ${confidenceLevel(score)}-signal engine`,
+          reviewState: review,
+          recommendedAction: action,
+        },
       });
     }
   }
-  // Dedupe symmetric pairs — keep the higher-scored direction only.
   const seen = new Map<string, MatchCandidate>();
   for (const m of out) {
     const key = [m.personA_id, m.personB_id].sort().join("|");
@@ -80,16 +198,15 @@ function computeCandidates(): MatchCandidate[] {
   return Array.from(seen.values()).sort((a, b) => b.score - a.score);
 }
 
-// In-memory mutable list (mock).
 export const mockMatches: MatchCandidate[] = computeCandidates();
 
-// Semillas: un match aprobado y uno rechazado para poblar el histórico.
 if (mockMatches[0]) {
   mockMatches[0] = {
     ...mockMatches[0],
     status: "approved",
     reviewedBy: "Cruz Roja Latinoamérica",
     reviewedAt: "2025-05-10",
+    explanation: { ...mockMatches[0].explanation, reviewState: "approved" },
   };
 }
 if (mockMatches[mockMatches.length - 1] && mockMatches.length > 1) {
@@ -100,5 +217,6 @@ if (mockMatches[mockMatches.length - 1] && mockMatches.length > 1) {
     reviewedBy: "ACNUR Regional",
     reviewedAt: "2025-05-11",
     note: "No coincide edad exacta reportada por familiar.",
+    explanation: { ...mockMatches[last].explanation, reviewState: "rejected" },
   };
 }
