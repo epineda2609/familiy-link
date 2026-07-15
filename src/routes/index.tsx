@@ -1,5 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Search, UserPlus, Waves, Flame, Zap, ArrowRight } from "lucide-react";
+import {
+  Search,
+  UserPlus,
+  Waves,
+  Flame,
+  Zap,
+  ArrowRight,
+  HeartHandshake,
+  ShieldCheck,
+  Sunrise,
+} from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
