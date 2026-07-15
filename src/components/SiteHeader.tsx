@@ -1,11 +1,11 @@
 import { Link } from "@tanstack/react-router";
-import { Heart, Globe, Menu, X } from "lucide-react";
+import { Heart, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useT } from "../i18n/LocaleProvider";
-import type { Locale } from "../i18n/messages";
+import { LanguageSelector } from "./LanguageSelector";
 
 export function SiteHeader() {
-  const { t, locale, setLocale } = useT();
+  const { t } = useT();
   const [open, setOpen] = useState(false);
 
   const linkCls =
