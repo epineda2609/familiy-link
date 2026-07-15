@@ -198,9 +198,16 @@ function ReportPage() {
             {t("report.title")}
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">{t("report.subtitle")}</p>
+          <div className="mt-3">
+            <PrivacyInline />
+          </div>
         </header>
 
-        <div className="mt-6 flex items-start gap-3 rounded-xl border border-urgent/40 bg-urgent/10 p-4">
+        <div className="mt-6">
+          <WhatHappensNow flow="report" />
+        </div>
+
+        <div className="mt-4 flex items-start gap-3 rounded-xl border border-urgent/40 bg-urgent/10 p-4">
           <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-urgent-foreground" aria-hidden />
           <div>
             <p className="text-sm font-semibold text-foreground">
@@ -211,6 +218,7 @@ function ReportPage() {
             </p>
           </div>
         </div>
+
 
         <form onSubmit={onSubmit} noValidate className="mt-6 space-y-6">
           {/* Persona */}
