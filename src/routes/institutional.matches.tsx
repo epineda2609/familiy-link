@@ -6,7 +6,6 @@ import {
   X,
   RotateCcw,
   ExternalLink,
-  Gauge,
   Users,
 } from "lucide-react";
 import { useT } from "../i18n/LocaleProvider";
@@ -23,6 +22,11 @@ import { integrations } from "../integrations/simulatedIntegrations";
 import { toast } from "../components/Toast";
 import { EmptyState } from "../components/EmptyState";
 import { Inbox } from "lucide-react";
+import { ConfidenceScore } from "../components/matching/ConfidenceScore";
+import { MatchExplanationList } from "../components/matching/MatchExplanation";
+import { ContradictionList } from "../components/matching/ContradictionList";
+import { ReviewBadge } from "../components/matching/ReviewBadge";
+import { RecommendedActionBanner } from "../components/matching/RecommendedAction";
 
 export const Route = createFileRoute("/institutional/matches")({
   head: () => ({
