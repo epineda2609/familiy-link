@@ -396,8 +396,4 @@ function PersonPanel({
   );
 }
 
-function readableReason(_code: string, _t: (k: MessageKey) => string): string {
-  return _code;
-}
-void readableReason;
 
