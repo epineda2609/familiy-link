@@ -50,6 +50,13 @@ export function SiteHeader() {
             {t("nav.search")}
           </Link>
           <Link
+            to="/rescue"
+            className={linkCls}
+            activeProps={{ className: `${linkCls} ${activeCls}` }}
+          >
+            {t("nav.rescue")}
+          </Link>
+          <Link
             to="/report"
             className={linkCls}
             activeProps={{ className: `${linkCls} ${activeCls}` }}
@@ -92,6 +99,9 @@ export function SiteHeader() {
             </Link>
             <Link to="/search" className={mobileLinkCls} onClick={close} activeProps={{ className: `${mobileLinkCls} ${activeCls}` }}>
               {t("nav.search")}
+            </Link>
+            <Link to="/rescue" className={mobileLinkCls} onClick={close} activeProps={{ className: `${mobileLinkCls} ${activeCls}` }}>
+              {t("nav.rescue")}
             </Link>
             <Link to="/report" className={mobileLinkCls} onClick={close} activeProps={{ className: `${mobileLinkCls} ${activeCls}` }}>
               {t("nav.report")}
