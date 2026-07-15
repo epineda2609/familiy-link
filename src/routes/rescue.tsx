@@ -14,6 +14,7 @@ import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
 import { SkipLink } from "../components/SkipLink";
 import { DistributedContributions } from "../components/DistributedContributions";
+import { WhatHappensNow } from "../components/ux/WhatHappensNow";
 import { useT } from "../i18n/LocaleProvider";
 import type { MessageKey } from "../i18n/messages";
 import { mockRescueRecords, findRescueByCode } from "../data/mock/rescue";
@@ -93,7 +94,11 @@ function RescuePage() {
         </section>
 
         {/* Lookup */}
+        {/* Lookup */}
         <section className="mx-auto max-w-3xl px-4 py-14">
+          <div className="mb-6">
+            <WhatHappensNow flow="rescue" />
+          </div>
           <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
             <div className="mb-4 flex items-center gap-2">
               <span className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary">
