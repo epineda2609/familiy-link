@@ -13,6 +13,9 @@ export interface Disaster {
   startedAt: string; // ISO
   active: boolean;
   affectedEstimate?: number;
+  magnitude?: string;
+  fatalities?: number;
+  missing?: number;
 }
 
 /** Perfil público — SIN datos sensibles. Nunca incluye fotos de fallecidos ni contactos. */
