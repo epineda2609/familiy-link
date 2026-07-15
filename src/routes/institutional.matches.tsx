@@ -396,12 +396,8 @@ function PersonPanel({
   );
 }
 
-function readableReason(code: string, t: (k: MessageKey) => string): string {
-  if (code.startsWith("age_diff_")) {
-    const n = code.slice("age_diff_".length);
-    return `${t("match.reason.age_diff")}: ${n}`;
-  }
-  const key = `match.reason.${code}` as MessageKey;
-  const val = t(key);
-  return val === key ? code : val;
+function readableReason(_code: string, _t: (k: MessageKey) => string): string {
+  return _code;
 }
+void readableReason;
+
