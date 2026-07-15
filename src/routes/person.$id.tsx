@@ -166,8 +166,19 @@ function PersonDetailPage() {
               <MessageSquare className="h-4 w-4" aria-hidden />
               {t("person.actions.report")}
             </button>
+            {safeId && (
+              <Link
+                to="/safe-id/$code"
+                params={{ code: safeId.shortCode }}
+                className="inline-flex items-center gap-1.5 rounded-md border border-primary/30 bg-primary/5 px-3 py-1.5 text-sm font-medium text-primary transition hover:bg-primary/10"
+              >
+                <ShieldCheck className="h-4 w-4" aria-hidden />
+                {t("safeId.link")} · {safeId.shortCode}
+              </Link>
+            )}
           </div>
         </header>
+
 
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
