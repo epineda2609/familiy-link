@@ -66,21 +66,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <label className="sr-only" htmlFor="locale-select">
-            {t("nav.language")}
-          </label>
-          <div className="flex items-center gap-1 rounded-md border border-input bg-card px-2 py-1">
-            <Globe className="h-3.5 w-3.5 text-muted-foreground" aria-hidden />
-            <select
-              id="locale-select"
-              value={locale}
-              onChange={(e) => setLocale(e.target.value as Locale)}
-              className="bg-transparent text-xs font-medium focus:outline-none"
-            >
-              <option value="es">ES</option>
-              <option value="pt">PT</option>
-            </select>
-          </div>
+          <LanguageSelector />
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
