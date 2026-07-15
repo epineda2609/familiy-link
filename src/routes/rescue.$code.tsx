@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, CheckCircle2, HelpCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle2, HelpCircle, ShieldCheck } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
@@ -10,6 +10,7 @@ import { getCaseHistoryByRescue } from "../repositories/CaseTimelineRepository";
 import { useT } from "../i18n/LocaleProvider";
 import type { MessageKey } from "../i18n/messages";
 import { findRescueByCode } from "../data/mock/rescue";
+import { findSafeIdByRescueCode } from "../data/mock/safeIds";
 
 export const Route = createFileRoute("/rescue/$code")({
   loader: ({ params }) => {
@@ -61,6 +62,7 @@ function RescueDetail() {
   const { t, locale } = useT();
   const { record } = Route.useLoaderData();
   const last = record.chain[record.chain.length - 1];
+  const safeId = findSafeIdByRescueCode(record.code);
 
   return (
     <div className="min-h-dvh bg-background">
