@@ -4,8 +4,9 @@ import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
 import { SkipLink } from "../components/SkipLink";
-import { RescueChainTimeline } from "../components/RescueChainTimeline";
 import { RescueBadgePreview } from "../components/RescueBadgePreview";
+import { CaseNarrative } from "../components/CaseNarrative";
+import { getCaseHistoryByRescue } from "../repositories/CaseTimelineRepository";
 import { useT } from "../i18n/LocaleProvider";
 import type { MessageKey } from "../i18n/messages";
 import { findRescueByCode } from "../data/mock/rescue";
@@ -119,15 +120,6 @@ function RescueDetail() {
         <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_360px]">
           {/* Chain */}
           <section>
-            <div className="mb-4">
-              <h2 className="text-xl font-bold tracking-tight">
-                {t("rescue.chain.title")}
-              </h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {t("rescue.chain.subtitle")}
-              </p>
-            </div>
-
             <div className="mb-6 rounded-xl border border-border bg-card p-4 shadow-sm">
               <p className="text-xs uppercase tracking-wide text-muted-foreground">
                 {t("rescue.record.currentCustody")}
@@ -139,7 +131,12 @@ function RescueDetail() {
               </p>
             </div>
 
-            <RescueChainTimeline events={record.chain} />
+            {(() => {
+              const history = getCaseHistoryByRescue(record.code);
+              return history ? (
+                <CaseNarrative history={history} defaultView="timeline" />
+              ) : null;
+            })()}
 
             {record.linkedPersonId && (
               <div className="mt-6">
