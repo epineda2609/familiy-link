@@ -6,9 +6,11 @@ import {
   Calendar,
   User,
   ShieldAlert,
+  ShieldCheck,
   Share2,
   MessageSquare,
   Flag,
+  Camera,
 } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
@@ -24,6 +26,12 @@ import type {
 import type { MessageKey } from "../i18n/messages";
 import { CaseNarrative } from "../components/CaseNarrative";
 import { getCaseHistoryByPerson } from "../repositories/CaseTimelineRepository";
+import { findSafeIdByPersonId } from "../data/mock/safeIds";
+import { EvidenceGallery } from "../components/evidence/EvidenceGallery";
+import { AudiencePreviewTabs } from "../components/evidence/AudiencePreviewTabs";
+import { evidenceRepository } from "../repositories/EvidenceRepository";
+import { resolveAudience, type SafeIdAudience } from "../domain/safeId";
+import { useMode } from "../modes/OperationalModeProvider";
 
 export const Route = createFileRoute("/person/$id")({
   loader: async ({ params }) => {
