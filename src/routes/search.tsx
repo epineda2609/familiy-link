@@ -7,6 +7,8 @@ import { SkipLink } from "../components/SkipLink";
 import { SearchForm } from "../components/SearchForm";
 import { PersonCard } from "../components/PersonCard";
 import { EmptyState } from "../components/EmptyState";
+import { WhatHappensNow } from "../components/ux/WhatHappensNow";
+import { PrivacyInline } from "../components/ux/PrivacyInline";
 import { SearchX } from "lucide-react";
 import { useT } from "../i18n/LocaleProvider";
 import {
@@ -74,7 +76,15 @@ function SearchPage() {
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
             {t("search.subtitle")}
           </p>
+          <div className="mt-3">
+            <PrivacyInline />
+          </div>
         </header>
+
+        <div className="mb-6">
+          <WhatHappensNow flow="search" />
+        </div>
+
 
         <SearchForm
           value={filters}
