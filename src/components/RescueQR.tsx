@@ -1,6 +1,8 @@
 // BASUF — Pseudo-QR determinista para la demo (no es un QR real).
 // En producción usar librería estándar (qrcode). Para demo: patrón visual
 // creíble derivado del código, sin dependencias extra.
+import type { ReactElement } from "react";
+
 
 interface Props {
   value: string;
@@ -31,7 +33,7 @@ export function RescueQR({ value, size = 160, className }: Props) {
   const grid = 21;
   const cell = size / grid;
   const rng = rand(hashSeed(value));
-  const cells: JSX.Element[] = [];
+  const cells: ReactElement[] = [];
 
   const isFinder = (r: number, c: number) => {
     const inBox = (br: number, bc: number) =>
