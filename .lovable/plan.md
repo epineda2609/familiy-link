@@ -1,106 +1,105 @@
-# Iteración J — Internacionalización completa + Narrativa humanitaria
 
-BASUF se abre al mundo: 10 idiomas completos con soporte RTL, y una narrativa que conecta con el origen humanitario del proyecto (los dos hermanos, los sismos de Venezuela de junio 2026).
+# Iteración L — Modos de crisis, matching explicable, timeline vivo
 
-## Objetivos
+Tres bloques que se construyen en paralelo y comparten un mismo modelo de eventos y de coincidencias enriquecidas. Todo sigue siendo mock-first (sin Supabase todavía), tipado estricto y multilingüe en los 10 idiomas.
 
-1. Convertir BASUF en una plataforma verdaderamente multilingüe (10 idiomas completos).
-2. Añadir soporte RTL para árabe con layouts tolerantes.
-3. Elevar la home con un mensaje humanitario claro: contexto de origen + sección "Nuestra misión".
-4. Mantener el tono humano, serio y esperanzador — nada de dashboard frío.
+## Bloque 1 — Modos de uso en crisis
 
----
+Introducir un concepto de **modo operativo** que reconfigura la UI según el contexto del actor. No es un rol de seguridad (eso vendrá con Cloud), es una preferencia de interfaz.
 
-## Fase 1 — Refactor de arquitectura i18n
+Modos:
+- `family` — Búsqueda Familiar (por defecto, tono cálido, textos largos ok)
+- `callcenter` — Call Center (densidad alta, acciones de reporte rápidas, atajos)
+- `field` — Rescatista en Campo (botones grandes, móvil, alto contraste, foco en crear ingreso de rescate)
+- `hospital` — Ingreso Hospitalario (formularios de admisión/traslado, terminología clínica)
+- `shelter` — Registro en Refugio (check-in, custodia de menores)
+- `coord` — Revisión / Coordinación (tablas densas, matching y auditoría)
 
-Actualmente `src/i18n/messages.ts` contiene un único archivo con dos objetos (`es`, `pt`). No escala a 10 idiomas.
+Cada modo define:
+- densidad (`comfortable` | `compact` | `touch`)
+- tono (`warm` | `neutral` | `clinical`)
+- acciones rápidas (lista de CTAs prioritarios)
+- terminología (mapa de claves i18n alternativas: p.ej. `person.status.missing` → "sin localizar" en family vs "no identificado" en hospital)
 
-**Cambios:**
-- Nueva estructura `src/i18n/locales/{es,en,pt,fr,ar,da,it,de,tr,ja}.ts` — un archivo por idioma, mismo shape tipado.
-- `src/i18n/messages.ts` pasa a ser el índice: importa los 10 locales, exporta el tipo `MessageKey` derivado del locale base (`es`) para garantizar type-safety.
-- `Locale` type se expande a los 10 códigos ISO.
-- `LocaleProvider` detecta idioma inicial en este orden: `localStorage` → `navigator.language` → `es`.
-- Sincroniza `document.documentElement.lang` y `document.documentElement.dir` (`rtl` solo para `ar`, `ltr` para el resto).
+Implementación:
+- Nuevo `src/modes/OperationalMode.ts` con tipos, catálogo y helpers (`getModeConfig`, `getModeCTAs`).
+- Nuevo `src/modes/OperationalModeProvider.tsx` con contexto + `localStorage`.
+- Nuevo componente `ModeSelector` en `SiteHeader` (junto a `LanguageSelector`).
+- Nueva ruta `/modes` explicando cada modo y permitiendo seleccionarlo.
+- `SiteHeader` reordena CTAs según `getModeCTAs(mode)`.
+- Clases utilitarias tailwind vía `data-mode="..."` en `<html>` para tocar densidad global (padding/tap targets) sin reescribir componentes.
+- Nuevas claves i18n `mode.*` en los 10 idiomas.
 
-## Fase 2 — Traducciones completas (10 idiomas)
+## Bloque 2 — Matching explicable y confiable
 
-Traducir cada clave existente + las nuevas de la Fase 4 a los 10 idiomas: **es, en, pt, fr, ar, da (danés), it, de, tr, ja**.
+Elevar el motor de coincidencias existente (`data/mock/matches.ts`) a un modelo explicable.
 
-- Traducción humana y contextual, no literal — respetando el tono humanitario.
-- Árabe con dirección RTL y numerales occidentales.
-- Japonés respetando registro formal humanitario (敬語 cuando corresponda).
-- Textos operativos (estados, roles, acciones) cortos y claros para lectores no técnicos.
+Modelo (`src/domain/match.ts`):
+- `MatchKind = 'exact' | 'probabilistic' | 'narrative' | 'visual' | 'human'`
+- `MatchField = { key, valueA, valueB, agreement: 'match' | 'contradict' | 'partial' | 'unknown' }`
+- `MatchExplanation = { kind, score, fields: MatchField[], contradictions: MatchField[], reportedBy, reviewState, recommendedAction }`
+- Ampliar `MatchCandidate` con `explanation: MatchExplanation`.
 
-## Fase 3 — Selector de idioma accesible
+Recalcular en `computeCandidates()` para poblar campos comparados (edad, género, ubicación, desastre, señas) marcando match/contradict/partial. Contradicciones no vetan la sugerencia; bajan el score y se muestran.
 
-Reemplazar el toggle actual ES/PT por un selector real:
+Componentes visuales (`src/components/matching/`):
+- `ConfidenceScore.tsx` — anillo/barra con umbrales (alta ≥80, media 50-79, baja <50), a11y con `aria-valuenow`.
+- `MatchExplanation.tsx` — lista de campos con iconos ✓ / ✗ / ~ y valores comparados.
+- `ContradictionList.tsx` — resalta campos en conflicto.
+- `ReviewBadge.tsx` — estado de revisión (pendiente/aprobado/rechazado/requiere autoridad).
+- `RecommendedAction.tsx` — CTA sugerida (ej. "Solicitar validación familiar", "Marcar como no coincidencia").
 
-- Nuevo componente `LanguageSelector` en `src/components/LanguageSelector.tsx`.
-- Menú desplegable accesible (`role="listbox"`, teclado, `aria-expanded`).
-- Muestra bandera + nombre del idioma en su propio idioma (ej. `Français`, `العربية`, `日本語`).
-- Presente en `SiteHeader` (desktop y menú móvil) — visible siempre.
-- Guarda selección en `localStorage`.
+Refactor `routes/institutional.matches.tsx` para usar estos componentes en cada fila/expansión. La lista sigue funcionando; se enriquece la explicación.
 
-## Fase 4 — Soporte RTL y layouts tolerantes
+Nuevas claves i18n `match.explain.*`, `match.field.*`, `match.action.*` en los 10 idiomas.
 
-- `src/styles.css`: reglas globales para RTL (`[dir="rtl"]`) con márgenes/espaciados lógicos donde aplique.
-- Reemplazar clases `ml-*/mr-*` por `ms-*/me-*` (Tailwind v4 soporta propiedades lógicas nativas) en componentes de layout compartido: `SiteHeader`, `SiteFooter`, `PersonCard`, `EmptyState`, `Toast`.
-- Auditar textos largos: `SiteHeader`, tarjetas y navegación de pestañas institucionales usan `truncate` o `flex-wrap` para tolerar alemán / francés (que suelen ser 30-40% más largos).
+## Bloque 3 — Timeline vivo + historia narrativa
 
-## Fase 5 — Narrativa humanitaria en la home
+Unificar los eventos de `RescueRecord.chain` con los eventos de personas (`PublicPersonCard`) en un único stream de eventos de caso.
 
-**5.1 Hero mejorado** (`src/routes/index.tsx`)
-- Sobre el H1 actual, un pequeño kicker/eyebrow: "Plataforma humanitaria de reunificación familiar".
-- Bajo el H1, un párrafo contextual (1-2 líneas) con la línea de origen del proyecto — visible pero respetuoso, no dramático.
-- Botones CTA principales conservan su lugar y jerarquía.
+Modelo (`src/domain/caseTimeline.ts`):
+- `CaseEventType` extiende los tipos de rescate + `reported_missing`, `partial_id`, `possible_match`, `critical_review`, `deceased_review`.
+- `CaseEvent = { id, type, at, actorOrg, note?, sourceKind: 'family' | 'rescuer' | 'hospital' | 'shelter' | 'ngo' | 'authority' | 'system' }`
+- `CaseHistory = { personId?, rescueCode?, events: CaseEvent[] }`
 
-**5.2 Nueva sección "Nuestra misión"** (misma ruta `/`, bajo el hero y antes de los cards de acción)
-- Tres pilares visuales (icono + título + descripción corta):
-  - **Humanidad** — cada ficha es una persona, no un registro.
-  - **Trazabilidad** — evidencia clara del origen y confiabilidad de cada dato.
-  - **Esperanza** — un puente entre el caos y la reunificación.
-- Un bloque narrativo corto (2-3 líneas) que introduce el origen: los dos hermanos, la necesidad urgente evidenciada tras los sismos de Venezuela del 24 de junio de 2026, y el propósito futuro (ONG, hospitales, refugios, brigadas).
-- Todo el texto vive en las claves i18n `mission.*` — traducible a los 10 idiomas.
-- Mantenemos las cards de acciones (`/search`, `/report`, `/institutional`) donde están hoy — no las tocamos.
+Repositorio: `src/repositories/CaseTimelineRepository.ts` que fusiona `mockPeople` + `mockRescueRecords` + `mockMatches` aprobados en un timeline por caso.
 
-## Fase 6 — Verificación
+Generación narrativa (`src/lib/caseNarrative.ts`):
+- `buildNarrative(history, locale, disasters): string[]` — devuelve 2–4 párrafos derivados **estrictamente** de los eventos (nunca inventa). Plantillas por idioma con placeholders `{location}`, `{disaster}`, `{actor}`, `{when}`. Reglas: si no hay evento hospitalario, no menciona hospital; si estado es `deceased`, tono sobrio y sin detalles sensibles.
 
-- `tsgo` para asegurar type-safety del refactor i18n.
-- Recorrido visual: rutas `/`, `/search`, `/institutional` en `es`, `en`, `ar` (RTL) y `de` (textos largos).
-- Confirmar que el `<html lang>` y `<html dir>` cambian correctamente.
+UI:
+- Nuevo componente `CaseTimeline.tsx` (evolución de `RescueChainTimeline`, más tipos, filtrable por capa).
+- Nuevo componente `CaseNarrative.tsx` con toggle "Ver como historia" / "Ver como línea temporal".
+- Integración en `routes/person.$id.tsx` (nuevo bloque "Historia del caso") y `routes/rescue.$code.tsx` (reemplaza la timeline actual manteniendo la vista de pulsera).
 
----
+Nuevas claves i18n `case.timeline.*`, `case.narrative.template.*` en los 10 idiomas.
 
 ## Detalles técnicos
 
-**Estructura final de i18n:**
-```text
-src/i18n/
-  locales/
-    es.ts      ← locale base, define el shape (source of truth para MessageKey)
-    en.ts
-    pt.ts
-    fr.ts
-    ar.ts
-    da.ts
-    it.ts
-    de.ts
-    tr.ts
-    ja.ts
-  messages.ts  ← re-exporta { messages, Locale, MessageKey, localeMeta }
-  LocaleProvider.tsx  ← detección + dir/lang sync + selector API
-```
+- Todo en frontend, mock-first, sin Supabase.
+- Sin nuevas dependencias.
+- Tipado estricto: `MessageKey` sigue derivándose de `es.ts`; se añaden claves a los 10 locales para no romper el fallback.
+- Accesibilidad: cada componente de matching y timeline lleva roles ARIA, `aria-label` traducido, foco visible.
+- RTL: los nuevos componentes usan `ms-*` / `me-*` y evitan `left/right` fijos.
+- Modos aplican vía `data-mode` en `<html>`; los componentes de timeline y matching consultan `useMode()` para densidad/tono, no para lógica de negocio.
 
-**`localeMeta`** contiene por idioma: `code`, `nativeName`, `flag` (emoji), `dir` (`ltr`|`rtl`) — consumido por `LanguageSelector`.
+## Fuera de alcance de esta iteración
 
-**Claves i18n nuevas (Fase 5):**
-`hero.kicker`, `hero.contextLine`, `mission.title`, `mission.pillar.humanity.*`, `mission.pillar.traceability.*`, `mission.pillar.hope.*`, `mission.originTitle`, `mission.originBody`.
+- Persistencia real de modo/matches en Supabase (llegará con Lovable Cloud).
+- Edición humana del timeline desde la UI (solo lectura + acciones ya existentes de aprobar/rechazar match).
+- IA real para narrativa o para matching visual/fotográfico; se simula con reglas.
+- Página `/about` o rediseño de la home.
 
-**Fuera de alcance en esta iteración:**
-- Página `/about` dedicada (puede venir en Iteración K si se desea).
-- Traducir logs de auditoría históricos ya almacenados en `localStorage` (solo se traducen los nuevos y la UI que los muestra).
-- Fuentes específicas por script (árabe/japonés usan la fuente del sistema como fallback; podemos añadir web fonts dedicadas después si se pide).
+## Verificación
 
-## Resumen
+- `tsgo` limpio.
+- Recorrido manual: seleccionar cada modo y verificar cambios en `SiteHeader` + densidad.
+- `/institutional/matches` muestra score, campos que coinciden, contradicciones y acción recomendada.
+- `/person/p-001` y `/rescue/R-2XM9` muestran timeline unificado + narrativa coherente con los eventos.
+- Cambio a `ar` mantiene RTL en los nuevos componentes.
 
-Al terminar la iteración J, BASUF podrá usarse en 10 idiomas incluyendo árabe (RTL), tendrá un selector de idioma accesible y visible, y la home comunicará con claridad su origen humanitario y su misión — sin perder el orden y la seriedad ya construidos.
+## Archivos previstos
+
+Creados: `src/modes/OperationalMode.ts`, `src/modes/OperationalModeProvider.tsx`, `src/components/ModeSelector.tsx`, `src/routes/modes.tsx`, `src/domain/match.ts`, `src/components/matching/{ConfidenceScore,MatchExplanation,ContradictionList,ReviewBadge,RecommendedAction}.tsx`, `src/domain/caseTimeline.ts`, `src/repositories/CaseTimelineRepository.ts`, `src/lib/caseNarrative.ts`, `src/components/CaseTimeline.tsx`, `src/components/CaseNarrative.tsx`.
+
+Editados: `src/routes/__root.tsx` (provider + `data-mode`), `src/components/SiteHeader.tsx`, `src/data/mock/matches.ts`, `src/routes/institutional.matches.tsx`, `src/routes/person.$id.tsx`, `src/routes/rescue.$code.tsx`, `src/i18n/locales/*.ts` (10 idiomas), `src/routeTree.gen.ts`.
