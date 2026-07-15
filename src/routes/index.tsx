@@ -51,7 +51,11 @@ const disasterIcon: Record<DisasterType, typeof Waves> = {
 
 function Home() {
   const { t } = useT();
-  const activeDisasters = mockDisasters.filter((d) => d.active).slice(0, 4);
+  const activeDisasters = mockDisasters
+    .filter((d) => d.active)
+    .slice()
+    .sort((a, b) => (a.startedAt < b.startedAt ? 1 : -1))
+    .slice(0, 4);
 
   return (
     <div className="min-h-dvh bg-background">
@@ -251,12 +255,43 @@ function Home() {
                   {d.region ? `${d.region} · ` : ""}
                   {d.country}
                 </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {new Date(d.startedAt).toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </p>
+                {d.magnitude && (
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    Magnitud:{" "}
+                    <span className="font-semibold text-foreground">
+                      {d.magnitude}
+                    </span>
+                  </p>
+                )}
                 {d.affectedEstimate && (
                   <p className="mt-3 text-xs text-muted-foreground">
                     <span className="font-semibold text-foreground">
                       {d.affectedEstimate.toLocaleString()}
                     </span>{" "}
                     afectadas (est.)
+                  </p>
+                )}
+                {d.fatalities !== undefined && (
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    <span className="font-semibold text-destructive">
+                      ~{d.fatalities.toLocaleString()}
+                    </span>{" "}
+                    fallecidos
+                  </p>
+                )}
+                {d.missing !== undefined && (
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    <span className="font-semibold text-urgent-foreground">
+                      &gt;{d.missing.toLocaleString()}
+                    </span>{" "}
+                    desaparecidos (reportes)
                   </p>
                 )}
               </article>

@@ -2,6 +2,19 @@ import type { Disaster } from "../../domain/types";
 
 export const mockDisasters: Disaster[] = [
   {
+    id: "d-ve-2026-sismo-yaracuy",
+    type: "earthquake",
+    name: "Sismo en Yaracuy (doblete sísmico)",
+    country: "VE",
+    region: "Yaracuy (San Felipe / Yumare)",
+    startedAt: "2026-06-24",
+    active: true,
+    affectedEstimate: 17907,
+    magnitude: "7.2 y 7.5",
+    fatalities: 3800,
+    missing: 30000,
+  },
+  {
     id: "d-mx-2024-sismo",
     type: "earthquake",
     name: "Sismo Costa del Pacífico",
