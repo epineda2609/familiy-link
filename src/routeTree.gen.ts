@@ -10,10 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
+import { Route as RescueRouteImport } from './routes/rescue'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as InstitutionalRouteImport } from './routes/institutional'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as InstitutionalIndexRouteImport } from './routes/institutional.index'
+import { Route as RescueCodeRouteImport } from './routes/rescue.$code'
 import { Route as PersonIdRouteImport } from './routes/person.$id'
 import { Route as InstitutionalMatchesRouteImport } from './routes/institutional.matches'
 import { Route as InstitutionalIntegrationsRouteImport } from './routes/institutional.integrations'
@@ -22,6 +24,11 @@ import { Route as InstitutionalAuditRouteImport } from './routes/institutional.a
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RescueRoute = RescueRouteImport.update({
+  id: '/rescue',
+  path: '/rescue',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReportRoute = ReportRouteImport.update({
@@ -43,6 +50,11 @@ const InstitutionalIndexRoute = InstitutionalIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => InstitutionalRoute,
+} as any)
+const RescueCodeRoute = RescueCodeRouteImport.update({
+  id: '/$code',
+  path: '/$code',
+  getParentRoute: () => RescueRoute,
 } as any)
 const PersonIdRoute = PersonIdRouteImport.update({
   id: '/person/$id',
@@ -70,21 +82,25 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/institutional': typeof InstitutionalRouteWithChildren
   '/report': typeof ReportRoute
+  '/rescue': typeof RescueRouteWithChildren
   '/search': typeof SearchRoute
   '/institutional/audit': typeof InstitutionalAuditRoute
   '/institutional/integrations': typeof InstitutionalIntegrationsRoute
   '/institutional/matches': typeof InstitutionalMatchesRoute
   '/person/$id': typeof PersonIdRoute
+  '/rescue/$code': typeof RescueCodeRoute
   '/institutional/': typeof InstitutionalIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/report': typeof ReportRoute
+  '/rescue': typeof RescueRouteWithChildren
   '/search': typeof SearchRoute
   '/institutional/audit': typeof InstitutionalAuditRoute
   '/institutional/integrations': typeof InstitutionalIntegrationsRoute
   '/institutional/matches': typeof InstitutionalMatchesRoute
   '/person/$id': typeof PersonIdRoute
+  '/rescue/$code': typeof RescueCodeRoute
   '/institutional': typeof InstitutionalIndexRoute
 }
 export interface FileRoutesById {
@@ -92,11 +108,13 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/institutional': typeof InstitutionalRouteWithChildren
   '/report': typeof ReportRoute
+  '/rescue': typeof RescueRouteWithChildren
   '/search': typeof SearchRoute
   '/institutional/audit': typeof InstitutionalAuditRoute
   '/institutional/integrations': typeof InstitutionalIntegrationsRoute
   '/institutional/matches': typeof InstitutionalMatchesRoute
   '/person/$id': typeof PersonIdRoute
+  '/rescue/$code': typeof RescueCodeRoute
   '/institutional/': typeof InstitutionalIndexRoute
 }
 export interface FileRouteTypes {
@@ -105,32 +123,38 @@ export interface FileRouteTypes {
     | '/'
     | '/institutional'
     | '/report'
+    | '/rescue'
     | '/search'
     | '/institutional/audit'
     | '/institutional/integrations'
     | '/institutional/matches'
     | '/person/$id'
+    | '/rescue/$code'
     | '/institutional/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/report'
+    | '/rescue'
     | '/search'
     | '/institutional/audit'
     | '/institutional/integrations'
     | '/institutional/matches'
     | '/person/$id'
+    | '/rescue/$code'
     | '/institutional'
   id:
     | '__root__'
     | '/'
     | '/institutional'
     | '/report'
+    | '/rescue'
     | '/search'
     | '/institutional/audit'
     | '/institutional/integrations'
     | '/institutional/matches'
     | '/person/$id'
+    | '/rescue/$code'
     | '/institutional/'
   fileRoutesById: FileRoutesById
 }
@@ -138,6 +162,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   InstitutionalRoute: typeof InstitutionalRouteWithChildren
   ReportRoute: typeof ReportRoute
+  RescueRoute: typeof RescueRouteWithChildren
   SearchRoute: typeof SearchRoute
   PersonIdRoute: typeof PersonIdRoute
 }
@@ -149,6 +174,13 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rescue': {
+      id: '/rescue'
+      path: '/rescue'
+      fullPath: '/rescue'
+      preLoaderRoute: typeof RescueRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/report': {
@@ -178,6 +210,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/institutional/'
       preLoaderRoute: typeof InstitutionalIndexRouteImport
       parentRoute: typeof InstitutionalRoute
+    }
+    '/rescue/$code': {
+      id: '/rescue/$code'
+      path: '/$code'
+      fullPath: '/rescue/$code'
+      preLoaderRoute: typeof RescueCodeRouteImport
+      parentRoute: typeof RescueRoute
     }
     '/person/$id': {
       id: '/person/$id'
@@ -228,10 +267,22 @@ const InstitutionalRouteWithChildren = InstitutionalRoute._addFileChildren(
   InstitutionalRouteChildren,
 )
 
+interface RescueRouteChildren {
+  RescueCodeRoute: typeof RescueCodeRoute
+}
+
+const RescueRouteChildren: RescueRouteChildren = {
+  RescueCodeRoute: RescueCodeRoute,
+}
+
+const RescueRouteWithChildren =
+  RescueRoute._addFileChildren(RescueRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   InstitutionalRoute: InstitutionalRouteWithChildren,
   ReportRoute: ReportRoute,
+  RescueRoute: RescueRouteWithChildren,
   SearchRoute: SearchRoute,
   PersonIdRoute: PersonIdRoute,
 }
