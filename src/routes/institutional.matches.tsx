@@ -40,11 +40,6 @@ export const Route = createFileRoute("/institutional/matches")({
 
 const statuses: MatchStatus[] = ["pending", "approved", "rejected"];
 
-const statusStyles: Record<MatchStatus, string> = {
-  pending: "bg-urgent/20 text-urgent-foreground border-urgent/40",
-  approved: "bg-hope/20 text-hope-foreground border-hope/40",
-  rejected: "bg-destructive/10 text-destructive border-destructive/30",
-};
 
 const personStatusPill: Record<PersonStatus, string> = {
   missing: "bg-destructive/10 text-destructive border-destructive/30",
