@@ -29,6 +29,13 @@ const ACTIONS: AuditAction[] = [
   "match.approve",
   "match.reject",
   "match.reset",
+  "safeId.view",
+  "safeId.scan",
+  "safeId.print",
+  "safeId.share",
+  "safeId.audience.change",
+  "evidence.upload",
+  "evidence.reveal",
 ];
 
 const actionTone: Record<AuditAction, string> = {
@@ -41,6 +48,13 @@ const actionTone: Record<AuditAction, string> = {
   "match.approve": "bg-hope/20 text-hope-foreground border-hope/40",
   "match.reject": "bg-destructive/10 text-destructive border-destructive/30",
   "match.reset": "bg-muted text-muted-foreground border-border",
+  "safeId.view": "bg-primary/10 text-primary border-primary/30",
+  "safeId.scan": "bg-primary/10 text-primary border-primary/30",
+  "safeId.print": "bg-muted text-muted-foreground border-border",
+  "safeId.share": "bg-primary/10 text-primary border-primary/30",
+  "safeId.audience.change": "bg-muted text-muted-foreground border-border",
+  "evidence.upload": "bg-primary/10 text-primary border-primary/30",
+  "evidence.reveal": "bg-destructive/10 text-destructive border-destructive/30",
 };
 
 function AuditPage() {

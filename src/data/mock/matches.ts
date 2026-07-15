@@ -206,7 +206,26 @@ if (mockMatches[0]) {
     status: "approved",
     reviewedBy: "Cruz Roja Latinoamérica",
     reviewedAt: "2025-05-10",
-    explanation: { ...mockMatches[0].explanation, reviewState: "approved" },
+    explanation: {
+      ...mockMatches[0].explanation,
+      reviewState: "approved",
+      visualSimilarity: {
+        level: "medium",
+        note: "Rasgos generales compatibles (cabello, contorno facial).",
+      },
+    },
+  };
+}
+if (mockMatches[1]) {
+  mockMatches[1] = {
+    ...mockMatches[1],
+    explanation: {
+      ...mockMatches[1].explanation,
+      visualSimilarity: {
+        level: "low",
+        note: "Baja similitud visual — foto de baja calidad.",
+      },
+    },
   };
 }
 if (mockMatches[mockMatches.length - 1] && mockMatches.length > 1) {

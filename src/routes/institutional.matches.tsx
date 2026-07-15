@@ -27,6 +27,7 @@ import { MatchExplanationList } from "../components/matching/MatchExplanation";
 import { ContradictionList } from "../components/matching/ContradictionList";
 import { ReviewBadge } from "../components/matching/ReviewBadge";
 import { RecommendedActionBanner } from "../components/matching/RecommendedAction";
+import { VisualSimilarityCard } from "../components/matching/VisualSimilarityCard";
 
 export const Route = createFileRoute("/institutional/matches")({
   head: () => ({
@@ -275,6 +276,13 @@ function MatchCard({
       <div className="mt-5">
         <RecommendedActionBanner action={match.explanation.recommendedAction} />
       </div>
+
+      {match.explanation.visualSimilarity && (
+        <div className="mt-3">
+          <VisualSimilarityCard vs={match.explanation.visualSimilarity} />
+        </div>
+      )}
+
 
       {match.status !== "pending" && (
         <div className="mt-4 rounded-md border border-border bg-muted/30 px-3 py-2 text-xs text-muted-foreground">

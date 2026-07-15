@@ -22,6 +22,13 @@ export type RecommendedAction =
   | "escalateAuthority"
   | "approveNow";
 
+export type VisualSimilarityLevel = "low" | "medium" | "high";
+
+export interface VisualSimilarity {
+  level: VisualSimilarityLevel;
+  note: string;
+}
+
 export interface MatchExplanation {
   kind: MatchKind;
   score: number; // 0-100
@@ -30,6 +37,7 @@ export interface MatchExplanation {
   reportedBy: string;
   reviewState: ReviewState;
   recommendedAction: RecommendedAction;
+  visualSimilarity?: VisualSimilarity;
 }
 
 export function confidenceLevel(score: number): "high" | "medium" | "low" {

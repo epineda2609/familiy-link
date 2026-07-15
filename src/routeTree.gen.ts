@@ -16,6 +16,7 @@ import { Route as ModesRouteImport } from './routes/modes'
 import { Route as InstitutionalRouteImport } from './routes/institutional'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as InstitutionalIndexRouteImport } from './routes/institutional.index'
+import { Route as SafeIdCodeRouteImport } from './routes/safe-id.$code'
 import { Route as RescueCodeRouteImport } from './routes/rescue.$code'
 import { Route as PersonIdRouteImport } from './routes/person.$id'
 import { Route as InstitutionalMatchesRouteImport } from './routes/institutional.matches'
@@ -57,6 +58,11 @@ const InstitutionalIndexRoute = InstitutionalIndexRouteImport.update({
   path: '/',
   getParentRoute: () => InstitutionalRoute,
 } as any)
+const SafeIdCodeRoute = SafeIdCodeRouteImport.update({
+  id: '/safe-id/$code',
+  path: '/safe-id/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RescueCodeRoute = RescueCodeRouteImport.update({
   id: '/$code',
   path: '/$code',
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/institutional/matches': typeof InstitutionalMatchesRoute
   '/person/$id': typeof PersonIdRoute
   '/rescue/$code': typeof RescueCodeRoute
+  '/safe-id/$code': typeof SafeIdCodeRoute
   '/institutional/': typeof InstitutionalIndexRoute
 }
 export interface FileRoutesByTo {
@@ -109,6 +116,7 @@ export interface FileRoutesByTo {
   '/institutional/matches': typeof InstitutionalMatchesRoute
   '/person/$id': typeof PersonIdRoute
   '/rescue/$code': typeof RescueCodeRoute
+  '/safe-id/$code': typeof SafeIdCodeRoute
   '/institutional': typeof InstitutionalIndexRoute
 }
 export interface FileRoutesById {
@@ -124,6 +132,7 @@ export interface FileRoutesById {
   '/institutional/matches': typeof InstitutionalMatchesRoute
   '/person/$id': typeof PersonIdRoute
   '/rescue/$code': typeof RescueCodeRoute
+  '/safe-id/$code': typeof SafeIdCodeRoute
   '/institutional/': typeof InstitutionalIndexRoute
 }
 export interface FileRouteTypes {
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
     | '/institutional/matches'
     | '/person/$id'
     | '/rescue/$code'
+    | '/safe-id/$code'
     | '/institutional/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -153,6 +163,7 @@ export interface FileRouteTypes {
     | '/institutional/matches'
     | '/person/$id'
     | '/rescue/$code'
+    | '/safe-id/$code'
     | '/institutional'
   id:
     | '__root__'
@@ -167,6 +178,7 @@ export interface FileRouteTypes {
     | '/institutional/matches'
     | '/person/$id'
     | '/rescue/$code'
+    | '/safe-id/$code'
     | '/institutional/'
   fileRoutesById: FileRoutesById
 }
@@ -178,6 +190,7 @@ export interface RootRouteChildren {
   RescueRoute: typeof RescueRouteWithChildren
   SearchRoute: typeof SearchRoute
   PersonIdRoute: typeof PersonIdRoute
+  SafeIdCodeRoute: typeof SafeIdCodeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -230,6 +243,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/institutional/'
       preLoaderRoute: typeof InstitutionalIndexRouteImport
       parentRoute: typeof InstitutionalRoute
+    }
+    '/safe-id/$code': {
+      id: '/safe-id/$code'
+      path: '/safe-id/$code'
+      fullPath: '/safe-id/$code'
+      preLoaderRoute: typeof SafeIdCodeRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/rescue/$code': {
       id: '/rescue/$code'
@@ -306,6 +326,7 @@ const rootRouteChildren: RootRouteChildren = {
   RescueRoute: RescueRouteWithChildren,
   SearchRoute: SearchRoute,
   PersonIdRoute: PersonIdRoute,
+  SafeIdCodeRoute: SafeIdCodeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

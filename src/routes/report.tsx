@@ -5,6 +5,9 @@ import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
 import { SkipLink } from "../components/SkipLink";
+import { WhatHappensNow } from "../components/ux/WhatHappensNow";
+import { PrivacyInline } from "../components/ux/PrivacyInline";
+import { EvidenceUploader } from "../components/evidence/EvidenceUploader";
 import { useT } from "../i18n/LocaleProvider";
 import {
   peopleRepository,
@@ -195,9 +198,16 @@ function ReportPage() {
             {t("report.title")}
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">{t("report.subtitle")}</p>
+          <div className="mt-3">
+            <PrivacyInline />
+          </div>
         </header>
 
-        <div className="mt-6 flex items-start gap-3 rounded-xl border border-urgent/40 bg-urgent/10 p-4">
+        <div className="mt-6">
+          <WhatHappensNow flow="report" />
+        </div>
+
+        <div className="mt-4 flex items-start gap-3 rounded-xl border border-urgent/40 bg-urgent/10 p-4">
           <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-urgent-foreground" aria-hidden />
           <div>
             <p className="text-sm font-semibold text-foreground">
@@ -208,6 +218,7 @@ function ReportPage() {
             </p>
           </div>
         </div>
+
 
         <form onSubmit={onSubmit} noValidate className="mt-6 space-y-6">
           {/* Persona */}
@@ -392,7 +403,15 @@ function ReportPage() {
             </div>
           </section>
 
+          {/* Evidencia (opcional) */}
+          <EvidenceUploader
+            caseRef={`report-${Date.now()}`}
+            uploadedBy={form.reporterName.trim() || "Reportante"}
+            defaultVisibility="family_verified"
+          />
+
           {/* Consent */}
+
           <section
             className={`rounded-xl border p-5 shadow-sm ${errors.consent ? "border-destructive/50 bg-destructive/5" : "border-border bg-card"}`}
           >

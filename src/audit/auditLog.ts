@@ -11,7 +11,14 @@ export type AuditAction =
   | "sensitive.reveal"
   | "match.approve"
   | "match.reject"
-  | "match.reset";
+  | "match.reset"
+  | "safeId.view"
+  | "safeId.scan"
+  | "safeId.print"
+  | "safeId.share"
+  | "safeId.audience.change"
+  | "evidence.upload"
+  | "evidence.reveal";
 
 export interface AuditActor {
   operatorName: string;

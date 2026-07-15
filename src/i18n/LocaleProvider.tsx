@@ -65,7 +65,8 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const t = (key: MessageKey) => messages[locale][key] ?? key;
+  const t = (key: MessageKey) =>
+    messages[locale][key] ?? messages.en[key] ?? messages.es[key] ?? key;
 
   return (
     <LocaleContext.Provider value={{ locale, setLocale, t, dir }}>

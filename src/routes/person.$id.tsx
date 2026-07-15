@@ -6,9 +6,11 @@ import {
   Calendar,
   User,
   ShieldAlert,
+  ShieldCheck,
   Share2,
   MessageSquare,
   Flag,
+  Camera,
 } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
@@ -24,6 +26,12 @@ import type {
 import type { MessageKey } from "../i18n/messages";
 import { CaseNarrative } from "../components/CaseNarrative";
 import { getCaseHistoryByPerson } from "../repositories/CaseTimelineRepository";
+import { findSafeIdByPersonId } from "../data/mock/safeIds";
+import { EvidenceGallery } from "../components/evidence/EvidenceGallery";
+import { AudiencePreviewTabs } from "../components/evidence/AudiencePreviewTabs";
+import { evidenceRepository } from "../repositories/EvidenceRepository";
+import { resolveAudience, type SafeIdAudience } from "../domain/safeId";
+import { useMode } from "../modes/OperationalModeProvider";
 
 export const Route = createFileRoute("/person/$id")({
   loader: async ({ params }) => {
@@ -65,12 +73,19 @@ const statusStyles: Record<PublicPersonCard["status"], string> = {
 
 function PersonDetailPage() {
   const { t } = useT();
+  const { mode } = useMode();
   const data = Route.useLoaderData() as {
     person: PublicPersonCard;
     disaster: Disaster | null;
     countries: Country[];
   };
   const { person, disaster, countries } = data;
+  const safeId = findSafeIdByPersonId(person.id);
+  const [evidenceAudience, setEvidenceAudience] = useState<SafeIdAudience>(() =>
+    resolveAudience(mode),
+  );
+  const evidenceItems = evidenceRepository.listByCase(person.id);
+
 
   const countryName =
     countries.find((c: Country) => c.code === person.country)?.name ??
@@ -151,8 +166,19 @@ function PersonDetailPage() {
               <MessageSquare className="h-4 w-4" aria-hidden />
               {t("person.actions.report")}
             </button>
+            {safeId && (
+              <Link
+                to="/safe-id/$code"
+                params={{ code: safeId.shortCode }}
+                className="inline-flex items-center gap-1.5 rounded-md border border-primary/30 bg-primary/5 px-3 py-1.5 text-sm font-medium text-primary transition hover:bg-primary/10"
+              >
+                <ShieldCheck className="h-4 w-4" aria-hidden />
+                {t("safeId.link")} · {safeId.shortCode}
+              </Link>
+            )}
           </div>
         </header>
+
 
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
@@ -235,6 +261,32 @@ function PersonDetailPage() {
             </div>
           </aside>
         </div>
+
+        <section className="mt-10 rounded-xl border border-border bg-card p-6 shadow-sm">
+          <div className="mb-4 flex items-center gap-2">
+            <Camera className="h-4 w-4 text-primary" aria-hidden />
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              {t("evidence.title")}
+            </h2>
+          </div>
+          <p className="mb-4 text-xs text-muted-foreground">
+            {t("evidence.subtitle")}
+          </p>
+          <div className="mb-4">
+            <AudiencePreviewTabs
+              value={evidenceAudience}
+              onChange={setEvidenceAudience}
+            />
+          </div>
+          <EvidenceGallery
+            items={evidenceItems}
+            audience={evidenceAudience}
+            actorName="Vista previa"
+            actorOrg="—"
+            actorRole={mode}
+          />
+        </section>
+
 
         <section className="mt-10">
           {(() => {

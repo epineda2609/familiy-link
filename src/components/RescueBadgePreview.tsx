@@ -1,10 +1,13 @@
-import { Printer } from "lucide-react";
+import { Printer, ShieldCheck } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import type { RescueRecord } from "../domain/rescue";
 import { RescueQR } from "./RescueQR";
 import { useT } from "../i18n/LocaleProvider";
+import { findSafeIdByRescueCode } from "../data/mock/safeIds";
 
 export function RescueBadgePreview({ record }: { record: RescueRecord }) {
   const { t } = useT();
+  const safeId = findSafeIdByRescueCode(record.code);
   return (
     <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
       <div className="flex items-center justify-between gap-3">
@@ -44,6 +47,18 @@ export function RescueBadgePreview({ record }: { record: RescueRecord }) {
       <p className="mt-3 text-xs text-muted-foreground">
         {t("rescue.badge.desc")}
       </p>
+
+      {safeId && (
+        <Link
+          to="/safe-id/$code"
+          params={{ code: safeId.shortCode }}
+          className="mt-3 inline-flex items-center gap-1.5 rounded-md border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/10"
+        >
+          <ShieldCheck className="h-3.5 w-3.5" aria-hidden />
+          {t("safeId.link")} · {safeId.shortCode}
+        </Link>
+      )}
     </div>
   );
 }
+

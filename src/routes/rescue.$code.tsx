@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, CheckCircle2, HelpCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle2, HelpCircle, ShieldCheck } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
@@ -10,6 +10,7 @@ import { getCaseHistoryByRescue } from "../repositories/CaseTimelineRepository";
 import { useT } from "../i18n/LocaleProvider";
 import type { MessageKey } from "../i18n/messages";
 import { findRescueByCode } from "../data/mock/rescue";
+import { findSafeIdByRescueCode } from "../data/mock/safeIds";
 
 export const Route = createFileRoute("/rescue/$code")({
   loader: ({ params }) => {
@@ -61,6 +62,7 @@ function RescueDetail() {
   const { t, locale } = useT();
   const { record } = Route.useLoaderData();
   const last = record.chain[record.chain.length - 1];
+  const safeId = findSafeIdByRescueCode(record.code);
 
   return (
     <div className="min-h-dvh bg-background">
@@ -130,6 +132,30 @@ function RescueDetail() {
                 {last.location ? ` · ${last.location}` : ""}
               </p>
             </div>
+
+            {safeId && (
+              <Link
+                to="/safe-id/$code"
+                params={{ code: safeId.shortCode }}
+                className="mb-6 flex items-center justify-between gap-3 rounded-xl border border-primary/30 bg-primary/5 p-4 transition hover:bg-primary/10"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary/10 text-primary">
+                    <ShieldCheck className="h-4 w-4" aria-hidden />
+                  </span>
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+                      {t("safeId.title")}
+                    </p>
+                    <p className="font-mono text-sm">{safeId.shortCode}</p>
+                  </div>
+                </div>
+                <span className="text-xs font-medium text-primary">
+                  {t("safeId.link")}
+                </span>
+              </Link>
+            )}
+
 
             {(() => {
               const history = getCaseHistoryByRescue(record.code);
