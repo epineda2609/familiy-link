@@ -1,34 +1,60 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { messages, type Locale, type MessageKey } from "./messages";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
+import {
+  messages,
+  isLocale,
+  localeMeta,
+  type Locale,
+  type MessageKey,
+} from "./messages";
 
 type Ctx = {
   locale: Locale;
   setLocale: (l: Locale) => void;
   t: (key: MessageKey) => string;
+  dir: "ltr" | "rtl";
 };
 
 const LocaleContext = createContext<Ctx | null>(null);
 const STORAGE_KEY = "basuf.locale";
 
+function detectInitialLocale(): Locale {
+  if (typeof window === "undefined") return "es";
+  try {
+    const saved = window.localStorage.getItem(STORAGE_KEY);
+    if (saved && isLocale(saved)) return saved;
+  } catch {
+    /* ignore */
+  }
+  const nav = window.navigator?.language?.slice(0, 2).toLowerCase() ?? "";
+  if (isLocale(nav)) return nav;
+  return "es";
+}
+
 export function LocaleProvider({ children }: { children: ReactNode }) {
+  // SSR-safe initial state; real detection runs post-hydration.
   const [locale, setLocaleState] = useState<Locale>("es");
 
-  // Read persisted locale after hydration only (avoid SSR mismatch).
   useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem(STORAGE_KEY);
-      if (saved === "es" || saved === "pt") setLocaleState(saved);
-    } catch {
-      /* ignore */
-    }
+    const detected = detectInitialLocale();
+    if (detected !== locale) setLocaleState(detected);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Keep <html lang> synced con la localidad para lectores de pantalla.
+  const dir = localeMeta[locale].dir;
+
+  // Sync <html lang> and <html dir> for screen readers and layout.
   useEffect(() => {
     if (typeof document !== "undefined") {
       document.documentElement.lang = locale;
+      document.documentElement.dir = dir;
     }
-  }, [locale]);
+  }, [locale, dir]);
 
   const setLocale = (l: Locale) => {
     setLocaleState(l);
@@ -42,7 +68,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
   const t = (key: MessageKey) => messages[locale][key] ?? key;
 
   return (
-    <LocaleContext.Provider value={{ locale, setLocale, t }}>
+    <LocaleContext.Provider value={{ locale, setLocale, t, dir }}>
       {children}
     </LocaleContext.Provider>
   );
