@@ -73,12 +73,19 @@ const statusStyles: Record<PublicPersonCard["status"], string> = {
 
 function PersonDetailPage() {
   const { t } = useT();
+  const { mode } = useMode();
   const data = Route.useLoaderData() as {
     person: PublicPersonCard;
     disaster: Disaster | null;
     countries: Country[];
   };
   const { person, disaster, countries } = data;
+  const safeId = findSafeIdByPersonId(person.id);
+  const [evidenceAudience, setEvidenceAudience] = useState<SafeIdAudience>(() =>
+    resolveAudience(mode),
+  );
+  const evidenceItems = evidenceRepository.listByCase(person.id);
+
 
   const countryName =
     countries.find((c: Country) => c.code === person.country)?.name ??
