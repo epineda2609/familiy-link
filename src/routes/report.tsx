@@ -5,6 +5,9 @@ import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
 import { SkipLink } from "../components/SkipLink";
+import { WhatHappensNow } from "../components/ux/WhatHappensNow";
+import { PrivacyInline } from "../components/ux/PrivacyInline";
+import { EvidenceUploader } from "../components/evidence/EvidenceUploader";
 import { useT } from "../i18n/LocaleProvider";
 import {
   peopleRepository,
