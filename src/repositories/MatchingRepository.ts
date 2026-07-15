@@ -47,22 +47,29 @@ class MockMatchingRepository implements IMatchingRepository {
       reviewedBy,
       reviewedAt: new Date().toISOString().slice(0, 10),
       note,
+      explanation: { ...m.explanation, reviewState: "approved" },
     });
   }
   async reject(id: string, reviewedBy: string, note?: string) {
+    const m = mockMatches.find((x) => x.id === id);
+    if (!m) return null;
     return this.update(id, {
       status: "rejected",
       reviewedBy,
       reviewedAt: new Date().toISOString().slice(0, 10),
       note,
+      explanation: { ...m.explanation, reviewState: "rejected" },
     });
   }
   async reset(id: string) {
+    const m = mockMatches.find((x) => x.id === id);
+    if (!m) return null;
     return this.update(id, {
       status: "pending",
       reviewedBy: undefined,
       reviewedAt: undefined,
       note: undefined,
+      explanation: { ...m.explanation, reviewState: "pending" },
     });
   }
 }
