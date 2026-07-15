@@ -403,7 +403,15 @@ function ReportPage() {
             </div>
           </section>
 
+          {/* Evidencia (opcional) */}
+          <EvidenceUploader
+            caseRef={`report-${Date.now()}`}
+            uploadedBy={form.reporterName.trim() || "Reportante"}
+            defaultVisibility="family_verified"
+          />
+
           {/* Consent */}
+
           <section
             className={`rounded-xl border p-5 shadow-sm ${errors.consent ? "border-destructive/50 bg-destructive/5" : "border-border bg-card"}`}
           >
