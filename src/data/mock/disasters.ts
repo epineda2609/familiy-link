@@ -73,6 +73,8 @@ export const mockDisasters: Disaster[] = [
     startedAt: "2025-01-22",
     active: true,
     affectedEstimate: 15000,
+    fatalities: 95,
+    missing: 2100,
   },
 ];
 
