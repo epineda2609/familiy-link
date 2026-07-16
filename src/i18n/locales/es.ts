@@ -3,7 +3,7 @@ const esDict = {
   "app.name": "BASUF",
   "app.tagline": "Brother And Sister Uniendo Familias",
   "app.mission":
-    "Una red humanitaria para reconectar a personas separadas por catástrofes.",
+    "Somos una red humanitaria para reconectar a personas separadas por catástrofes.",
   "demo.banner":
     "Entorno de demostración — Todos los datos mostrados son ficticios.",
   "nav.home": "Inicio",
