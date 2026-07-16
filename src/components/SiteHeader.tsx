@@ -3,7 +3,6 @@ import { Heart, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useT } from "../i18n/LocaleProvider";
 import { LanguageSelector } from "./LanguageSelector";
-import { ModeSelector } from "./ModeSelector";
 import { useMode } from "../modes/OperationalModeProvider";
 
 export function SiteHeader() {
