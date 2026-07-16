@@ -117,7 +117,7 @@ const esDict = {
   "report.field.displayName": "Nombre o apodo público",
   "report.field.approximateAge": "Edad aproximada",
   "report.field.gender": "Género",
-  "report.field.country": "País",
+  "report.field.country": "País de ocurrencia",
   "report.field.disaster": "Catástrofe",
   "report.field.lastSeenLocation": "Lugar del último avistamiento",
   "report.field.lastSeenAt": "Fecha del último avistamiento",
