@@ -255,7 +255,7 @@ const esDict = {
     "Entorno de demostración: los mensajes no se envían realmente. Los eventos quedan registrados y auditados.",
   "integrations.lastSync": "Última sincronización",
   "integrations.status.connected": "Conectado",
-  "integrations.status.degraded": "CONEXION INESTABLE",
+  "integrations.status.degraded": "FUERA DE LINEA",
   "integrations.status.offline": "Fuera de línea",
   "integrations.action.resync": "Resincronizar",
   "integrations.action.enable": "Activar",
