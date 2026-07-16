@@ -262,7 +262,7 @@ const esDict = {
   "integrations.action.disable": "Desactivar",
   "integrations.test.title": "Enviar mensaje de prueba",
   "integrations.test.channel": "Canal",
-  "integrations.test.recipient": "Destinatario (enmascarado)",
+  "integrations.test.recipient": "Destinatario (confidencial)",
   "integrations.test.recipient.ph": "Ej. +52 55 •••• 1234",
   "integrations.test.message": "Mensaje",
   "integrations.test.message.ph": "Contenido del mensaje simulado…",
