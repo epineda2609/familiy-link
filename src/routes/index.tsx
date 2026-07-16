@@ -236,32 +236,6 @@ function Home() {
         </div>
       </section>
 
-      {/* Cómo funciona */}
-      <section className="border-t border-border bg-muted/40">
-        <div className="mx-auto max-w-7xl px-4 py-16">
-          <h2 className="mb-10 text-center text-2xl font-bold tracking-tight sm:text-3xl">
-            {t("home.how.title")}
-          </h2>
-          <ol className="grid gap-6 sm:grid-cols-3">
-            {[1, 2, 3].map((n) => (
-              <li
-                key={n}
-                className="relative rounded-xl border border-border bg-card p-6 shadow-sm"
-              >
-                <span className="absolute -top-3 left-6 grid h-7 w-7 place-items-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
-                  {n}
-                </span>
-                <h3 className="mt-2 font-semibold">
-                  {t(`home.how.step${n}.title` as MessageKey)}
-                </h3>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  {t(`home.how.step${n}.desc` as MessageKey)}
-                </p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
 
 
       </main>
