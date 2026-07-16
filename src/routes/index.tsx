@@ -210,9 +210,11 @@ function Home() {
                 {d.affectedEstimate && (
                   <p className="mt-3 text-xs text-muted-foreground">
                     <span className="font-semibold text-foreground">
-                      {d.affectedEstimate.toLocaleString()}
+                      {d.affectedEstimate >= 1000000 
+                        ? `${(d.affectedEstimate / 1000000).toFixed(1).replace(/\.0$/, '')}m` 
+                        : d.affectedEstimate.toLocaleString()}
                     </span>{" "}
-                    afectadas (est.)
+                    personas afectadas (est.)
                   </p>
                 )}
                 {d.fatalities !== undefined && (
