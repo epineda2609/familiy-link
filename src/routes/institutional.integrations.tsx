@@ -103,8 +103,8 @@ function IntegrationsPage() {
       integrationId: conn.id,
       channel: testChannel,
       recipientLabel: testTarget,
-      subject: "Mensaje de prueba",
-      body: testMessage,
+      subject: "Reencuentro pendiente",
+      body: "Hemos identificado a un familiar y nos confirmo que esta listo para venir a buscar a Maria Cadenas\u00a0",
     });
     toast.success(t("toast.integration.testSent"), testTarget);
     setTestTarget("");
