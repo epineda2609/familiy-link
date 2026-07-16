@@ -11,7 +11,7 @@ export const mockDisasters: Disaster[] = [
     active: true,
     affectedEstimate: 6700000,
     magnitude: "7.2 y 7.5",
-    fatalities: 3800,
+    fatalities: 4829,
     missing: 30000,
   },
   {
