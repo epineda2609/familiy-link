@@ -97,31 +97,6 @@ function Home() {
                 {t("home.cta.report")}
               </Link>
             </div>
-
-            {/* Rescue chain differentiator */}
-            <Link
-              to="/rescue"
-              className="group mt-8 flex items-start gap-4 rounded-xl border border-urgent/30 bg-urgent/5 p-5 transition hover:border-urgent/50 hover:bg-urgent/10"
-            >
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-urgent/20 text-urgent-foreground">
-                <QrCode className="h-5 w-5" aria-hidden />
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="text-xs font-semibold uppercase tracking-wide text-urgent-foreground">
-                  {t("rescue.home.hint")}
-                </p>
-                <p className="mt-1 font-semibold">
-                  {t("rescue.differentiator.title")}
-                </p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {t("rescue.differentiator.desc")}
-                </p>
-              </div>
-              <ArrowRight
-                className="mt-2 h-5 w-5 shrink-0 text-urgent-foreground transition group-hover:translate-x-1"
-                aria-hidden
-              />
-            </Link>
           </div>
         </div>
       </section>
