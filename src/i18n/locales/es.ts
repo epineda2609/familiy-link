@@ -9,7 +9,7 @@ const esDict = {
   "nav.home": "Inicio",
   "nav.search": "Buscar",
   "nav.report": "Reportar",
-  "nav.about": "Sobre BASUF",
+  "nav.about": "Acerca de nosotros",
   "nav.institutional": "Panel institucional",
   "nav.language": "Idioma",
   "nav.primary": "Navegación principal",

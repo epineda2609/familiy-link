@@ -14,6 +14,7 @@ import { Route as RescueRouteImport } from './routes/rescue'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as ModesRouteImport } from './routes/modes'
 import { Route as InstitutionalRouteImport } from './routes/institutional'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as InstitutionalIndexRouteImport } from './routes/institutional.index'
 import { Route as SafeIdCodeRouteImport } from './routes/safe-id.$code'
@@ -46,6 +47,11 @@ const ModesRoute = ModesRouteImport.update({
 const InstitutionalRoute = InstitutionalRouteImport.update({
   id: '/institutional',
   path: '/institutional',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -92,6 +98,7 @@ const InstitutionalAuditRoute = InstitutionalAuditRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/institutional': typeof InstitutionalRouteWithChildren
   '/modes': typeof ModesRoute
   '/report': typeof ReportRoute
@@ -107,6 +114,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/modes': typeof ModesRoute
   '/report': typeof ReportRoute
   '/rescue': typeof RescueRouteWithChildren
@@ -122,6 +130,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/institutional': typeof InstitutionalRouteWithChildren
   '/modes': typeof ModesRoute
   '/report': typeof ReportRoute
@@ -139,6 +148,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/institutional'
     | '/modes'
     | '/report'
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/modes'
     | '/report'
     | '/rescue'
@@ -168,6 +179,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/institutional'
     | '/modes'
     | '/report'
@@ -184,6 +196,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   InstitutionalRoute: typeof InstitutionalRouteWithChildren
   ModesRoute: typeof ModesRoute
   ReportRoute: typeof ReportRoute
@@ -228,6 +241,13 @@ declare module '@tanstack/react-router' {
       path: '/institutional'
       fullPath: '/institutional'
       preLoaderRoute: typeof InstitutionalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -320,6 +340,7 @@ const RescueRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   InstitutionalRoute: InstitutionalRouteWithChildren,
   ModesRoute: ModesRoute,
   ReportRoute: ReportRoute,
@@ -331,13 +352,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

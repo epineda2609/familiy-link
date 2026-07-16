@@ -10,7 +10,7 @@ export const en: MessageDict = {
   "nav.home": "Home",
   "nav.search": "Search",
   "nav.report": "Report",
-  "nav.about": "About BASUF",
+  "nav.about": "About us",
   "nav.institutional": "Institutional panel",
   "nav.language": "Language",
   "nav.primary": "Primary navigation",
