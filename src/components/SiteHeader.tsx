@@ -84,6 +84,13 @@ export function SiteHeader() {
             </Link>
           ))}
           <Link
+            to="/about"
+            className={linkCls}
+            activeProps={{ className: `${linkCls} ${activeCls}` }}
+          >
+            {t("nav.about")}
+          </Link>
+          <Link
             to="/modes"
             className={linkCls}
             activeProps={{ className: `${linkCls} ${activeCls}` }}
@@ -128,6 +135,14 @@ export function SiteHeader() {
                 {l.label}
               </Link>
             ))}
+            <Link
+              to="/about"
+              className={mobileLinkCls}
+              onClick={close}
+              activeProps={{ className: `${mobileLinkCls} ${activeCls}` }}
+            >
+              {t("nav.about")}
+            </Link>
             <Link
               to="/modes"
               className={mobileLinkCls}
