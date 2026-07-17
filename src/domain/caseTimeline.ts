@@ -7,7 +7,8 @@ export type CaseEventType =
   | "partial_id"
   | "possible_match"
   | "critical_review"
-  | "deceased_review";
+  | "deceased_review"
+  | "citizen_update";
 
 export type CaseSourceKind =
   | "family"
@@ -16,7 +17,10 @@ export type CaseSourceKind =
   | "shelter"
   | "ngo"
   | "authority"
-  | "system";
+  | "system"
+  | "citizen";
+
+export type CaseEventValidation = "pending" | "verified" | "rejected";
 
 export interface CaseEvent {
   id: string;
@@ -26,6 +30,9 @@ export interface CaseEvent {
   sourceKind: CaseSourceKind;
   location?: string;
   note?: string;
+  validation?: CaseEventValidation;
+  summary?: string;
+  proposedStatus?: string;
 }
 
 export interface CaseHistory {
