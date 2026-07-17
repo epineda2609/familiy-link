@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as RescueRouteImport } from './routes/rescue'
 import { Route as ReportRouteImport } from './routes/report'
+import { Route as ProtocolsRouteImport } from './routes/protocols'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ModesRouteImport } from './routes/modes'
 import { Route as InstitutionalRouteImport } from './routes/institutional'
@@ -38,6 +39,11 @@ const RescueRoute = RescueRouteImport.update({
 const ReportRoute = ReportRouteImport.update({
   id: '/report',
   path: '/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProtocolsRoute = ProtocolsRouteImport.update({
+  id: '/protocols',
+  path: '/protocols',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/institutional': typeof InstitutionalRouteWithChildren
   '/modes': typeof ModesRoute
   '/privacy': typeof PrivacyRoute
+  '/protocols': typeof ProtocolsRoute
   '/report': typeof ReportRoute
   '/rescue': typeof RescueRouteWithChildren
   '/search': typeof SearchRoute
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/modes': typeof ModesRoute
   '/privacy': typeof PrivacyRoute
+  '/protocols': typeof ProtocolsRoute
   '/report': typeof ReportRoute
   '/rescue': typeof RescueRouteWithChildren
   '/search': typeof SearchRoute
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/institutional': typeof InstitutionalRouteWithChildren
   '/modes': typeof ModesRoute
   '/privacy': typeof PrivacyRoute
+  '/protocols': typeof ProtocolsRoute
   '/report': typeof ReportRoute
   '/rescue': typeof RescueRouteWithChildren
   '/search': typeof SearchRoute
@@ -161,6 +170,7 @@ export interface FileRouteTypes {
     | '/institutional'
     | '/modes'
     | '/privacy'
+    | '/protocols'
     | '/report'
     | '/rescue'
     | '/search'
@@ -177,6 +187,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/modes'
     | '/privacy'
+    | '/protocols'
     | '/report'
     | '/rescue'
     | '/search'
@@ -194,6 +205,7 @@ export interface FileRouteTypes {
     | '/institutional'
     | '/modes'
     | '/privacy'
+    | '/protocols'
     | '/report'
     | '/rescue'
     | '/search'
@@ -212,6 +224,7 @@ export interface RootRouteChildren {
   InstitutionalRoute: typeof InstitutionalRouteWithChildren
   ModesRoute: typeof ModesRoute
   PrivacyRoute: typeof PrivacyRoute
+  ProtocolsRoute: typeof ProtocolsRoute
   ReportRoute: typeof ReportRoute
   RescueRoute: typeof RescueRouteWithChildren
   SearchRoute: typeof SearchRoute
@@ -240,6 +253,13 @@ declare module '@tanstack/react-router' {
       path: '/report'
       fullPath: '/report'
       preLoaderRoute: typeof ReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/protocols': {
+      id: '/protocols'
+      path: '/protocols'
+      fullPath: '/protocols'
+      preLoaderRoute: typeof ProtocolsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -364,6 +384,7 @@ const rootRouteChildren: RootRouteChildren = {
   InstitutionalRoute: InstitutionalRouteWithChildren,
   ModesRoute: ModesRoute,
   PrivacyRoute: PrivacyRoute,
+  ProtocolsRoute: ProtocolsRoute,
   ReportRoute: ReportRoute,
   RescueRoute: RescueRouteWithChildren,
   SearchRoute: SearchRoute,
