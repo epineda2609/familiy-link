@@ -27,6 +27,7 @@ export interface PublicPersonCard {
   status: PersonStatus;
   disasterId: string;
   country: string;
+  nationality?: string;
   lastSeenLocation?: string;
   lastSeenAt?: string; // ISO
   distinctiveFeatures?: string; // señas visibles no sensibles
