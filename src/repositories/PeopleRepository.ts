@@ -65,6 +65,9 @@ class MockPeopleRepository implements IPeopleRepository {
   async listCountries() {
     return mockCountries;
   }
+  async listNationalities() {
+    return mockNationalities;
+  }
   async createReport(input: ReportPersonInput) {
     const id = `p-local-${Date.now()}`;
     const record: PublicPersonCard = {
