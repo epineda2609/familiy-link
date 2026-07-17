@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as RescueRouteImport } from './routes/rescue'
 import { Route as ReportRouteImport } from './routes/report'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ModesRouteImport } from './routes/modes'
 import { Route as InstitutionalRouteImport } from './routes/institutional'
 import { Route as AboutRouteImport } from './routes/about'
@@ -37,6 +38,11 @@ const RescueRoute = RescueRouteImport.update({
 const ReportRoute = ReportRouteImport.update({
   id: '/report',
   path: '/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ModesRoute = ModesRouteImport.update({
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/institutional': typeof InstitutionalRouteWithChildren
   '/modes': typeof ModesRoute
+  '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
   '/rescue': typeof RescueRouteWithChildren
   '/search': typeof SearchRoute
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/modes': typeof ModesRoute
+  '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
   '/rescue': typeof RescueRouteWithChildren
   '/search': typeof SearchRoute
@@ -133,6 +141,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/institutional': typeof InstitutionalRouteWithChildren
   '/modes': typeof ModesRoute
+  '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
   '/rescue': typeof RescueRouteWithChildren
   '/search': typeof SearchRoute
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/institutional'
     | '/modes'
+    | '/privacy'
     | '/report'
     | '/rescue'
     | '/search'
@@ -166,6 +176,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/modes'
+    | '/privacy'
     | '/report'
     | '/rescue'
     | '/search'
@@ -182,6 +193,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/institutional'
     | '/modes'
+    | '/privacy'
     | '/report'
     | '/rescue'
     | '/search'
@@ -199,6 +211,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   InstitutionalRoute: typeof InstitutionalRouteWithChildren
   ModesRoute: typeof ModesRoute
+  PrivacyRoute: typeof PrivacyRoute
   ReportRoute: typeof ReportRoute
   RescueRoute: typeof RescueRouteWithChildren
   SearchRoute: typeof SearchRoute
@@ -227,6 +240,13 @@ declare module '@tanstack/react-router' {
       path: '/report'
       fullPath: '/report'
       preLoaderRoute: typeof ReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/modes': {
@@ -343,6 +363,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   InstitutionalRoute: InstitutionalRouteWithChildren,
   ModesRoute: ModesRoute,
+  PrivacyRoute: PrivacyRoute,
   ReportRoute: ReportRoute,
   RescueRoute: RescueRouteWithChildren,
   SearchRoute: SearchRoute,
@@ -352,13 +373,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
