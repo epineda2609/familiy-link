@@ -3,6 +3,34 @@ import { mockRescueRecords } from "../data/mock/rescue";
 import { mockMatches } from "../data/mock/matches";
 import type { CaseEvent, CaseHistory, CaseSourceKind } from "../domain/caseTimeline";
 import type { ActorKind } from "../domain/rescue";
+import { caseUpdateRepository, type CaseUpdateRecord } from "./CaseUpdateRepository";
+
+function summarizeUpdate(u: CaseUpdateRecord): string {
+  const bits: string[] = [];
+  const id = u.identity;
+  if (id.knownName) bits.push(`Nombre: ${id.knownName}`);
+  if (id.alias) bits.push(`Alias: ${id.alias}`);
+  if (id.approximateAge) bits.push(`Edad ~${id.approximateAge}`);
+  if (id.nationality) bits.push(`Nacionalidad: ${id.nationality}`);
+  if (id.document) bits.push(`Doc: ${id.document}`);
+  if (id.notes) bits.push(id.notes);
+  const ls = u.lastSeen;
+  const loc = [ls.location, ls.city, ls.country].filter(Boolean).join(", ");
+  if (loc) bits.push(`Visto en: ${loc}`);
+  if (ls.date || ls.time) bits.push(`${ls.date ?? ""} ${ls.time ?? ""}`.trim());
+  if (ls.description) bits.push(ls.description);
+  return bits.join(" · ");
+}
+
+function updateLocation(u: CaseUpdateRecord): string | undefined {
+  const parts = [u.lastSeen.location, u.lastSeen.city, u.lastSeen.country].filter(Boolean);
+  return parts.length ? parts.join(", ") : undefined;
+}
+
+function updateActor(u: CaseUpdateRecord): string {
+  if (u.reporter.anonymous) return "Aporte anónimo";
+  return u.reporter.name || "Aporte ciudadano";
+}
 
 function actorKindToSource(k: ActorKind): CaseSourceKind {
   switch (k) {
