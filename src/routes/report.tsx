@@ -300,6 +300,26 @@ function ReportPage() {
                 </select>
               </Field>
               <Field
+                id="nationality"
+                label={t("report.field.nationality")}
+                required
+                error={errors.nationality}
+              >
+                <select
+                  id="nationality"
+                  className={fieldCls}
+                  value={form.nationality}
+                  onChange={(e) => set("nationality", e.target.value)}
+                >
+                  <option value="">{t("report.field.nationality.placeholder")}</option>
+                  {countries.map((c) => (
+                    <option key={`nat-${c.code}`} value={c.code}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              <Field
                 id="disasterId"
                 label={t("report.field.disaster")}
                 required
