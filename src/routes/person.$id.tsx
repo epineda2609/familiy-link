@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ArrowLeft,
   MapPin,
@@ -32,6 +32,9 @@ import { AudiencePreviewTabs } from "../components/evidence/AudiencePreviewTabs"
 import { evidenceRepository } from "../repositories/EvidenceRepository";
 import { resolveAudience, type SafeIdAudience } from "../domain/safeId";
 import { useMode } from "../modes/OperationalModeProvider";
+import { ShareDialog } from "../components/ShareDialog";
+import { CaseUpdateDialog } from "../components/CaseUpdateDialog";
+import { useCaseUpdates } from "../repositories/CaseUpdateRepository";
 
 export const Route = createFileRoute("/person/$id")({
   loader: async ({ params }) => {
@@ -85,6 +88,10 @@ function PersonDetailPage() {
     resolveAudience(mode),
   );
   const evidenceItems = evidenceRepository.listByCase(person.id);
+  // Subscribe to citizen updates so the case history refreshes reactively.
+  useCaseUpdates(person.id);
+  const [shareOpen, setShareOpen] = useState(false);
+  const [infoOpen, setInfoOpen] = useState(false);
 
 
   const countryName =
@@ -96,26 +103,25 @@ function PersonDetailPage() {
     ? (`disaster.${disaster.type}` as MessageKey)
     : null;
 
-  const [copied, setCopied] = useState(false);
-  useEffect(() => {
-    if (!copied) return;
-    const id = window.setTimeout(() => setCopied(false), 1800);
-    return () => window.clearTimeout(id);
-  }, [copied]);
+  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 
   const share = async () => {
-    const url = typeof window !== "undefined" ? window.location.href : "";
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: person.displayName, url });
-      } else {
-        await navigator.clipboard.writeText(url);
-        setCopied(true);
+    const url = shareUrl;
+    const text = t("share.messageTemplate")
+      .replace("{name}", person.displayName)
+      .replace("{url}", url);
+    if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
+      try {
+        await navigator.share({ title: person.displayName, text, url });
+        return;
+      } catch (err) {
+        // User cancelled or share not permitted: fall back to modal.
+        if ((err as DOMException)?.name === "AbortError") return;
       }
-    } catch {
-      /* user cancelled */
     }
+    setShareOpen(true);
   };
+
 
   return (
     <div className="min-h-dvh bg-background">
@@ -157,10 +163,11 @@ function PersonDetailPage() {
               className="inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium text-foreground transition hover:bg-accent"
             >
               <Share2 className="h-4 w-4" aria-hidden />
-              {copied ? "✓" : t("person.actions.share")}
+              {t("person.actions.share")}
             </button>
             <button
               type="button"
+              onClick={() => setInfoOpen(true)}
               className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
             >
               <MessageSquare className="h-4 w-4" aria-hidden />
@@ -178,6 +185,19 @@ function PersonDetailPage() {
             )}
           </div>
         </header>
+
+        <ShareDialog
+          open={shareOpen}
+          onOpenChange={setShareOpen}
+          url={shareUrl}
+          name={person.displayName}
+        />
+        <CaseUpdateDialog
+          open={infoOpen}
+          onOpenChange={setInfoOpen}
+          person={person}
+        />
+
 
 
         <div className="mt-6 grid gap-6 md:grid-cols-2">
