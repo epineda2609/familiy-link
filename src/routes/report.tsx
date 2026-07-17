@@ -314,7 +314,7 @@ function ReportPage() {
                   onChange={(e) => set("nationality", e.target.value)}
                 >
                   <option value="">{t("report.field.nationality.placeholder")}</option>
-                  {countries.map((c) => (
+                  {nationalities.map((c) => (
                     <option key={`nat-${c.code}`} value={c.code}>
                       {c.name}
                     </option>
