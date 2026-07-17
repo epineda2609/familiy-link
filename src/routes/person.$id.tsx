@@ -35,7 +35,6 @@ import { useMode } from "../modes/OperationalModeProvider";
 import { ShareDialog } from "../components/ShareDialog";
 import { CaseUpdateDialog } from "../components/CaseUpdateDialog";
 import { useCaseUpdates } from "../repositories/CaseUpdateRepository";
-import { toast } from "../components/Toast";
 
 export const Route = createFileRoute("/person/$id")({
   loader: async ({ params }) => {
