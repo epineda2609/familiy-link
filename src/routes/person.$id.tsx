@@ -166,10 +166,11 @@ function PersonDetailPage() {
               className="inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium text-foreground transition hover:bg-accent"
             >
               <Share2 className="h-4 w-4" aria-hidden />
-              {copied ? "✓" : t("person.actions.share")}
+              {t("person.actions.share")}
             </button>
             <button
               type="button"
+              onClick={() => setInfoOpen(true)}
               className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
             >
               <MessageSquare className="h-4 w-4" aria-hidden />
@@ -187,6 +188,19 @@ function PersonDetailPage() {
             )}
           </div>
         </header>
+
+        <ShareDialog
+          open={shareOpen}
+          onOpenChange={setShareOpen}
+          url={shareUrl}
+          name={person.displayName}
+        />
+        <CaseUpdateDialog
+          open={infoOpen}
+          onOpenChange={setInfoOpen}
+          person={person}
+        />
+
 
 
         <div className="mt-6 grid gap-6 md:grid-cols-2">
