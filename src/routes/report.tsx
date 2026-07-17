@@ -105,6 +105,7 @@ function ReportPage() {
     if (!form.displayName.trim()) next.displayName = req;
     if (!form.gender) next.gender = req;
     if (!form.country) next.country = req;
+    if (!form.nationality) next.nationality = req;
     if (!form.disasterId) next.disasterId = req;
     if (!form.reporterName.trim()) next.reporterName = req;
     if (!form.reporterContact.trim()) next.reporterContact = req;
