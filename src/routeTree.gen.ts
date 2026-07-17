@@ -12,8 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as RescueRouteImport } from './routes/rescue'
 import { Route as ReportRouteImport } from './routes/report'
+import { Route as ProtocolsRouteImport } from './routes/protocols'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ModesRouteImport } from './routes/modes'
 import { Route as InstitutionalRouteImport } from './routes/institutional'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as InstitutionalIndexRouteImport } from './routes/institutional.index'
@@ -39,6 +42,16 @@ const ReportRoute = ReportRouteImport.update({
   path: '/report',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProtocolsRoute = ProtocolsRouteImport.update({
+  id: '/protocols',
+  path: '/protocols',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ModesRoute = ModesRouteImport.update({
   id: '/modes',
   path: '/modes',
@@ -47,6 +60,11 @@ const ModesRoute = ModesRouteImport.update({
 const InstitutionalRoute = InstitutionalRouteImport.update({
   id: '/institutional',
   path: '/institutional',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -99,8 +117,11 @@ const InstitutionalAuditRoute = InstitutionalAuditRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/institutional': typeof InstitutionalRouteWithChildren
   '/modes': typeof ModesRoute
+  '/privacy': typeof PrivacyRoute
+  '/protocols': typeof ProtocolsRoute
   '/report': typeof ReportRoute
   '/rescue': typeof RescueRouteWithChildren
   '/search': typeof SearchRoute
@@ -115,7 +136,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/modes': typeof ModesRoute
+  '/privacy': typeof PrivacyRoute
+  '/protocols': typeof ProtocolsRoute
   '/report': typeof ReportRoute
   '/rescue': typeof RescueRouteWithChildren
   '/search': typeof SearchRoute
@@ -131,8 +155,11 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/institutional': typeof InstitutionalRouteWithChildren
   '/modes': typeof ModesRoute
+  '/privacy': typeof PrivacyRoute
+  '/protocols': typeof ProtocolsRoute
   '/report': typeof ReportRoute
   '/rescue': typeof RescueRouteWithChildren
   '/search': typeof SearchRoute
@@ -149,8 +176,11 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/contact'
     | '/institutional'
     | '/modes'
+    | '/privacy'
+    | '/protocols'
     | '/report'
     | '/rescue'
     | '/search'
@@ -165,7 +195,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/contact'
     | '/modes'
+    | '/privacy'
+    | '/protocols'
     | '/report'
     | '/rescue'
     | '/search'
@@ -180,8 +213,11 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/contact'
     | '/institutional'
     | '/modes'
+    | '/privacy'
+    | '/protocols'
     | '/report'
     | '/rescue'
     | '/search'
@@ -197,8 +233,11 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
   InstitutionalRoute: typeof InstitutionalRouteWithChildren
   ModesRoute: typeof ModesRoute
+  PrivacyRoute: typeof PrivacyRoute
+  ProtocolsRoute: typeof ProtocolsRoute
   ReportRoute: typeof ReportRoute
   RescueRoute: typeof RescueRouteWithChildren
   SearchRoute: typeof SearchRoute
@@ -229,6 +268,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/protocols': {
+      id: '/protocols'
+      path: '/protocols'
+      fullPath: '/protocols'
+      preLoaderRoute: typeof ProtocolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/modes': {
       id: '/modes'
       path: '/modes'
@@ -241,6 +294,13 @@ declare module '@tanstack/react-router' {
       path: '/institutional'
       fullPath: '/institutional'
       preLoaderRoute: typeof InstitutionalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -341,8 +401,11 @@ const RescueRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  ContactRoute: ContactRoute,
   InstitutionalRoute: InstitutionalRouteWithChildren,
   ModesRoute: ModesRoute,
+  PrivacyRoute: PrivacyRoute,
+  ProtocolsRoute: ProtocolsRoute,
   ReportRoute: ReportRoute,
   RescueRoute: RescueRouteWithChildren,
   SearchRoute: SearchRoute,
