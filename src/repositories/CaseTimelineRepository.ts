@@ -102,6 +102,21 @@ export function getCaseHistoryByPerson(personId: string): CaseHistory | null {
     });
   }
 
+  // Citizen updates ("Tengo información") linked to this case
+  for (const u of caseUpdateRepository.listByCase(person.id)) {
+    events.push({
+      id: `cu-${u.id}`,
+      type: "citizen_update",
+      at: u.createdAt,
+      actorOrg: updateActor(u),
+      sourceKind: "citizen",
+      location: updateLocation(u),
+      summary: summarizeUpdate(u),
+      validation: u.validation,
+      proposedStatus: u.proposedStatus || undefined,
+    });
+  }
+
   events.sort((a, b) => (a.at < b.at ? -1 : 1));
 
   return {
