@@ -89,6 +89,10 @@ function PersonDetailPage() {
     resolveAudience(mode),
   );
   const evidenceItems = evidenceRepository.listByCase(person.id);
+  // Subscribe to citizen updates so the case history refreshes reactively.
+  useCaseUpdates(person.id);
+  const [shareOpen, setShareOpen] = useState(false);
+  const [infoOpen, setInfoOpen] = useState(false);
 
 
   const countryName =
@@ -100,26 +104,27 @@ function PersonDetailPage() {
     ? (`disaster.${disaster.type}` as MessageKey)
     : null;
 
-  const [copied, setCopied] = useState(false);
-  useEffect(() => {
-    if (!copied) return;
-    const id = window.setTimeout(() => setCopied(false), 1800);
-    return () => window.clearTimeout(id);
-  }, [copied]);
+  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 
   const share = async () => {
-    const url = typeof window !== "undefined" ? window.location.href : "";
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: person.displayName, url });
-      } else {
-        await navigator.clipboard.writeText(url);
-        setCopied(true);
+    const url = shareUrl;
+    const text = t("share.messageTemplate")
+      .replace("{name}", person.displayName)
+      .replace("{url}", url);
+    if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
+      try {
+        await navigator.share({ title: person.displayName, text, url });
+        return;
+      } catch (err) {
+        // User cancelled or share not permitted: fall back to modal.
+        if ((err as DOMException)?.name === "AbortError") return;
       }
-    } catch {
-      /* user cancelled */
     }
+    setShareOpen(true);
   };
+
+  const copied = false;
+  void copied;
 
   return (
     <div className="min-h-dvh bg-background">
