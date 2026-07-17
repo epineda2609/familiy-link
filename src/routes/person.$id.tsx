@@ -32,6 +32,10 @@ import { AudiencePreviewTabs } from "../components/evidence/AudiencePreviewTabs"
 import { evidenceRepository } from "../repositories/EvidenceRepository";
 import { resolveAudience, type SafeIdAudience } from "../domain/safeId";
 import { useMode } from "../modes/OperationalModeProvider";
+import { ShareDialog } from "../components/ShareDialog";
+import { CaseUpdateDialog } from "../components/CaseUpdateDialog";
+import { useCaseUpdates } from "../repositories/CaseUpdateRepository";
+import { toast } from "../components/Toast";
 
 export const Route = createFileRoute("/person/$id")({
   loader: async ({ params }) => {
