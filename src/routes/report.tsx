@@ -47,6 +47,7 @@ type FormState = {
   approximateAge: string;
   gender: Gender | "";
   country: string;
+  nationality: string;
   disasterId: string;
   lastSeenLocation: string;
   lastSeenAt: string;
@@ -61,6 +62,7 @@ const emptyState: FormState = {
   approximateAge: "",
   gender: "",
   country: "",
+  nationality: "",
   disasterId: "",
   lastSeenLocation: "",
   lastSeenAt: "",
