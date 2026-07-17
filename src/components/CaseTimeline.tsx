@@ -12,10 +12,11 @@ import {
   UserSearch,
   AlertOctagon,
   Skull,
+  MessageSquarePlus,
   type LucideIcon,
 } from "lucide-react";
 import { useT } from "../i18n/LocaleProvider";
-import type { CaseEvent } from "../domain/caseTimeline";
+import type { CaseEvent, CaseEventValidation } from "../domain/caseTimeline";
 import type { MessageKey } from "../i18n/messages";
 
 const iconMap: Record<CaseEvent["type"], LucideIcon> = {
@@ -33,6 +34,7 @@ const iconMap: Record<CaseEvent["type"], LucideIcon> = {
   possible_match: Link2,
   critical_review: AlertOctagon,
   deceased_review: Skull,
+  citizen_update: MessageSquarePlus,
 };
 
 const tintMap: Record<CaseEvent["type"], string> = {
@@ -50,10 +52,16 @@ const tintMap: Record<CaseEvent["type"], string> = {
   possible_match: "bg-primary/15 text-primary",
   critical_review: "bg-urgent/20 text-urgent-foreground",
   deceased_review: "bg-muted text-muted-foreground",
+  citizen_update: "bg-primary/10 text-primary",
+};
+
+const validationTint: Record<CaseEventValidation, string> = {
+  pending: "border-urgent/40 bg-urgent/10 text-urgent-foreground",
+  verified: "border-primary/40 bg-primary/10 text-primary",
+  rejected: "border-destructive/40 bg-destructive/10 text-destructive",
 };
 
 function eventLabelKey(t: CaseEvent["type"]): MessageKey {
-  // Rescue types share their existing i18n keys under rescue.chain.event.*
   const rescueTypes: CaseEvent["type"][] = [
     "rescue",
     "triage",
@@ -115,6 +123,24 @@ export function CaseTimeline({ events }: { events: CaseEvent[] }) {
                 </span>
                 {e.location ? ` · ${e.location}` : ""}
               </p>
+              {e.validation && (
+                <span
+                  className={`mt-2 inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${validationTint[e.validation]}`}
+                >
+                  {t(`case.validation.${e.validation}` as MessageKey)}
+                </span>
+              )}
+              {e.proposedStatus && (
+                <p className="mt-2 text-xs text-muted-foreground">
+                  {t("case.event.proposedStatus")}:{" "}
+                  <span className="font-medium text-foreground">
+                    {t(`status.${e.proposedStatus}` as MessageKey)}
+                  </span>
+                </p>
+              )}
+              {e.summary && (
+                <p className="mt-2 text-sm text-foreground/90">{e.summary}</p>
+              )}
               {e.note && (
                 <p className="mt-2 text-sm text-foreground/90">{e.note}</p>
               )}
