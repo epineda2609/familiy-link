@@ -35,6 +35,7 @@ export interface IPeopleRepository {
   getDisasterById(id: string): Promise<Disaster | null>;
   listDisasters(): Promise<Disaster[]>;
   listCountries(): Promise<Country[]>;
+  listNationalities(): Promise<Country[]>;
   createReport(input: ReportPersonInput): Promise<PublicPersonCard>;
 }
 
@@ -63,6 +64,9 @@ class MockPeopleRepository implements IPeopleRepository {
   }
   async listCountries() {
     return mockCountries;
+  }
+  async listNationalities() {
+    return mockNationalities;
   }
   async createReport(input: ReportPersonInput) {
     const id = `p-local-${Date.now()}`;

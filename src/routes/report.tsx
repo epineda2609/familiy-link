@@ -88,10 +88,12 @@ function ReportPage() {
   const [created, setCreated] = useState<PublicPersonCard | null>(null);
   const [disasters, setDisasters] = useState<Disaster[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
+  const [nationalities, setNationalities] = useState<Country[]>([]);
 
   useEffect(() => {
     peopleRepository.listDisasters().then(setDisasters);
     peopleRepository.listCountries().then(setCountries);
+    peopleRepository.listNationalities().then(setNationalities);
   }, []);
 
   const set = <K extends keyof FormState>(k: K, v: FormState[K]) => {
@@ -312,7 +314,7 @@ function ReportPage() {
                   onChange={(e) => set("nationality", e.target.value)}
                 >
                   <option value="">{t("report.field.nationality.placeholder")}</option>
-                  {countries.map((c) => (
+                  {nationalities.map((c) => (
                     <option key={`nat-${c.code}`} value={c.code}>
                       {c.name}
                     </option>
