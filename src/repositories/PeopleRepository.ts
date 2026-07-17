@@ -73,6 +73,7 @@ class MockPeopleRepository implements IPeopleRepository {
       status: "missing",
       disasterId: input.disasterId,
       country: input.country,
+      nationality: input.nationality,
       lastSeenLocation: input.lastSeenLocation,
       lastSeenAt: input.lastSeenAt,
       distinctiveFeatures: input.distinctiveFeatures,
