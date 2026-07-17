@@ -125,6 +125,7 @@ function ReportPage() {
         approximateAge: ageNum && !Number.isNaN(ageNum) ? ageNum : undefined,
         gender: form.gender as Gender,
         country: form.country,
+        nationality: form.nationality,
         disasterId: form.disasterId,
         lastSeenLocation: form.lastSeenLocation.trim() || undefined,
         lastSeenAt: form.lastSeenAt || undefined,
