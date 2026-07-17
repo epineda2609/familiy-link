@@ -16,6 +16,7 @@ import { Route as ProtocolsRouteImport } from './routes/protocols'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ModesRouteImport } from './routes/modes'
 import { Route as InstitutionalRouteImport } from './routes/institutional'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as InstitutionalIndexRouteImport } from './routes/institutional.index'
@@ -59,6 +60,11 @@ const ModesRoute = ModesRouteImport.update({
 const InstitutionalRoute = InstitutionalRouteImport.update({
   id: '/institutional',
   path: '/institutional',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -111,6 +117,7 @@ const InstitutionalAuditRoute = InstitutionalAuditRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/institutional': typeof InstitutionalRouteWithChildren
   '/modes': typeof ModesRoute
   '/privacy': typeof PrivacyRoute
@@ -129,6 +136,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/modes': typeof ModesRoute
   '/privacy': typeof PrivacyRoute
   '/protocols': typeof ProtocolsRoute
@@ -147,6 +155,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/institutional': typeof InstitutionalRouteWithChildren
   '/modes': typeof ModesRoute
   '/privacy': typeof PrivacyRoute
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/contact'
     | '/institutional'
     | '/modes'
     | '/privacy'
@@ -185,6 +195,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/contact'
     | '/modes'
     | '/privacy'
     | '/protocols'
@@ -202,6 +213,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/contact'
     | '/institutional'
     | '/modes'
     | '/privacy'
@@ -221,6 +233,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
   InstitutionalRoute: typeof InstitutionalRouteWithChildren
   ModesRoute: typeof ModesRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -281,6 +294,13 @@ declare module '@tanstack/react-router' {
       path: '/institutional'
       fullPath: '/institutional'
       preLoaderRoute: typeof InstitutionalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -381,6 +401,7 @@ const RescueRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  ContactRoute: ContactRoute,
   InstitutionalRoute: InstitutionalRouteWithChildren,
   ModesRoute: ModesRoute,
   PrivacyRoute: PrivacyRoute,

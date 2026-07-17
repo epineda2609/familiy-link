@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { useT } from "../i18n/LocaleProvider";
 
 export function SiteFooter() {
@@ -11,9 +12,30 @@ export function SiteFooter() {
             <p className="text-xs">{t("app.tagline")}</p>
           </div>
           <ul className="flex flex-wrap gap-x-6 gap-y-2 text-xs">
-            <li>{t("footer.privacy")}</li>
-            <li>{t("footer.protocols")}</li>
-            <li>{t("footer.contact")}</li>
+            <li>
+              <Link
+                to="/privacy"
+                className="underline-offset-2 hover:text-foreground hover:underline"
+              >
+                {t("footer.privacy")}
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/protocols"
+                className="underline-offset-2 hover:text-foreground hover:underline"
+              >
+                {t("footer.protocols")}
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/contact"
+                className="underline-offset-2 hover:text-foreground hover:underline"
+              >
+                {t("footer.contact")}
+              </Link>
+            </li>
           </ul>
         </div>
         <p className="mt-6 text-xs">{t("footer.rights")}</p>
