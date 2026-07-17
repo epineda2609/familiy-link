@@ -1,7 +1,7 @@
 // BASUF — Aportes ciudadanos sobre un caso existente ("Tengo información").
 // Cada envío queda almacenado como una nueva actualización asociada al caso,
 // sin sobrescribir los datos oficiales. Repositorio en memoria (mock).
-import { useSyncExternalStore } from "react";
+import { useSyncExternalStore, useMemo } from "react";
 import type { Gender, PersonStatus } from "../domain/types";
 
 export type CaseUpdateValidation = "pending" | "verified" | "rejected";
@@ -45,8 +45,10 @@ type Listener = () => void;
 
 const listeners = new Set<Listener>();
 let records: CaseUpdateRecord[] = [];
+let version = 0;
 
 function emit() {
+  version += 1;
   for (const l of listeners) l();
 }
 
@@ -65,21 +67,25 @@ export const caseUpdateRepository = {
   listByCase(caseId: string): CaseUpdateRecord[] {
     return records.filter((r) => r.caseId === caseId);
   },
+  all(): CaseUpdateRecord[] {
+    return records;
+  },
   subscribe(l: Listener) {
     listeners.add(l);
     return () => {
       listeners.delete(l);
     };
   },
-  snapshot() {
-    return records;
+  getVersion() {
+    return version;
   },
 };
 
 export function useCaseUpdates(caseId: string): CaseUpdateRecord[] {
-  return useSyncExternalStore(
+  const v = useSyncExternalStore(
     (l) => caseUpdateRepository.subscribe(l),
-    () => caseUpdateRepository.listByCase(caseId),
-    () => [],
+    () => caseUpdateRepository.getVersion(),
+    () => 0,
   );
+  return useMemo(() => caseUpdateRepository.listByCase(caseId), [caseId, v]);
 }
