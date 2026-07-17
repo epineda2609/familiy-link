@@ -122,8 +122,6 @@ function PersonDetailPage() {
     setShareOpen(true);
   };
 
-  const copied = false;
-  void copied;
 
   return (
     <div className="min-h-dvh bg-background">
