@@ -18,6 +18,7 @@ export interface ReportPersonInput {
   approximateAge?: number;
   gender: "f" | "m" | "o";
   country: string;
+  nationality?: string;
   disasterId: string;
   lastSeenLocation?: string;
   lastSeenAt?: string;
