@@ -119,6 +119,8 @@ export const en: MessageDict = {
   "report.field.approximateAge": "Approximate age",
   "report.field.gender": "Gender",
   "report.field.country": "Country of occurrence",
+  "report.field.nationality": "Nationality",
+  "report.field.nationality.placeholder": "Select nationality",
   "report.field.disaster": "Disaster",
   "report.field.lastSeenLocation": "Location of last sighting",
   "report.field.lastSeenAt": "Date of last sighting",

@@ -47,6 +47,7 @@ type FormState = {
   approximateAge: string;
   gender: Gender | "";
   country: string;
+  nationality: string;
   disasterId: string;
   lastSeenLocation: string;
   lastSeenAt: string;
@@ -61,6 +62,7 @@ const emptyState: FormState = {
   approximateAge: "",
   gender: "",
   country: "",
+  nationality: "",
   disasterId: "",
   lastSeenLocation: "",
   lastSeenAt: "",
@@ -103,6 +105,7 @@ function ReportPage() {
     if (!form.displayName.trim()) next.displayName = req;
     if (!form.gender) next.gender = req;
     if (!form.country) next.country = req;
+    if (!form.nationality) next.nationality = req;
     if (!form.disasterId) next.disasterId = req;
     if (!form.reporterName.trim()) next.reporterName = req;
     if (!form.reporterContact.trim()) next.reporterContact = req;
@@ -122,6 +125,7 @@ function ReportPage() {
         approximateAge: ageNum && !Number.isNaN(ageNum) ? ageNum : undefined,
         gender: form.gender as Gender,
         country: form.country,
+        nationality: form.nationality,
         disasterId: form.disasterId,
         lastSeenLocation: form.lastSeenLocation.trim() || undefined,
         lastSeenAt: form.lastSeenAt || undefined,
@@ -290,6 +294,26 @@ function ReportPage() {
                   <option value="">{t("report.field.select")}</option>
                   {countries.map((c) => (
                     <option key={c.code} value={c.code}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              <Field
+                id="nationality"
+                label={t("report.field.nationality")}
+                required
+                error={errors.nationality}
+              >
+                <select
+                  id="nationality"
+                  className={fieldCls}
+                  value={form.nationality}
+                  onChange={(e) => set("nationality", e.target.value)}
+                >
+                  <option value="">{t("report.field.nationality.placeholder")}</option>
+                  {countries.map((c) => (
+                    <option key={`nat-${c.code}`} value={c.code}>
                       {c.name}
                     </option>
                   ))}
