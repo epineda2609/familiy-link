@@ -39,7 +39,7 @@ export const en: MessageDict = {
     "A bridge between chaos and reunion, built for NGOs, hospitals, shelters and rescue brigades.",
   "mission.originTitle": "Why BASUF exists",
   "mission.originBody":
-    "Born from the grief of a devastating catastrophe and the need and goal of two Venezuelan siblings: to build a simple and functional tool that helps real families when traditional systems fail by connecting all links to find the family member. Today our portal is an open foundation for humanitarian organizations anywhere in the world.",
+    "Born from the grief of a devastating catastrophe and the need and goal of two Venezuelan siblings: to build a simple and functional tool that helps real families when traditional systems fail by connecting all links to find the family member.\u00A0\n\n\nToday our portal is an open foundation for humanitarian organizations anywhere in the world.",
   "home.stats.cases": "Registered cases",
   "home.stats.reunions": "Reunions",
   "home.stats.orgs": "Partner organizations",
