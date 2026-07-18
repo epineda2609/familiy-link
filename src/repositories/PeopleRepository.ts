@@ -34,6 +34,28 @@ export interface ReportPersonInput {
   consent: boolean;
 }
 
+export interface CreateDisasterInput {
+  name: string;
+  type: DisasterType;
+  customType?: string;
+  country: string;
+  region: string;
+  startedAt: string;
+  description?: string;
+  magnitude?: string;
+  affectedEstimate?: number;
+  fatalities?: number;
+  missing?: number;
+  createdByOperator?: string;
+  createdByOrg?: string;
+}
+
+export class DuplicateDisasterError extends Error {
+  constructor() {
+    super("duplicate_disaster");
+    this.name = "DuplicateDisasterError";
+  }
+
 export interface IPeopleRepository {
   searchPublic(filters: SearchFilters): Promise<PublicPersonCard[]>;
   getPublicById(id: string): Promise<PublicPersonCard | null>;
