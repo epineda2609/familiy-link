@@ -61,6 +61,11 @@ function DashboardPage() {
   const [disasters, setDisasters] = useState<Disaster[]>([]);
   const [statusFilter, setStatusFilter] = useState<PersonStatus | "">("");
   const [revealed, setRevealed] = useState<Set<string>>(new Set());
+  const [createOpen, setCreateOpen] = useState(false);
+
+  const canCreateDisaster = session?.role === "admin";
+  const refreshDisasters = () =>
+    peopleRepository.listDisasters().then(setDisasters);
 
   const canEdit = session?.role === "admin" || session?.role === "reviewer";
   const actor: AuditActor | null = session
