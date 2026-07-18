@@ -11,6 +11,7 @@ type Props = {
   onReset: () => void;
   countries: Country[];
   disasters: Disaster[];
+  nationalities: Country[];
   compact?: boolean;
 };
 
@@ -29,6 +30,7 @@ export function SearchForm({
   onReset,
   countries,
   disasters,
+  nationalities,
   compact,
 }: Props) {
   const { t } = useT();
