@@ -95,10 +95,10 @@ function ContactPage() {
                   <div className="text-sm">
                     <p className="font-semibold">Correo</p>
                     <a
-                      href="mailto:contacto@plataformahumanitaria.org"
+                      href="mailto:contacto@basuf.org"
                       className="text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
                     >
-                      contacto@plataformahumanitaria.org
+                      contacto@basuf.org
                     </a>
                   </div>
                 </li>
