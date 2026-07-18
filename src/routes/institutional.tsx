@@ -294,10 +294,17 @@ function BasufAdminLoginForm({
 
   return (
     <form onSubmit={submit} className="space-y-4">
-      <p className="rounded-md border border-primary/30 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
-        Acceso interno BASUF (Administrador/Master). Sólo personal de la
-        organización.
-      </p>
+      <div className="rounded-md border border-primary/30 bg-primary/5 px-3 py-2 text-xs text-muted-foreground space-y-1">
+        <p>
+          Acceso interno BASUF (Administrador/Master). Sólo personal de la
+          organización.
+        </p>
+        <p>
+          Demo — Operador:{" "}
+          <span className="font-mono text-foreground">BASUF Admin</span> · Código:{" "}
+          <span className="font-mono text-foreground">{BASUF_MASTER_CODE}</span>
+        </p>
+      </div>
       <div className="flex flex-col gap-1">
         <label className="text-xs font-medium text-muted-foreground" htmlFor="badm">
           Nombre del operador
