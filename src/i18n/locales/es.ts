@@ -49,7 +49,7 @@ const esDict = {
   "home.how.title": "Cómo funciona",
   "home.how.step1.title": "Reporta o busca",
   "home.how.step1.desc":
-    "Registra a una persona desaparecida o busca coincidencias en la red.",
+    "Registra a una persona desaparecida o busca coincidencias en nuestra base de datos.",
   "home.how.step2.title": "Coincidencias verificadas",
   "home.how.step2.desc":
     "El sistema propone posibles coincidencias y las organizaciones aliadas las validan.",
