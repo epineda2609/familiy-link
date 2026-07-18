@@ -118,6 +118,45 @@ class MockPeopleRepository implements IPeopleRepository {
     mockPeople.unshift(record);
     return record;
   }
+  async createDisaster(input: CreateDisasterInput): Promise<Disaster> {
+    const name = input.name.trim();
+    const region = input.region.trim();
+    const country = input.country.trim();
+    if (!name || !input.type || !country || !region || !input.startedAt) {
+      throw new Error("missing_required_fields");
+    }
+    const duplicate = mockDisasters.find(
+      (d) =>
+        d.name.trim().toLowerCase() === name.toLowerCase() &&
+        d.country.trim().toLowerCase() === country.toLowerCase() &&
+        d.startedAt === input.startedAt,
+    );
+    if (duplicate) throw new DuplicateDisasterError();
+    const record: Disaster = {
+      id: `d-local-${Date.now()}`,
+      type: input.type,
+      customType: input.type === "other" ? input.customType?.trim() : undefined,
+      name,
+      country,
+      region,
+      startedAt: input.startedAt,
+      active: true,
+      state: "active",
+      description: input.description?.trim() || undefined,
+      magnitude:
+        input.type === "earthquake" && input.magnitude?.trim()
+          ? input.magnitude.trim()
+          : undefined,
+      affectedEstimate: input.affectedEstimate,
+      fatalities: input.fatalities,
+      missing: input.missing,
+      createdAt: new Date().toISOString(),
+      createdByOperator: input.createdByOperator,
+      createdByOrg: input.createdByOrg,
+    };
+    mockDisasters.unshift(record);
+    return record;
+  }
 }
 
 export const peopleRepository: IPeopleRepository = new MockPeopleRepository();
