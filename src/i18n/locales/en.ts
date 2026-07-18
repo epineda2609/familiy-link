@@ -54,7 +54,7 @@ export const en: MessageDict = {
   "home.how.step2.title": "Verified matches",
   "home.how.step2.desc":
     "The system suggests possible matches and partner organizations validate them.",
-  "home.how.step3.title": "Safe reunion",
+  "home.how.step3.title": "Receive/Update status and share QR",
   "home.how.step3.desc":
     "We coordinate contact respecting privacy and humanitarian protocols.",
   "search.title": "Search for people",
