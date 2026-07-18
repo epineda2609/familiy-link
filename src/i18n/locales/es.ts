@@ -61,7 +61,7 @@ const esDict = {
     "Usa filtros para encontrar coincidencias. Los datos sensibles no se muestran en el panel público.",
   "search.field.name": "Nombre o apodo",
   "search.field.name.ph": "Ej. María, Juan Pérez…",
-  "search.field.country": "País",
+  "search.field.country": "País de ocurrencia",
   "search.field.disaster": "Catástrofe",
   "search.field.status": "Estado",
   "search.field.ageRange": "Rango de edad",

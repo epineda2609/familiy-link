@@ -62,7 +62,7 @@ export const en: MessageDict = {
     "Use filters to find matches. Sensitive data is not shown in the public panel.",
   "search.field.name": "Name or nickname",
   "search.field.name.ph": "E.g. Maria, John Smith…",
-  "search.field.country": "Country",
+  "search.field.country": "Country of occurrence",
   "search.field.disaster": "Disaster",
   "search.field.status": "Status",
   "search.field.ageRange": "Age range",
