@@ -56,6 +56,7 @@ const actionTone: Record<AuditAction, string> = {
   "safeId.audience.change": "bg-muted text-muted-foreground border-border",
   "evidence.upload": "bg-primary/10 text-primary border-primary/30",
   "evidence.reveal": "bg-destructive/10 text-destructive border-destructive/30",
+  "disaster.create": "bg-hope/20 text-hope-foreground border-hope/40",
 };
 
 function AuditPage() {
