@@ -21,15 +21,21 @@ export type Gender = "f" | "m" | "o";
 export interface Disaster {
   id: string;
   type: DisasterType;
+  customType?: string;
   name: string;
   country: string;
   region?: string;
   startedAt: string; // ISO
   active: boolean;
+  state?: DisasterState;
+  description?: string;
   affectedEstimate?: number;
   magnitude?: string;
   fatalities?: number;
   missing?: number;
+  createdAt?: string;
+  createdByOperator?: string;
+  createdByOrg?: string;
 }
 
 /** Perfil público — SIN datos sensibles. Nunca incluye fotos de fallecidos ni contactos. */
