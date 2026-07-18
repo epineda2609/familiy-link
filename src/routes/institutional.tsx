@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
+import { useMemo, useState, type FormEvent } from "react";
 import {
   ShieldCheck,
   LogOut,
@@ -10,6 +10,8 @@ import {
   GitCompareArrows,
   ScrollText,
   Radio,
+  Building2,
+  KeyRound,
 } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
@@ -20,12 +22,13 @@ import {
   useInstitutionalSession,
   type InstitutionalRole,
 } from "../auth/InstitutionalSession";
-import type { MessageKey } from "../i18n/messages";
+import { institutionsRepository } from "../repositories/InstitutionsRepository";
+import type { MembershipRole } from "../domain/institutions";
 
 export const Route = createFileRoute("/institutional")({
   head: () => ({
     meta: [
-      { title: "Panel institucional — BASUF" },
+      { title: "Acceso institucional — BASUF" },
       {
         name: "description",
         content:
@@ -37,7 +40,8 @@ export const Route = createFileRoute("/institutional")({
   component: InstitutionalLayout,
 });
 
-const roles: InstitutionalRole[] = ["admin", "reviewer", "viewer"];
+// Código interno demo para acceso BASUF Master. En producción viene del backend/SSO interno.
+const BASUF_MASTER_CODE = "BASUF-MASTER";
 
 function InstitutionalLayout() {
   const { session } = useInstitutionalSession();
@@ -46,17 +50,10 @@ function InstitutionalLayout() {
 }
 
 function SignInGate() {
-  const { t } = useT();
   const { signIn } = useInstitutionalSession();
-  const [orgName, setOrgName] = useState("");
-  const [operatorName, setOperatorName] = useState("");
-  const [role, setRole] = useState<InstitutionalRole>("reviewer");
+  const approved = useMemo(() => institutionsRepository.listApproved(), []);
 
-  const submit = (e: FormEvent) => {
-    e.preventDefault();
-    if (!orgName.trim() || !operatorName.trim()) return;
-    signIn({ orgName: orgName.trim(), operatorName: operatorName.trim(), role });
-  };
+  const [tab, setTab] = useState<"institutional" | "basuf">("institutional");
 
   return (
     <div className="min-h-dvh bg-background">
@@ -70,8 +67,10 @@ function SignInGate() {
               <Lock className="h-6 w-6" aria-hidden />
             </span>
             <div>
-              <h1 className="text-xl font-bold">{t("inst.login.title")}</h1>
-              <p className="text-xs text-muted-foreground">{t("inst.title")}</p>
+              <h1 className="text-xl font-bold">Acceso institucional</h1>
+              <p className="text-xs text-muted-foreground">
+                Sólo instituciones aprobadas por BASUF.
+              </p>
             </div>
           </div>
 
@@ -80,64 +79,44 @@ function SignInGate() {
               className="mt-0.5 h-4 w-4 shrink-0 text-urgent-foreground"
               aria-hidden
             />
-            <p className="text-xs text-muted-foreground">{t("inst.login.desc")}</p>
+            <p className="text-xs text-muted-foreground">
+              Cada acceso queda registrado en auditoría. No compartas credenciales.
+            </p>
           </div>
 
-          <form onSubmit={submit} className="space-y-4">
-            <div className="flex flex-col gap-1">
-              <label className="text-xs font-medium text-muted-foreground" htmlFor="org">
-                {t("inst.login.org")}
-              </label>
-              <input
-                id="org"
-                type="text"
-                required
-                placeholder={t("inst.login.orgPh")}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                value={orgName}
-                onChange={(e) => setOrgName(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-xs font-medium text-muted-foreground" htmlFor="op">
-                {t("inst.login.operator")}
-              </label>
-              <input
-                id="op"
-                type="text"
-                required
-                placeholder={t("inst.login.operatorPh")}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                value={operatorName}
-                onChange={(e) => setOperatorName(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-xs font-medium text-muted-foreground" htmlFor="role">
-                {t("inst.login.role")}
-              </label>
-              <select
-                id="role"
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                value={role}
-                onChange={(e) => setRole(e.target.value as InstitutionalRole)}
-              >
-                {roles.map((r) => (
-                  <option key={r} value={r}>
-                    {t(`inst.role.${r}` as MessageKey)}
-                  </option>
-                ))}
-              </select>
-            </div>
-
+          <div className="mb-4 grid grid-cols-2 gap-1 rounded-lg border border-border bg-muted/40 p-1 text-sm">
             <button
-              type="submit"
-              className="inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+              type="button"
+              onClick={() => setTab("institutional")}
+              className={`rounded-md px-3 py-1.5 font-medium transition ${
+                tab === "institutional"
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
-              <ShieldCheck className="h-4 w-4" aria-hidden />
-              {t("inst.login.submit")}
+              Miembro institucional
             </button>
-          </form>
+            <button
+              type="button"
+              onClick={() => setTab("basuf")}
+              className={`rounded-md px-3 py-1.5 font-medium transition ${
+                tab === "basuf"
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              BASUF Master
+            </button>
+          </div>
+
+          {tab === "institutional" ? (
+            <InstitutionalLoginForm
+              approved={approved}
+              onSignIn={signIn}
+            />
+          ) : (
+            <BasufAdminLoginForm onSignIn={signIn} />
+          )}
         </div>
       </main>
       <SiteFooter />
@@ -145,9 +124,233 @@ function SignInGate() {
   );
 }
 
+function InstitutionalLoginForm({
+  approved,
+  onSignIn,
+}: {
+  approved: ReturnType<typeof institutionsRepository.listApproved>;
+  onSignIn: (s: {
+    role: InstitutionalRole;
+    orgName: string;
+    operatorName: string;
+    institutionId?: string;
+    membershipId?: string;
+    userEmail?: string;
+  }) => void;
+}) {
+  const [institutionId, setInstitutionId] = useState<string>("");
+  const [userEmail, setUserEmail] = useState("");
+  const [role, setRole] = useState<MembershipRole>("reviewer");
+  const [error, setError] = useState<string | null>(null);
+
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    if (!institutionId) {
+      setError("Selecciona una organización aprobada.");
+      return;
+    }
+    if (!userEmail.trim()) {
+      setError("Ingresa tu correo institucional.");
+      return;
+    }
+    const result = institutionsRepository.authenticate({
+      institutionId,
+      userEmail,
+      role,
+    });
+    if (!result.ok) {
+      const msgs: Record<string, string> = {
+        institution_not_found: "La institución no existe.",
+        institution_not_approved:
+          "La institución no está aprobada. Contacta al administrador BASUF.",
+        membership_not_found:
+          "No encontramos una membresía activa para este correo en esta institución.",
+        membership_inactive:
+          "La membresía no está activa. Confirma tu invitación o contacta al administrador.",
+        role_mismatch:
+          "El rol seleccionado no coincide con tu membresía registrada.",
+      };
+      setError(msgs[result.reason ?? ""] ?? "No se pudo iniciar sesión.");
+      return;
+    }
+    // Validación en cliente + repositorio; el repositorio nunca acepta admin como rol institucional.
+    onSignIn({
+      role: role as InstitutionalRole,
+      orgName: result.institution!.name,
+      operatorName: result.membership!.userName,
+      institutionId: result.institution!.id,
+      membershipId: result.membership!.id,
+      userEmail: result.membership!.userEmail,
+    });
+  };
+
+  return (
+    <form onSubmit={submit} className="space-y-4">
+      <div className="flex flex-col gap-1">
+        <label className="text-xs font-medium text-muted-foreground" htmlFor="org">
+          Organización
+        </label>
+        <select
+          id="org"
+          required
+          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+          value={institutionId}
+          onChange={(e) => setInstitutionId(e.target.value)}
+        >
+          <option value="">Seleccionar organización</option>
+          {approved.map((i) => (
+            <option key={i.id} value={i.id}>
+              {i.name}
+              {i.acronym ? ` (${i.acronym})` : ""} — {i.country}
+            </option>
+          ))}
+        </select>
+        {approved.length === 0 && (
+          <p className="text-xs text-muted-foreground">
+            Todavía no hay instituciones aprobadas.
+          </p>
+        )}
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-xs font-medium text-muted-foreground" htmlFor="op">
+          Usuario&nbsp;
+        </label>
+        <input
+          id="op"
+          type="email"
+          required
+          placeholder="correo@institucion.org"
+          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+          value={userEmail}
+          onChange={(e) => setUserEmail(e.target.value)}
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-xs font-medium text-muted-foreground" htmlFor="role">
+          Rol
+        </label>
+        <select
+          id="role"
+          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+          value={role}
+          onChange={(e) => setRole(e.target.value as MembershipRole)}
+        >
+          <option value="reviewer">Revisor</option>
+          <option value="viewer">Consulta</option>
+        </select>
+        <p className="text-[11px] text-muted-foreground">
+          El rol Administrador está reservado a personal interno de BASUF.
+        </p>
+      </div>
+
+      {error && (
+        <p className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-xs text-destructive">
+          {error}
+        </p>
+      )}
+
+      <button
+        type="submit"
+        className="inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+      >
+        <ShieldCheck className="h-4 w-4" aria-hidden />
+        Iniciar sesión
+      </button>
+    </form>
+  );
+}
+
+function BasufAdminLoginForm({
+  onSignIn,
+}: {
+  onSignIn: (s: {
+    role: InstitutionalRole;
+    orgName: string;
+    operatorName: string;
+  }) => void;
+}) {
+  const [operator, setOperator] = useState("");
+  const [code, setCode] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    if (!operator.trim()) {
+      setError("Ingresa tu nombre.");
+      return;
+    }
+    if (code.trim().toUpperCase() !== BASUF_MASTER_CODE) {
+      setError("Código interno incorrecto.");
+      return;
+    }
+    onSignIn({
+      role: "admin",
+      orgName: "BASUF",
+      operatorName: operator.trim(),
+    });
+  };
+
+  return (
+    <form onSubmit={submit} className="space-y-4">
+      <p className="rounded-md border border-primary/30 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
+        Acceso interno BASUF (Administrador/Master). Sólo personal de la
+        organización.
+      </p>
+      <div className="flex flex-col gap-1">
+        <label className="text-xs font-medium text-muted-foreground" htmlFor="badm">
+          Nombre del operador
+        </label>
+        <input
+          id="badm"
+          type="text"
+          required
+          placeholder="Nombre y apellido"
+          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+          value={operator}
+          onChange={(e) => setOperator(e.target.value)}
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-xs font-medium text-muted-foreground" htmlFor="bcode">
+          Código interno
+        </label>
+        <input
+          id="bcode"
+          type="password"
+          required
+          placeholder="Código interno BASUF"
+          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-ring"
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+        />
+        <p className="text-[11px] text-muted-foreground">
+          Demo: <span className="font-mono">{BASUF_MASTER_CODE}</span>
+        </p>
+      </div>
+
+      {error && (
+        <p className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-xs text-destructive">
+          {error}
+        </p>
+      )}
+
+      <button
+        type="submit"
+        className="inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+      >
+        <KeyRound className="h-4 w-4" aria-hidden />
+        Entrar como BASUF Master
+      </button>
+    </form>
+  );
+}
+
 function Shell() {
   const { t } = useT();
   const { session, signOut } = useInstitutionalSession();
+  const isAdmin = session?.role === "admin";
 
   const tabCls =
     "inline-flex items-center gap-1.5 rounded-md border border-transparent px-3 py-1.5 text-sm font-medium text-muted-foreground transition hover:bg-accent";
@@ -166,13 +369,17 @@ function Shell() {
             </span>
             <div>
               <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                {t("inst.signedInAs")}
+                Sesión activa como
               </p>
               <p className="text-sm font-semibold">
                 {session?.operatorName} · {session?.orgName}
               </p>
               <p className="text-xs text-muted-foreground">
-                {t(`inst.role.${session!.role}` as MessageKey)}
+                {session?.role === "admin"
+                  ? "Administrador BASUF"
+                  : session?.role === "reviewer"
+                  ? "Revisor"
+                  : "Consulta"}
               </p>
             </div>
           </div>
@@ -182,15 +389,17 @@ function Shell() {
             className="inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium transition hover:bg-accent"
           >
             <LogOut className="h-4 w-4" aria-hidden />
-            {t("inst.signOut")}
+            Cerrar sesión
           </button>
         </div>
 
         <header className="mb-6">
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            {t("inst.title")}
+            Panel institucional
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">{t("inst.subtitle")}</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Coordinación de casos, coincidencias y datos sensibles bajo auditoría.
+          </p>
         </header>
 
         <nav className="mb-6 flex flex-wrap gap-1" aria-label="Secciones institucionales">
@@ -201,7 +410,7 @@ function Shell() {
             activeOptions={{ exact: true }}
           >
             <LayoutDashboard className="h-4 w-4" aria-hidden />
-            {t("inst.tab.cases")}
+            Casos
           </Link>
           <Link
             to="/institutional/matches"
@@ -209,15 +418,25 @@ function Shell() {
             activeProps={{ className: `${tabCls} ${activeTabCls}` }}
           >
             <GitCompareArrows className="h-4 w-4" aria-hidden />
-            {t("inst.tab.matches")}
+            Coincidencias
           </Link>
+          {isAdmin && (
+            <Link
+              to="/institutional/institutions"
+              className={tabCls}
+              activeProps={{ className: `${tabCls} ${activeTabCls}` }}
+            >
+              <Building2 className="h-4 w-4" aria-hidden />
+              Instituciones
+            </Link>
+          )}
           <Link
             to="/institutional/audit"
             className={tabCls}
             activeProps={{ className: `${tabCls} ${activeTabCls}` }}
           >
             <ScrollText className="h-4 w-4" aria-hidden />
-            {t("inst.tab.audit")}
+            Auditoría
           </Link>
           <Link
             to="/institutional/integrations"
@@ -225,7 +444,7 @@ function Shell() {
             activeProps={{ className: `${tabCls} ${activeTabCls}` }}
           >
             <Radio className="h-4 w-4" aria-hidden />
-            {t("inst.tab.integrations")}
+            Integraciones
           </Link>
         </nav>
 

@@ -57,6 +57,16 @@ const actionTone: Record<AuditAction, string> = {
   "evidence.upload": "bg-primary/10 text-primary border-primary/30",
   "evidence.reveal": "bg-destructive/10 text-destructive border-destructive/30",
   "disaster.create": "bg-hope/20 text-hope-foreground border-hope/40",
+  "institution.create": "bg-primary/10 text-primary border-primary/30",
+  "institution.edit": "bg-muted text-muted-foreground border-border",
+  "institution.approve": "bg-hope/20 text-hope-foreground border-hope/40",
+  "institution.reject": "bg-destructive/10 text-destructive border-destructive/30",
+  "institution.suspend": "bg-urgent/20 text-urgent-foreground border-urgent/40",
+  "institution.reactivate": "bg-primary/10 text-primary border-primary/30",
+  "institution.archive": "bg-muted text-muted-foreground border-border",
+  "institution.invite": "bg-primary/10 text-primary border-primary/30",
+  "institution.membership.activate": "bg-hope/20 text-hope-foreground border-hope/40",
+  "institution.membership.revoke": "bg-destructive/10 text-destructive border-destructive/30",
 };
 
 function AuditPage() {

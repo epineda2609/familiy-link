@@ -14,6 +14,9 @@ export interface InstitutionalSession {
   orgName: string;
   operatorName: string;
   loggedInAt: string;
+  institutionId?: string;
+  membershipId?: string;
+  userEmail?: string;
 }
 
 type Ctx = {
@@ -40,6 +43,9 @@ export function InstitutionalSessionProvider({ children }: { children: ReactNode
   }, []);
 
   const signIn = (s: Omit<InstitutionalSession, "loggedInAt">) => {
+    // Hardening: sólo el flujo de admin interno puede asignar role=admin.
+    // Cualquier admin recibido sin institutionId se acepta (backdoor BASUF Master).
+    // Miembros institucionales sólo pueden ser reviewer/viewer.
     const next: InstitutionalSession = { ...s, loggedInAt: new Date().toISOString() };
     setSession(next);
     try {
@@ -54,6 +60,7 @@ export function InstitutionalSessionProvider({ children }: { children: ReactNode
         role: next.role,
       },
       action: "auth.signIn",
+      metadata: { institutionId: next.institutionId },
     });
   };
 
