@@ -197,7 +197,7 @@ function Home() {
       <section className="border-y border-border bg-card">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 py-8 sm:grid-cols-4">
           {[
-            { k: "home.stats.cases", v: "1.284" },
+            { k: "home.stats.cases", v: "1,284" },
             { k: "home.stats.reunions", v: "312" },
             { k: "home.stats.orgs", v: "50" },
             { k: "home.stats.countries", v: "20" },
