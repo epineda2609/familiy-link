@@ -16,7 +16,7 @@ const esDict = {
   "nav.open": "Abrir menú",
   "nav.close": "Cerrar menú",
   "a11y.skipToContent": "Saltar al contenido",
-  "hero.kicker": "Plataforma de reunificación y trazabilidad de personas por evento\u00a0catastrófico",
+  "hero.kicker": "Plataforma de reunificación y trazabilidad de personas por evento",
   "hero.contextLine":
     "Inspirada por la urgencia evidenciada tras los sismos de Venezuela del 24 de junio de 2026, BASUF ayuda a encontrar seres queridos cuando los registros, las comunicaciones y la coordinación fallan.",
   "home.hero.title": "Reunir familias es posible.",
