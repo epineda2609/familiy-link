@@ -19,7 +19,17 @@ export type AuditAction =
   | "safeId.audience.change"
   | "evidence.upload"
   | "evidence.reveal"
-  | "disaster.create";
+  | "disaster.create"
+  | "institution.create"
+  | "institution.edit"
+  | "institution.approve"
+  | "institution.reject"
+  | "institution.suspend"
+  | "institution.reactivate"
+  | "institution.archive"
+  | "institution.invite"
+  | "institution.membership.activate"
+  | "institution.membership.revoke";
 
 export interface AuditActor {
   operatorName: string;
