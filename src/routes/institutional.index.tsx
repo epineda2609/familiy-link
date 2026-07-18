@@ -1,15 +1,27 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
-import { CheckCircle2, XCircle, ExternalLink, Eye, EyeOff } from "lucide-react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
+import {
+  CheckCircle2,
+  XCircle,
+  ExternalLink,
+  Eye,
+  EyeOff,
+  Plus,
+  X,
+} from "lucide-react";
 import { useT } from "../i18n/LocaleProvider";
 import { useInstitutionalSession } from "../auth/InstitutionalSession";
 import {
   institutionalRepository,
   type InstitutionalCase,
 } from "../repositories/InstitutionalRepository";
-import { peopleRepository } from "../repositories/PeopleRepository";
-import type { Disaster, PersonStatus } from "../domain/types";
+import {
+  peopleRepository,
+  DuplicateDisasterError,
+  type CreateDisasterInput,
+} from "../repositories/PeopleRepository";
+import type { Disaster, DisasterType, PersonStatus } from "../domain/types";
 import type { MessageKey } from "../i18n/messages";
 import { auditLog } from "../audit/auditLog";
 import type { AuditActor } from "../audit/auditLog";
