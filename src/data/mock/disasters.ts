@@ -12,7 +12,7 @@ export const mockDisasters: Disaster[] = [
     affectedEstimate: 6700000,
     magnitude: "7.2 y 7.5",
     fatalities: 4829,
-    missing: 30000,
+    missing: 68000,
   },
   {
     id: "d-mx-2024-sismo",
