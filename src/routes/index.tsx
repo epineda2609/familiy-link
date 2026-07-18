@@ -7,6 +7,14 @@ import {
   Zap,
   ArrowRight,
   QrCode,
+  Cloud,
+  Mountain,
+  Wind,
+  Flame as Fire,
+  Activity,
+  HeartHandshake,
+  AlertOctagon,
+  HelpCircle,
 } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
@@ -44,7 +52,35 @@ const disasterIcon: Record<DisasterType, typeof Waves> = {
   earthquake: Zap,
   war: Flame,
   flood: Waves,
+  tsunami: Waves,
+  hurricane: Wind,
+  storm: Cloud,
+  landslide: Mountain,
+  wildfire: Fire,
+  volcano: Activity,
+  humanitarian: HeartHandshake,
+  accident: AlertOctagon,
+  other: HelpCircle,
 };
+
+const disasterTypeLabels: Record<DisasterType, string> = {
+  earthquake: "Sismo",
+  war: "Conflicto",
+  flood: "Inundación",
+  tsunami: "Tsunami",
+  hurricane: "Huracán / ciclón",
+  storm: "Tormenta severa",
+  landslide: "Deslizamiento",
+  wildfire: "Incendio forestal",
+  volcano: "Erupción volcánica",
+  humanitarian: "Emergencia humanitaria",
+  accident: "Accidente mayor",
+  other: "Otro",
+};
+
+export function disasterTypeLabel(t: DisasterType): string {
+  return disasterTypeLabels[t] ?? "Evento";
+}
 
 function Home() {
   const { t } = useT();
@@ -198,8 +234,12 @@ function Home() {
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {activeDisasters.map((d) => {
-            const Icon = disasterIcon[d.type];
-            const typeKey = `disaster.${d.type === "earthquake" ? "earthquake" : d.type === "flood" ? "flood" : "war"}` as MessageKey;
+            const Icon = disasterIcon[d.type] ?? HelpCircle;
+            const knownTypes = ["earthquake", "flood", "war"] as const;
+            const isKnown = (knownTypes as readonly string[]).includes(d.type);
+            const typeLabel = isKnown
+              ? t(`disaster.${d.type}` as MessageKey)
+              : (d.customType || disasterTypeLabel(d.type));
             return (
               <article
                 key={d.id}
@@ -210,7 +250,7 @@ function Home() {
                     <Icon className="h-5 w-5" aria-hidden />
                   </span>
                   <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    {t(typeKey)}
+                    {typeLabel}
                   </span>
                 </div>
                 <h3 className="font-semibold leading-tight">{d.name}</h3>

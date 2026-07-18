@@ -1,21 +1,41 @@
 // BASUF — Modelo de dominio (compartido entre mocks y futuro Supabase).
 
-export type DisasterType = "earthquake" | "war" | "flood";
+export type DisasterType =
+  | "earthquake"
+  | "war"
+  | "flood"
+  | "tsunami"
+  | "hurricane"
+  | "storm"
+  | "landslide"
+  | "wildfire"
+  | "volcano"
+  | "humanitarian"
+  | "accident"
+  | "other";
+
+export type DisasterState = "active" | "closed" | "archived";
 export type PersonStatus = "missing" | "searching" | "found" | "reunited";
 export type Gender = "f" | "m" | "o";
 
 export interface Disaster {
   id: string;
   type: DisasterType;
+  customType?: string;
   name: string;
   country: string;
   region?: string;
   startedAt: string; // ISO
   active: boolean;
+  state?: DisasterState;
+  description?: string;
   affectedEstimate?: number;
   magnitude?: string;
   fatalities?: number;
   missing?: number;
+  createdAt?: string;
+  createdByOperator?: string;
+  createdByOrg?: string;
 }
 
 /** Perfil público — SIN datos sensibles. Nunca incluye fotos de fallecidos ni contactos. */

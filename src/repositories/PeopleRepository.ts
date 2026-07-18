@@ -1,4 +1,9 @@
-import type { PublicPersonCard, Disaster, Country } from "../domain/types";
+import type {
+  PublicPersonCard,
+  Disaster,
+  Country,
+  DisasterType,
+} from "../domain/types";
 import { mockPeople } from "../data/mock/people";
 import { mockDisasters, mockCountries } from "../data/mock/disasters";
 import { mockNationalities } from "../data/mock/nationalities";
@@ -29,6 +34,31 @@ export interface ReportPersonInput {
   consent: boolean;
 }
 
+export interface CreateDisasterInput {
+  name: string;
+  type: DisasterType;
+  customType?: string;
+  country: string;
+  region: string;
+  startedAt: string;
+  description?: string;
+  magnitude?: string;
+  affectedEstimate?: number;
+  fatalities?: number;
+  missing?: number;
+  createdByOperator?: string;
+  createdByOrg?: string;
+}
+
+export class DuplicateDisasterError extends Error {
+  constructor() {
+    super("duplicate_disaster");
+    this.name = "DuplicateDisasterError";
+  }
+}
+
+
+
 export interface IPeopleRepository {
   searchPublic(filters: SearchFilters): Promise<PublicPersonCard[]>;
   getPublicById(id: string): Promise<PublicPersonCard | null>;
@@ -37,6 +67,7 @@ export interface IPeopleRepository {
   listCountries(): Promise<Country[]>;
   listNationalities(): Promise<Country[]>;
   createReport(input: ReportPersonInput): Promise<PublicPersonCard>;
+  createDisaster(input: CreateDisasterInput): Promise<Disaster>;
 }
 
 class MockPeopleRepository implements IPeopleRepository {
@@ -85,6 +116,45 @@ class MockPeopleRepository implements IPeopleRepository {
       reportedAt: new Date().toISOString().slice(0, 10),
     };
     mockPeople.unshift(record);
+    return record;
+  }
+  async createDisaster(input: CreateDisasterInput): Promise<Disaster> {
+    const name = input.name.trim();
+    const region = input.region.trim();
+    const country = input.country.trim();
+    if (!name || !input.type || !country || !region || !input.startedAt) {
+      throw new Error("missing_required_fields");
+    }
+    const duplicate = mockDisasters.find(
+      (d) =>
+        d.name.trim().toLowerCase() === name.toLowerCase() &&
+        d.country.trim().toLowerCase() === country.toLowerCase() &&
+        d.startedAt === input.startedAt,
+    );
+    if (duplicate) throw new DuplicateDisasterError();
+    const record: Disaster = {
+      id: `d-local-${Date.now()}`,
+      type: input.type,
+      customType: input.type === "other" ? input.customType?.trim() : undefined,
+      name,
+      country,
+      region,
+      startedAt: input.startedAt,
+      active: true,
+      state: "active",
+      description: input.description?.trim() || undefined,
+      magnitude:
+        input.type === "earthquake" && input.magnitude?.trim()
+          ? input.magnitude.trim()
+          : undefined,
+      affectedEstimate: input.affectedEstimate,
+      fatalities: input.fatalities,
+      missing: input.missing,
+      createdAt: new Date().toISOString(),
+      createdByOperator: input.createdByOperator,
+      createdByOrg: input.createdByOrg,
+    };
+    mockDisasters.unshift(record);
     return record;
   }
 }
