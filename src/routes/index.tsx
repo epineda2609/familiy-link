@@ -7,6 +7,15 @@ import {
   Zap,
   ArrowRight,
   QrCode,
+  AlertTriangle,
+  Cloud,
+  Mountain,
+  Wind,
+  Flame as Fire,
+  Activity,
+  HeartHandshake,
+  AlertOctagon,
+  HelpCircle,
 } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
