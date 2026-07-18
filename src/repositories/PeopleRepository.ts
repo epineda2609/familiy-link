@@ -67,6 +67,7 @@ export interface IPeopleRepository {
   listCountries(): Promise<Country[]>;
   listNationalities(): Promise<Country[]>;
   createReport(input: ReportPersonInput): Promise<PublicPersonCard>;
+  createDisaster(input: CreateDisasterInput): Promise<Disaster>;
 }
 
 class MockPeopleRepository implements IPeopleRepository {
