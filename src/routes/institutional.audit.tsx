@@ -36,6 +36,7 @@ const ACTIONS: AuditAction[] = [
   "safeId.audience.change",
   "evidence.upload",
   "evidence.reveal",
+  "disaster.create",
 ];
 
 const actionTone: Record<AuditAction, string> = {
