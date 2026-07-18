@@ -21,7 +21,7 @@ const esDict = {
     "Inspirada por la urgencia evidenciada tras los sismos de Venezuela del 24 de junio de 2026, BASUF ayuda a encontrar seres queridos cuando los registros, las comunicaciones y la coordinación fallan.",
   "home.hero.title": "Reunir familias es posible.",
   "home.hero.subtitle":
-    "BASUF ayuda a localizar personas desaparecidas por sismos, guerras e inundaciones en Latinoamérica.",
+    "BASUF ayuda a localizar personas desaparecidas por catástrofes naturales, guerras y conflictos en Latinoamérica.",
   "home.cta.search": "Buscar a alguien",
   "home.cta.report": "Reportar persona",
   "mission.title": "Nuestra misión",

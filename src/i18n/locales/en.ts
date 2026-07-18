@@ -22,7 +22,7 @@ export const en: MessageDict = {
     "Inspired by the urgency revealed after Venezuela's earthquakes on June 24, 2026, BASUF helps people find their loved ones when records, communications and coordination break down.",
   "home.hero.title": "Reuniting families is possible.",
   "home.hero.subtitle":
-    "BASUF helps locate people missing due to earthquakes, wars and floods across Latin America.",
+    "BASUF helps locate people missing due to natural disasters, wars and conflicts across Latin America.",
   "home.cta.search": "Search for someone",
   "home.cta.report": "Report a person",
   "mission.title": "Our mission",
