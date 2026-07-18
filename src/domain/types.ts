@@ -1,6 +1,20 @@
 // BASUF — Modelo de dominio (compartido entre mocks y futuro Supabase).
 
-export type DisasterType = "earthquake" | "war" | "flood";
+export type DisasterType =
+  | "earthquake"
+  | "war"
+  | "flood"
+  | "tsunami"
+  | "hurricane"
+  | "storm"
+  | "landslide"
+  | "wildfire"
+  | "volcano"
+  | "humanitarian"
+  | "accident"
+  | "other";
+
+export type DisasterState = "active" | "closed" | "archived";
 export type PersonStatus = "missing" | "searching" | "found" | "reunited";
 export type Gender = "f" | "m" | "o";
 
