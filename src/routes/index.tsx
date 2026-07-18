@@ -199,7 +199,7 @@ function Home() {
           {[
             { k: "home.stats.cases", v: "1.284" },
             { k: "home.stats.reunions", v: "312" },
-            { k: "home.stats.orgs", v: "47" },
+            { k: "home.stats.orgs", v: "50" },
             { k: "home.stats.countries", v: "20" },
           ].map((s) => (
             <div key={s.k} className="text-center">
