@@ -165,7 +165,17 @@ function DashboardPage() {
 
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-lg font-semibold">{t("inst.cases.title")}</h2>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {canCreateDisaster && (
+            <button
+              type="button"
+              onClick={() => setCreateOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+            >
+              <Plus className="h-4 w-4" aria-hidden />
+              Crear evento
+            </button>
+          )}
           <label htmlFor="status-filter" className="text-xs font-medium text-muted-foreground">
             {t("inst.cases.filter")}
           </label>
