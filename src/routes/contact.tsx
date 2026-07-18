@@ -84,7 +84,7 @@ function ContactPage() {
                   <div className="text-sm">
                     <p className="font-semibold">Dirección</p>
                     <p className="text-muted-foreground">
-                      Av. Humanitaria 1234, Ciudad Central.
+                      Av. Humanitaria 1234, Ciudad Central, La Guaira, Venezuela.
                     </p>
                   </div>
                 </li>
@@ -143,7 +143,7 @@ function ContactPage() {
                   <div className="flex flex-col items-center gap-2 rounded-lg bg-card/90 px-4 py-3 shadow-sm backdrop-blur">
                     <MapPin className="h-6 w-6 text-primary" aria-hidden />
                     <p className="text-xs font-medium">
-                      Av. Humanitaria 1234, Ciudad Central
+                      Av. Humanitaria 1234, Ciudad Central, La Guaira, Venezuela
                     </p>
                     <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                       Mapa referencial · demostración
