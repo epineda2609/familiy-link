@@ -364,7 +364,7 @@ function DashboardPage() {
           }}
           operatorName={session?.operatorName}
           orgName={session?.orgName}
-          countries={Array.from(new Set(disasters.map((d) => d.country))).sort()}
+          countries={allCountriesEs}
         />
       )}
     </>
