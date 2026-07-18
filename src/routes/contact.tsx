@@ -108,7 +108,7 @@ function ContactPage() {
                   </span>
                   <div className="text-sm">
                     <p className="font-semibold">WhatsApp</p>
-                    <p className="text-muted-foreground">+54 9 11 5555-1234</p>
+                    <p className="text-muted-foreground">+58 9 11 5555-1234</p>
                   </div>
                 </li>
                 <li className="flex gap-3 rounded-xl border border-border bg-card p-4">
