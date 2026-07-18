@@ -158,7 +158,7 @@ export const en: MessageDict = {
     "Demo environment: choose a role and a simulated organization to enter the panel.",
   "inst.login.org": "Organization",
   "inst.login.orgPh": "E.g. Red Cross Latin America",
-  "inst.login.operator": "Operator name",
+  "inst.login.operator": "User\u00a0",
   "inst.login.operatorPh": "First and last name",
   "inst.login.role": "Role",
   "inst.login.submit": "Enter panel",

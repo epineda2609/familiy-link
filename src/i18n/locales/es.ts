@@ -157,7 +157,7 @@ const esDict = {
     "Entorno de demostración: elige un rol y una organización simulada para acceder al panel.",
   "inst.login.org": "Organización",
   "inst.login.orgPh": "Ej. Cruz Roja Latinoamérica",
-  "inst.login.operator": "Nombre del operador",
+  "inst.login.operator": "Usuario\u00a0",
   "inst.login.operatorPh": "Nombre y apellido",
   "inst.login.role": "Rol",
   "inst.login.submit": "Ingresar al panel",
