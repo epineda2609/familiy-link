@@ -16,7 +16,12 @@ export interface SearchFilters {
   gender?: string;
   ageMin?: number;
   ageMax?: number;
+  nationality?: string;
+  documentId?: string;
 }
+
+const normalizeDoc = (s: string) =>
+  s.trim().toLowerCase().replace(/[\s-]+/g, "");
 
 // Contrato del repositorio — implementable en el futuro contra Supabase.
 export interface ReportPersonInput {
@@ -73,6 +78,7 @@ export interface IPeopleRepository {
 class MockPeopleRepository implements IPeopleRepository {
   async searchPublic(f: SearchFilters): Promise<PublicPersonCard[]> {
     const q = (f.name ?? "").trim().toLowerCase();
+    const doc = f.documentId ? normalizeDoc(f.documentId) : "";
     return mockPeople.filter((p) => {
       if (q && !p.displayName.toLowerCase().includes(q)) return false;
       if (f.country && p.country !== f.country) return false;
@@ -81,6 +87,11 @@ class MockPeopleRepository implements IPeopleRepository {
       if (f.gender && p.gender !== f.gender) return false;
       if (f.ageMin != null && (p.approximateAge ?? 0) < f.ageMin) return false;
       if (f.ageMax != null && (p.approximateAge ?? 999) > f.ageMax) return false;
+      if (f.nationality && p.nationality !== f.nationality) return false;
+      if (doc) {
+        if (!p.documentId) return false;
+        if (!normalizeDoc(p.documentId).includes(doc)) return false;
+      }
       return true;
     });
   }

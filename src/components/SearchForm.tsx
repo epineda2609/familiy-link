@@ -11,6 +11,7 @@ type Props = {
   onReset: () => void;
   countries: Country[];
   disasters: Disaster[];
+  nationalities: Country[];
   compact?: boolean;
 };
 
@@ -29,6 +30,7 @@ export function SearchForm({
   onReset,
   countries,
   disasters,
+  nationalities,
   compact,
 }: Props) {
   const { t } = useT();
@@ -163,6 +165,41 @@ export function SearchForm({
               }
             />
           </div>
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label htmlFor="f-nationality" className={labelCls}>
+            {t("search.field.nationality")}
+          </label>
+          <select
+            id="f-nationality"
+            className={fieldCls}
+            value={value.nationality ?? ""}
+            onChange={(e) => set("nationality", e.target.value || undefined)}
+          >
+            <option value="">{t("report.field.nationality.placeholder")}</option>
+            {nationalities.map((c) => (
+              <option key={`nat-${c.code}`} value={c.code}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label htmlFor="f-documentId" className={labelCls}>
+            {t("search.field.documentId")}
+          </label>
+          <input
+            id="f-documentId"
+            type="text"
+            inputMode="text"
+            pattern="[A-Za-z0-9\s-]*"
+            className={fieldCls}
+            placeholder={t("search.field.documentId.ph")}
+            value={value.documentId ?? ""}
+            onChange={(e) => set("documentId", e.target.value || undefined)}
+          />
         </div>
       </div>
 
