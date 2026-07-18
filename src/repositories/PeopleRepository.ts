@@ -1,4 +1,9 @@
-import type { PublicPersonCard, Disaster, Country } from "../domain/types";
+import type {
+  PublicPersonCard,
+  Disaster,
+  Country,
+  DisasterType,
+} from "../domain/types";
 import { mockPeople } from "../data/mock/people";
 import { mockDisasters, mockCountries } from "../data/mock/disasters";
 import { mockNationalities } from "../data/mock/nationalities";
