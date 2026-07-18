@@ -119,7 +119,7 @@ function AboutPage() {
             <h3 className="text-lg font-semibold tracking-tight">
               {t("mission.originTitle")}
             </h3>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
               {t("mission.originBody")}
             </p>
           </div>
