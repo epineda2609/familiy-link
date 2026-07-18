@@ -10,7 +10,7 @@ const esDict = {
   "nav.search": "Buscar",
   "nav.report": "Reportar",
   "nav.about": "Acerca de nosotros",
-  "nav.institutional": "Panel institucional",
+  "nav.institutional": "Acceso institucional",
   "nav.language": "Idioma",
   "nav.primary": "Navegación principal",
   "nav.open": "Abrir menú",
