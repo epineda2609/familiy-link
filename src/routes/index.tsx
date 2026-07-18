@@ -64,6 +64,25 @@ const disasterIcon: Record<DisasterType, typeof Waves> = {
   other: HelpCircle,
 };
 
+const disasterTypeLabels: Record<DisasterType, string> = {
+  earthquake: "Sismo",
+  war: "Conflicto",
+  flood: "Inundación",
+  tsunami: "Tsunami",
+  hurricane: "Huracán / ciclón",
+  storm: "Tormenta severa",
+  landslide: "Deslizamiento",
+  wildfire: "Incendio forestal",
+  volcano: "Erupción volcánica",
+  humanitarian: "Emergencia humanitaria",
+  accident: "Accidente mayor",
+  other: "Otro",
+};
+
+export function disasterTypeLabel(t: DisasterType): string {
+  return disasterTypeLabels[t] ?? "Evento";
+}
+
 function Home() {
   const { t } = useT();
   const activeDisasters = mockDisasters
