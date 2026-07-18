@@ -50,7 +50,7 @@ export const en: MessageDict = {
   "home.how.title": "How it works",
   "home.how.step1.title": "Report or search",
   "home.how.step1.desc":
-    "Register a missing person or search for matches in the network.",
+    "Register a missing person or search for matches in our database.",
   "home.how.step2.title": "Verified matches",
   "home.how.step2.desc":
     "The system suggests possible matches and partner organizations validate them.",
