@@ -7,7 +7,6 @@ import {
   Zap,
   ArrowRight,
   QrCode,
-  AlertTriangle,
   Cloud,
   Mountain,
   Wind,
