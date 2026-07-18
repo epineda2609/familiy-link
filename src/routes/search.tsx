@@ -46,10 +46,12 @@ function SearchPage() {
   const [results, setResults] = useState<PublicPersonCard[]>([]);
   const [disasters, setDisasters] = useState<Disaster[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
+  const [nationalities, setNationalities] = useState<Country[]>([]);
 
   useEffect(() => {
     peopleRepository.listDisasters().then(setDisasters);
     peopleRepository.listCountries().then(setCountries);
+    peopleRepository.listNationalities().then(setNationalities);
   }, []);
 
   useEffect(() => {
@@ -96,6 +98,7 @@ function SearchPage() {
           }}
           countries={countries}
           disasters={disasters}
+          nationalities={nationalities}
         />
 
         <section className="mt-8">
