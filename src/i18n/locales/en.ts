@@ -124,6 +124,8 @@ export const en: MessageDict = {
   "report.field.country": "Country of occurrence",
   "report.field.nationality": "Nationality",
   "report.field.nationality.placeholder": "Select nationality",
+  "report.field.documentId": "Identity document",
+  "report.field.documentId.placeholder": "Document number",
   "report.field.disaster": "Disaster",
   "report.field.lastSeenLocation": "Location of last sighting",
   "report.field.lastSeenAt": "Date of last sighting",
