@@ -17,7 +17,7 @@ export const en: MessageDict = {
   "nav.open": "Open menu",
   "nav.close": "Close menu",
   "a11y.skipToContent": "Skip to content",
-  "hero.kicker": "Humanitarian platform for family reunification",
+  "hero.kicker": "Platform for reunification and traceability of persons per catastrophic\u00a0event",
   "hero.contextLine":
     "Inspired by the urgency revealed after Venezuela's earthquakes on June 24, 2026, BASUF helps people find their loved ones when records, communications and coordination break down.",
   "home.hero.title": "Reuniting families is possible.",
