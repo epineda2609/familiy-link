@@ -55,6 +55,9 @@ export class DuplicateDisasterError extends Error {
     super("duplicate_disaster");
     this.name = "DuplicateDisasterError";
   }
+}
+
+
 
 export interface IPeopleRepository {
   searchPublic(filters: SearchFilters): Promise<PublicPersonCard[]>;
