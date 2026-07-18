@@ -48,6 +48,7 @@ type FormState = {
   gender: Gender | "";
   country: string;
   nationality: string;
+  documentId: string;
   disasterId: string;
   lastSeenLocation: string;
   lastSeenAt: string;
@@ -63,6 +64,7 @@ const emptyState: FormState = {
   gender: "",
   country: "",
   nationality: "",
+  documentId: "",
   disasterId: "",
   lastSeenLocation: "",
   lastSeenAt: "",
@@ -128,6 +130,7 @@ function ReportPage() {
         gender: form.gender as Gender,
         country: form.country,
         nationality: form.nationality,
+        documentId: form.documentId.trim() || undefined,
         disasterId: form.disasterId,
         lastSeenLocation: form.lastSeenLocation.trim() || undefined,
         lastSeenAt: form.lastSeenAt || undefined,
@@ -320,6 +323,21 @@ function ReportPage() {
                     </option>
                   ))}
                 </select>
+              </Field>
+              <Field
+                id="documentId"
+                label={t("report.field.documentId")}
+              >
+                <input
+                  id="documentId"
+                  type="text"
+                  inputMode="text"
+                  pattern="[A-Za-z0-9\s-]*"
+                  className={fieldCls}
+                  placeholder={t("report.field.documentId.placeholder")}
+                  value={form.documentId}
+                  onChange={(e) => set("documentId", e.target.value)}
+                />
               </Field>
               <Field
                 id="disasterId"

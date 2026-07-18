@@ -30,6 +30,7 @@ export interface ReportPersonInput {
   gender: "f" | "m" | "o";
   country: string;
   nationality?: string;
+  documentId?: string;
   disasterId: string;
   lastSeenLocation?: string;
   lastSeenAt?: string;
@@ -121,6 +122,7 @@ class MockPeopleRepository implements IPeopleRepository {
       disasterId: input.disasterId,
       country: input.country,
       nationality: input.nationality,
+      documentId: input.documentId?.trim() || undefined,
       lastSeenLocation: input.lastSeenLocation,
       lastSeenAt: input.lastSeenAt,
       distinctiveFeatures: input.distinctiveFeatures,
