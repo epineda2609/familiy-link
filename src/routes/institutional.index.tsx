@@ -340,7 +340,368 @@ function DashboardPage() {
           </tbody>
         </table>
       </div>
+
+      {canCreateDisaster && createOpen && (
+        <CreateDisasterModal
+          onClose={() => setCreateOpen(false)}
+          onCreated={(d) => {
+            if (actor) {
+              auditLog.record({
+                actor,
+                action: "disaster.create",
+                targetId: d.id,
+                targetLabel: d.name,
+                metadata: {
+                  type: d.type,
+                  country: d.country,
+                  startedAt: d.startedAt,
+                },
+              });
+            }
+            toast.success("Evento creado", d.name);
+            refreshDisasters();
+            setCreateOpen(false);
+          }}
+          operatorName={session?.operatorName}
+          orgName={session?.orgName}
+          countries={Array.from(new Set(disasters.map((d) => d.country))).sort()}
+        />
+      )}
     </>
+  );
+}
+
+const disasterTypeOptions: { value: DisasterType; label: string }[] = [
+  { value: "earthquake", label: "Sismo" },
+  { value: "flood", label: "Inundación" },
+  { value: "tsunami", label: "Tsunami" },
+  { value: "hurricane", label: "Huracán / ciclón" },
+  { value: "storm", label: "Tormenta severa" },
+  { value: "landslide", label: "Deslizamiento" },
+  { value: "wildfire", label: "Incendio forestal" },
+  { value: "volcano", label: "Erupción volcánica" },
+  { value: "war", label: "Conflicto armado" },
+  { value: "humanitarian", label: "Emergencia humanitaria" },
+  { value: "accident", label: "Accidente de gran magnitud" },
+  { value: "other", label: "Otro" },
+];
+
+function CreateDisasterModal({
+  onClose,
+  onCreated,
+  operatorName,
+  orgName,
+  countries,
+}: {
+  onClose: () => void;
+  onCreated: (d: Disaster) => void;
+  operatorName?: string;
+  orgName?: string;
+  countries: string[];
+}) {
+  const [name, setName] = useState("");
+  const [type, setType] = useState<DisasterType>("earthquake");
+  const [customType, setCustomType] = useState("");
+  const [country, setCountry] = useState("");
+  const [region, setRegion] = useState("");
+  const [startedAt, setStartedAt] = useState(
+    new Date().toISOString().slice(0, 10),
+  );
+  const [description, setDescription] = useState("");
+  const [magnitude, setMagnitude] = useState("");
+  const [affected, setAffected] = useState("");
+  const [fatalities, setFatalities] = useState("");
+  const [missing, setMissing] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitting, setSubmitting] = useState(false);
+
+  const toNum = (v: string) => {
+    if (!v.trim()) return undefined;
+    const n = Number(v);
+    return Number.isFinite(n) && n >= 0 ? Math.floor(n) : undefined;
+  };
+
+  const validate = () => {
+    const e: Record<string, string> = {};
+    if (!name.trim()) e.name = "Requerido";
+    if (!type) e.type = "Requerido";
+    if (type === "other" && !customType.trim())
+      e.customType = "Especifica el tipo";
+    if (!country.trim()) e.country = "Requerido";
+    if (!region.trim()) e.region = "Requerido";
+    if (!startedAt) e.startedAt = "Requerido";
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const submit = async (ev: FormEvent) => {
+    ev.preventDefault();
+    if (!validate()) return;
+    setSubmitting(true);
+    try {
+      const payload: CreateDisasterInput = {
+        name: name.trim(),
+        type,
+        customType: type === "other" ? customType.trim() : undefined,
+        country: country.trim().toUpperCase(),
+        region: region.trim(),
+        startedAt,
+        description: description.trim() || undefined,
+        magnitude:
+          type === "earthquake" && magnitude.trim() ? magnitude.trim() : undefined,
+        affectedEstimate: toNum(affected),
+        fatalities: toNum(fatalities),
+        missing: toNum(missing),
+        createdByOperator: operatorName,
+        createdByOrg: orgName,
+      };
+      const created = await peopleRepository.createDisaster(payload);
+      onCreated(created);
+    } catch (err) {
+      if (err instanceof DuplicateDisasterError) {
+        setErrors({
+          name: "Ya existe un evento con el mismo nombre, país y fecha.",
+        });
+      } else {
+        toast.error(
+          "No se pudo crear el evento",
+          err instanceof Error ? err.message : "Error desconocido",
+        );
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const fieldCls =
+    "w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring";
+  const labelCls = "text-xs font-medium text-muted-foreground";
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Crear evento"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 p-4"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div className="my-10 w-full max-w-2xl rounded-2xl border border-border bg-card shadow-xl">
+        <div className="flex items-center justify-between border-b border-border px-5 py-4">
+          <div>
+            <h2 className="text-lg font-bold">Crear evento</h2>
+            <p className="text-xs text-muted-foreground">
+              Registra una nueva catástrofe. Quedará disponible en Reportar.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-md p-1 text-muted-foreground transition hover:bg-accent"
+            aria-label="Cerrar"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <form onSubmit={submit} className="space-y-4 p-5">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="sm:col-span-2">
+              <label className={labelCls} htmlFor="ev-name">
+                Nombre del evento *
+              </label>
+              <input
+                id="ev-name"
+                className={fieldCls}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Ej. Inundaciones en Bolivia 2026"
+              />
+              {errors.name && (
+                <p className="mt-1 text-xs text-destructive">{errors.name}</p>
+              )}
+            </div>
+            <div>
+              <label className={labelCls} htmlFor="ev-type">
+                Tipo *
+              </label>
+              <select
+                id="ev-type"
+                className={fieldCls}
+                value={type}
+                onChange={(e) => setType(e.target.value as DisasterType)}
+              >
+                {disasterTypeOptions.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {type === "other" && (
+              <div>
+                <label className={labelCls} htmlFor="ev-customType">
+                  Especifica el tipo *
+                </label>
+                <input
+                  id="ev-customType"
+                  className={fieldCls}
+                  value={customType}
+                  onChange={(e) => setCustomType(e.target.value)}
+                />
+                {errors.customType && (
+                  <p className="mt-1 text-xs text-destructive">
+                    {errors.customType}
+                  </p>
+                )}
+              </div>
+            )}
+            <div>
+              <label className={labelCls} htmlFor="ev-country">
+                País *
+              </label>
+              <input
+                id="ev-country"
+                list="ev-country-list"
+                className={fieldCls}
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                placeholder="Ej. BOLIVIA"
+              />
+              <datalist id="ev-country-list">
+                {countries.map((c) => (
+                  <option key={c} value={c} />
+                ))}
+              </datalist>
+              {errors.country && (
+                <p className="mt-1 text-xs text-destructive">{errors.country}</p>
+              )}
+            </div>
+            <div>
+              <label className={labelCls} htmlFor="ev-region">
+                Zona afectada *
+              </label>
+              <input
+                id="ev-region"
+                className={fieldCls}
+                value={region}
+                onChange={(e) => setRegion(e.target.value)}
+                placeholder="Provincia, ciudad, área"
+              />
+              {errors.region && (
+                <p className="mt-1 text-xs text-destructive">{errors.region}</p>
+              )}
+            </div>
+            <div>
+              <label className={labelCls} htmlFor="ev-date">
+                Fecha de inicio *
+              </label>
+              <input
+                id="ev-date"
+                type="date"
+                className={fieldCls}
+                value={startedAt}
+                onChange={(e) => setStartedAt(e.target.value)}
+              />
+              {errors.startedAt && (
+                <p className="mt-1 text-xs text-destructive">
+                  {errors.startedAt}
+                </p>
+              )}
+            </div>
+            <div className="sm:col-span-2">
+              <label className={labelCls} htmlFor="ev-desc">
+                Descripción breve
+              </label>
+              <textarea
+                id="ev-desc"
+                rows={2}
+                className={fieldCls}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
+            {type === "earthquake" && (
+              <div className="sm:col-span-2">
+                <label className={labelCls} htmlFor="ev-mag">
+                  Magnitud
+                </label>
+                <input
+                  id="ev-mag"
+                  className={fieldCls}
+                  value={magnitude}
+                  onChange={(e) => setMagnitude(e.target.value)}
+                  placeholder="Ej. 6.8"
+                />
+              </div>
+            )}
+            <div>
+              <label className={labelCls} htmlFor="ev-aff">
+                Personas afectadas (est.)
+              </label>
+              <input
+                id="ev-aff"
+                type="number"
+                min={0}
+                className={fieldCls}
+                value={affected}
+                onChange={(e) => setAffected(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className={labelCls} htmlFor="ev-fat">
+                Fallecidos
+              </label>
+              <input
+                id="ev-fat"
+                type="number"
+                min={0}
+                className={fieldCls}
+                value={fatalities}
+                onChange={(e) => setFatalities(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className={labelCls} htmlFor="ev-mis">
+                Desaparecidos
+              </label>
+              <input
+                id="ev-mis"
+                type="number"
+                min={0}
+                className={fieldCls}
+                value={missing}
+                onChange={(e) => setMissing(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="rounded-md border border-primary/30 bg-primary/5 p-3 text-xs text-muted-foreground">
+            El evento se creará con estado <strong>Activo</strong> y quedará
+            disponible en el formulario de Reportar.
+          </div>
+
+          <div className="flex flex-wrap justify-end gap-2 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-md border border-input bg-background px-4 py-2 text-sm font-medium transition hover:bg-accent"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={submitting}
+              className="inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:opacity-60"
+            >
+              <Plus className="h-4 w-4" aria-hidden />
+              {submitting ? "Creando…" : "Crear evento"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }
 
