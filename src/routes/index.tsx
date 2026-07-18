@@ -53,6 +53,15 @@ const disasterIcon: Record<DisasterType, typeof Waves> = {
   earthquake: Zap,
   war: Flame,
   flood: Waves,
+  tsunami: Waves,
+  hurricane: Wind,
+  storm: Cloud,
+  landslide: Mountain,
+  wildfire: Fire,
+  volcano: Activity,
+  humanitarian: HeartHandshake,
+  accident: AlertOctagon,
+  other: HelpCircle,
 };
 
 function Home() {
