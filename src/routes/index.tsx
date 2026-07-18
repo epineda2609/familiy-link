@@ -216,8 +216,12 @@ function Home() {
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {activeDisasters.map((d) => {
-            const Icon = disasterIcon[d.type];
-            const typeKey = `disaster.${d.type === "earthquake" ? "earthquake" : d.type === "flood" ? "flood" : "war"}` as MessageKey;
+            const Icon = disasterIcon[d.type] ?? HelpCircle;
+            const knownTypes = ["earthquake", "flood", "war"] as const;
+            const isKnown = (knownTypes as readonly string[]).includes(d.type);
+            const typeLabel = isKnown
+              ? t(`disaster.${d.type}` as MessageKey)
+              : (d.customType || disasterTypeLabel(d.type));
             return (
               <article
                 key={d.id}
