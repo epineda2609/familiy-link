@@ -232,7 +232,7 @@ function Home() {
                     <Icon className="h-5 w-5" aria-hidden />
                   </span>
                   <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    {t(typeKey)}
+                    {typeLabel}
                   </span>
                 </div>
                 <h3 className="font-semibold leading-tight">{d.name}</h3>
