@@ -38,7 +38,7 @@ const esDict = {
     "Un puente entre el caos y la reunificación, construido para ONG, hospitales, refugios y brigadas.",
   "mission.originTitle": "Por qué existe BASUF",
   "mission.originBody":
-    "Nace del dolor y del propósito de dos hermanos venezolanos: crear una herramienta seria que ayude a familias reales cuando los sistemas tradicionales fallan. Hoy es una base abierta para colaborar con organizaciones humanitarias en cualquier parte del mundo.",
+    "Nace del dolor de una devastadora catástrofe y de la necesidad y meta de dos hermanos Venezolanos: crear una herramienta simple y funcional que ayude a familias reales cuando los sistemas tradicionales fallan conectando todos los eslavones para encontrar al familar. Hoy nuestro portal es una base abierta para colaborar con organizaciones humanitarias en cualquier parte del mundo.",
   "home.stats.cases": "Casos registrados",
   "home.stats.reunions": "Reencuentros",
   "home.stats.orgs": "Organizaciones aliadas",
