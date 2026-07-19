@@ -74,12 +74,14 @@ export const cloudSync = {
     if (!isBrowser) return;
     // Resolver person_id desde el public_case_code / id local: para casos
     // demo (p-xxx) no existirá en Cloud todavía; en ese caso se omite.
-    const { data: person } = await supabase
-      .from("persons")
-      .select("id")
-      .or(`id.eq.${u.caseId},public_case_code.eq.${u.caseId}`)
-      .maybeSingle()
-      .then((res) => res, () => ({ data: null } as { data: null }));
+    const res = await safe(
+      supabase
+        .from("persons")
+        .select("id")
+        .or(`id.eq.${u.caseId},public_case_code.eq.${u.caseId}`)
+        .maybeSingle(),
+    );
+    const person = res?.data ?? null;
     if (!person) return;
     await safe(
       supabase.from("additional_information_reports").insert({
