@@ -90,13 +90,6 @@ export function SiteHeader() {
           >
             {t("nav.about")}
           </Link>
-          <Link
-            to="/modes"
-            className={linkCls}
-            activeProps={{ className: `${linkCls} ${activeCls}` }}
-          >
-            {t("nav.modes")}
-          </Link>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -142,14 +135,6 @@ export function SiteHeader() {
               activeProps={{ className: `${mobileLinkCls} ${activeCls}` }}
             >
               {t("nav.about")}
-            </Link>
-            <Link
-              to="/modes"
-              className={mobileLinkCls}
-              onClick={close}
-              activeProps={{ className: `${mobileLinkCls} ${activeCls}` }}
-            >
-              {t("nav.modes")}
             </Link>
           </div>
         </nav>
