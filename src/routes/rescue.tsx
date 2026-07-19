@@ -17,7 +17,7 @@ import { DistributedContributions } from "../components/DistributedContributions
 import { WhatHappensNow } from "../components/ux/WhatHappensNow";
 import { useT } from "../i18n/LocaleProvider";
 import type { MessageKey } from "../i18n/messages";
-import { mockRescueRecords, findRescueByCode } from "../data/mock/rescue";
+import { rescueRepository, useRescueList } from "../repositories/RescueRepository";
 
 export const Route = createFileRoute("/rescue")({
   head: () => ({
