@@ -44,11 +44,12 @@ function RescuePage() {
   const navigate = useNavigate();
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const records = useRescueList();
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!code.trim()) return;
-    const found = findRescueByCode(code);
+    const found = rescueRepository.find(code);
     if (!found) {
       setError(t("rescue.lookup.notFound"));
       return;
