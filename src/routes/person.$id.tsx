@@ -88,8 +88,9 @@ function PersonDetailPage() {
     resolveAudience(mode),
   );
   const evidenceItems = evidenceRepository.listByCase(person.id);
-  // Subscribe to citizen updates so the case history refreshes reactively.
+  // Subscribe to citizen updates + cloud timeline hydration so the case history refreshes reactively.
   useCaseUpdates(person.id);
+  useCaseTimeline(person.id);
   const [shareOpen, setShareOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
 
