@@ -78,8 +78,6 @@ const VALID_STATUSES: PersonStatus[] = [
   "missing",
   "searching",
   "found",
-  "identified",
-  "deceased",
   "reunited",
 ];
 
