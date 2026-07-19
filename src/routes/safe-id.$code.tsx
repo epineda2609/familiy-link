@@ -74,22 +74,15 @@ function SafeIdDetail() {
     ? findRescueByCode(record.linkedRescueCode)
     : undefined;
 
-  // record view on mount + audience changes
+  // record view on mount + audience changes (audit_logs is source of truth)
   useEffect(() => {
     safeIdRepository.record(record.shortCode, audience, "view");
-    auditLog.record({
-      actor: {
-        operatorName: "Anónimo",
-        orgName: "—",
-        role: mode,
-      },
-      action: "safeId.view",
-      targetId: record.shortCode,
-      metadata: { audience },
-    });
     setTick((v) => v + 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [record.shortCode, audience]);
+
+  // Re-render when new safeId events land in the audit log cache
+  useEffect(() => safeIdRepository.subscribe(() => setTick((v) => v + 1)), []);
 
   const events = safeIdRepository.list(record.shortCode);
 
