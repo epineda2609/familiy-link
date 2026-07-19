@@ -205,7 +205,7 @@ class CloudPeopleRepository implements IPeopleRepository {
     if (f.name?.trim()) q = q.ilike("display_name", `%${f.name.trim()}%`);
     if (f.country) q = q.eq("country", f.country);
     if (f.disasterId) q = q.eq("event_id", f.disasterId);
-    if (f.status) q = q.eq("current_status", f.status);
+    if (f.status) q = q.eq("current_status", f.status as PersonStatus);
     if (f.gender) q = q.eq("gender", f.gender);
     if (f.ageMin != null) q = q.gte("approximate_age", f.ageMin);
     if (f.ageMax != null) q = q.lte("approximate_age", f.ageMax);
