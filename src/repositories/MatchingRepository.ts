@@ -145,23 +145,26 @@ function buildFields(a: PublicPersonCard, b: PublicPersonCard): MatchField[] {
     valueB: b.disasterId,
     agreement: a.disasterId === b.disasterId ? "match" : "contradict",
   });
-  if (a.documentId && b.documentId) {
+  if (a.distinctiveFeatures && b.distinctiveFeatures) {
     fields.push({
-      key: "document",
-      valueA: a.documentId,
-      valueB: b.documentId,
-      agreement: a.documentId === b.documentId ? "match" : "contradict",
+      key: "features",
+      valueA: a.distinctiveFeatures,
+      valueB: b.distinctiveFeatures,
+      agreement:
+        a.distinctiveFeatures.toLowerCase() === b.distinctiveFeatures.toLowerCase()
+          ? "match"
+          : "partial",
     });
   }
   return fields;
 }
 
 function recommendedFor(score: number, hasContradiction: boolean): RecommendedAction {
-  if (hasContradiction) return "needsAuthority";
+  if (hasContradiction) return "escalateAuthority";
   const level = confidenceLevel(score);
-  if (level === "high") return "approve";
-  if (level === "medium") return "review";
-  return "reject";
+  if (level === "high") return "approveNow";
+  if (level === "medium") return "requestValidation";
+  return "markNoMatch";
 }
 
 function synthesizeExplanation(
