@@ -16,7 +16,7 @@ import { safeIdRepository } from "../repositories/SafeIdRepository";
 import { resolveAudience, type SafeIdAudience } from "../domain/safeId";
 import { useMode } from "../modes/OperationalModeProvider";
 import { useT } from "../i18n/LocaleProvider";
-import { auditLog } from "../audit/auditLog";
+
 
 export const Route = createFileRoute("/safe-id/$code")({
   loader: ({ params }) => {
