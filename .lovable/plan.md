@@ -1,107 +1,124 @@
+# Cloud como única fuente de verdad — migración integral
 
-# Persistencia completa en Lovable Cloud
+Trabajo sobre la arquitectura ya creada (19 tablas + `cloudSync.ts`). No recreo tablas, no rediseño UI, no agrego funcionalidades. Todo en una sola iteración.
 
-## Contexto verificado
-- El proyecto **NO tiene Lovable Cloud habilitado** todavía (los repositorios actuales — `PeopleRepository`, `InstitutionsRepository`, `CaseUpdateRepository`, `EvidenceRepository`, `SafeIdRepository`, `MatchingRepository`, `CaseTimelineRepository`, `auditLog`, `InstitutionalSession` — trabajan contra mocks en memoria + `localStorage`).
-- La UI (rutas, formularios, modales, dialogs) ya está consolidada. **No se rediseña nada visual.** Solo se cambian las implementaciones de repositorio para leer/escribir contra Cloud, y se reemplaza `InstitutionalSession` (localStorage) por sesión real de Cloud Auth con `profiles`.
+## Inventario detectado
 
-Primer paso técnico obligatorio: habilitar Lovable Cloud (proporciona Postgres + Auth + Storage). A partir de ahí todas las tablas se crean vía migraciones y se conectan mediante los repositorios ya existentes, sin tocar componentes de UI.
+**Con localStorage operativo (a eliminar):**
+- `src/auth/InstitutionalSession.tsx` — sesión institucional falsa.
+- `src/audit/auditLog.ts` — auditoría en LS.
+- `src/repositories/InstitutionsRepository.ts` — instituciones + membresías en LS.
+- `src/repositories/EvidenceRepository.ts` — evidencias en LS.
+- `src/integrations/simulatedIntegrations.ts` — registry demo (se mantiene, es simulación de integraciones externas, no dato operativo).
 
-## Modelo de datos (SQL en una sola migración)
+**Con mocks operativos (a reemplazar por Cloud):**
+- `PeopleRepository` → `mockPeople`, `mockDisasters`.
+- `CaseTimelineRepository`, `MatchingRepository`, `SafeIdRepository`, `InstitutionalRepository`, `CaseUpdateRepository` — todos en memoria.
+- `routes/index.tsx`, `routes/rescue*`, `routes/safe-id.$code.tsx`, `routes/person.$id.tsx`, `components/RescueBadgePreview.tsx` — importan mocks directos.
 
-Enums: `app_role` (`master_admin`,`administrator`,`reviewer`,`viewer`), `org_status`, `disaster_status`, `person_status`, `report_status`, `match_status`, `verification_decision`, `notification_type`, `visibility_level`, `disaster_type`, `institution_type`.
+**Preservado (catálogos estáticos válidos):** `nationalities.ts`, tipos, i18n, tema/idioma en LS, `simulatedIntegrations` (simulación explícita).
 
-Tablas (todas en `public`, con `GRANT`s explícitos, RLS activada, `created_at/updated_at` con triggers, soft-delete vía `archived_at` en entidades sensibles):
+## Cambios
 
-1. `profiles` — `auth_user_id` FK a `auth.users`, `organization_id`, datos de contacto, `status`, `last_login_at`. Auto-creado por trigger `on_auth_user_created`.
-2. `user_roles` — tabla separada `(user_id, role)` + función `has_role(_user_id, _role)` SECURITY DEFINER (patrón obligatorio anti-recursión RLS).
-3. `organizations` — reemplaza `institutions` mock; conserva 50 instituciones seed (mismos nombres/siglas/país/tipo). `status`, `approved_by`, `approved_at`, `is_demo`.
-4. `organization_memberships` — vincula `profile_id ↔ organization_id` con `institutional_role` (`reviewer`|`viewer`), `status` (`invited`,`active`,`revoked`), `invite_token`.
-5. `disaster_events` — reemplaza `mock/disasters`. Incluye `event_code`, coordenadas, `magnitude`, `fatalities`, `missing`, `affected_estimate`, `severity`, `status`, `created_by`.
-6. `persons` — registro principal (public_case_code auto, event_id, nombres, documentos, nacionalidad, rasgos físicos, `current_status`, `privacy_level`, `reported_by_user_id`, `reported_by_organization_id`, `photo_url`).
-7. `disappearance_details` — 1:1 con `persons` (último avistamiento, coordenadas, circunstancias, vestimenta).
-8. `person_contacts` — familiares/denunciantes con `consent_to_contact`.
-9. `additional_information_reports` — sustituye `CaseUpdateRepository`. `information_type`, `sighting_*`, `anonymity_requested`, `status`, `assigned_organization_id`.
-10. `person_status_history` — se llena vía trigger cuando `persons.current_status` cambia.
-11. `case_timeline` — línea temporal consolidada. Poblada por triggers al: crear persona, crear report, cambiar estado, crear match, crear verification.
-12. `potential_matches` — `source_person_id`, `matched_person_id`, `match_score`, `matching_fields JSONB`, `explanation`, `status`. Función `compute_person_matches(person_id)` con reglas básicas (documento exacto, similitud fonética `soundex`, edad±3, sexo, evento, cercanía geográfica < 50km, fecha ±30 días) que inserta sugerencias.
-13. `verification_reviews` — decisiones de revisor/admin sobre personas/reports/matches.
-14. `attachments` — polimórfica (`entity_type`, `entity_id`), integrada con bucket de Storage.
-15. `notifications` — internas por usuario/organización.
-16. `audit_logs` — reemplaza `auditLog` (localStorage). `previous_data/new_data JSONB`. Rellenado desde triggers y explícitamente desde repos en acciones sensibles.
-17. `search_logs` — opcional, solo métricas agregadas (sin PII sensible).
-18. `safe_ids` — códigos Safe ID (persistiendo lo que hoy genera `SafeIdRepository`).
-19. `rescue_intakes` — cadena de identidad de rescate (`R-XXXX`) del módulo actual.
+### 1. Migración SQL única (mínima, no recrea tablas)
 
-Índices en: nombres (trigram `pg_trgm`), documento, `event_id`, `current_status`, `country`, coordenadas, códigos públicos, `organization_id`, `person_id` en tablas hijas.
+Solo lo que falta para cerrar la integración:
 
-## Seguridad (RLS) — resumen por tabla
+- `ALTER TABLE persons/disaster_events/organizations/... ADD COLUMN IF NOT EXISTS is_demo boolean default false, dataset_type text default 'production'`.
+- Restricciones únicas para idempotencia del seed: `unique(name,country,start_date)` en `disaster_events` (si no existe), `unique(name,country)` en `organizations` (verificar), `unique(public_case_code)` en `persons`.
+- Función `seed_demo_data()` **idempotente** que hace `INSERT ... ON CONFLICT DO NOTHING` para:
+  - 20–30 personas ficticias (nombres genéricos tipo "Persona Demo NN", correos `@example.com`, sin fotos reales, distribuidas por estados: missing, searching, information_received, possible_match, located, reunited, case_closed).
+  - Reutiliza las 50 orgs y 6 eventos ya seedeados (marcándolos `is_demo=true` si aún no lo están).
+  - 10–15 `additional_information_reports` vinculados.
+  - `person_status_history` derivada por triggers ya existentes.
+  - 5–8 `potential_matches` en distintos estados.
+  - 3–5 `verification_reviews`.
+  - `person_contacts` ficticios.
+- Función `purge_demo_data()` que borra solo `where is_demo = true`.
+- Trigger `on_auth_user_created` (ya existe) — verificar que asigna rol `viewer` por defecto y NO permite auto-asignar admin.
+- Policy hardening: revisar que `user_roles` INSERT/UPDATE solo lo pueda hacer `master_admin`.
+- Grants faltantes en columnas `is_demo`/`dataset_type`.
 
-Función helper: `has_role(uid, role)`, `is_org_member(uid, org_id)`, `is_org_admin(uid)`. Todas SECURITY DEFINER.
+Ejecuto `SELECT seed_demo_data();` al final de la migración.
 
-- **profiles**: propietario lee/edita el suyo; admins leen todos.
-- **user_roles**: solo `master_admin` inserta/edita; usuario lee su fila.
-- **organizations**: `SELECT` público solo `status='approved'`; `INSERT/UPDATE` restringido a `master_admin`/`administrator`.
-- **organization_memberships**: `master_admin` gestiona; usuario ve las suyas.
-- **disaster_events**: `SELECT` público (activos/monitor); `INSERT/UPDATE` admin.
-- **persons**: `SELECT` público solo columnas seguras vía **vista `persons_public`** (excluye documento completo, datos médicos, contactos). Miembros de organización aprobada ven todo; admins ven todo. `INSERT` autenticado + público (para reportes ciudadanos, con `privacy_level` limitado).
-- **disappearance_details / person_contacts**: sin acceso público directo; solo revisores/admins de org aprobada.
-- **additional_information_reports**: `INSERT` público (anónimo permitido); `SELECT/UPDATE` restringido a reviewer/admin.
-- **person_status_history / case_timeline**: `SELECT` a través de vista pública que filtra por `visibility`; reviewer/admin ven todo.
-- **potential_matches / verification_reviews / audit_logs**: solo reviewer/admin.
-- **attachments**: hereda del `entity_type`+`entity_id`.
-- **notifications**: solo destinatario.
+### 2. Repositorios → async, contra Cloud
 
-Storage buckets:
-- `person-photos` (público para status ≠ deceased),
-- `evidence` (privado, signed URLs),
-- `case-documents` (privado).
+Todos los repositorios pasan a devolver `Promise<T>` leyendo/escribiendo Supabase. Firmas se ajustan mínimamente (ya varias son async).
 
-## Cambios de código (mínimos, sin tocar UI)
+- **`PeopleRepository`**: reemplaza `mockPeople`/`mockDisasters` por `supabase.from('persons')` con vista/select seguro (columnas públicas). `createReport` hace `insert().select().single()` y **espera** el registro. `createDisaster` idem. Mapper `dbRow → PublicPersonCard`.
+- **`InstitutionsRepository`**: elimina LS. `listApproved` → `organizations` where `status='approved'` order by name. `authenticate` desaparece (lo reemplaza Supabase Auth). `inviteUser` → inserta `organization_memberships` con `invite_token`. `activateInvite` → update membership vinculando `auth_user_id` del sesión actual. Aprobar/suspender → update `status`.
+- **`CaseUpdateRepository`**: elimina array local. `create` → insert en `additional_information_reports` esperando confirmación. `listByCase` → select por `person_id`.
+- **`CaseTimelineRepository`**: solo lectura desde `case_timeline`.
+- **`MatchingRepository`**: `list/listByPerson` desde `potential_matches`. `confirm/reject` → update `status`. `computeForPerson` → RPC `compute_person_matches`.
+- **`SafeIdRepository`**: contra `safe_ids`.
+- **`EvidenceRepository`**: `attachments` + storage bucket `evidence` (crear bucket privado si no existe en la migración).
+- **`InstitutionalRepository`**: join persons + disappearance_details + contacts vía select con relaciones (solo para reviewers/admins vía RLS).
+- **Rescue**: `rescue_intakes`.
 
-Se **reemplaza la implementación interna** de cada repositorio existente por consultas a `supabase` (browser client) o `createServerFn` con `requireSupabaseAuth` cuando la operación requiere autorización servidor. **Las firmas públicas de los repositorios se mantienen** para no tocar componentes.
+Todos los componentes que consumen usan `useEffect + useState` o `useSyncExternalStore` con caché in-memory (no LS). Estados: loading, empty, error, retry.
 
-- `src/integrations/supabase/*` — generado por el enable de Cloud.
-- `src/repositories/PeopleRepository.ts` — CRUD contra `persons` + `disappearance_details` + `person_contacts`. Los métodos `list/search/create/update/setStatus` mantienen su firma.
-- `src/repositories/InstitutionsRepository.ts` — contra `organizations` + `organization_memberships`. `listApproved`, `authenticate`, `inviteUser`, `activateInvite` se reimplementan.
-- `src/repositories/CaseUpdateRepository.ts` → `additional_information_reports`.
-- `src/repositories/MatchingRepository.ts` → `potential_matches` (con RPC `compute_person_matches`).
-- `src/repositories/CaseTimelineRepository.ts` → `case_timeline` (solo lectura; entries generadas por triggers).
-- `src/repositories/EvidenceRepository.ts` → `attachments` + Storage.
-- `src/repositories/SafeIdRepository.ts` → `safe_ids`.
-- `src/repositories/InstitutionalRepository.ts` → vista `persons_institutional` (join con sensibles).
-- `src/audit/auditLog.ts` — reemplaza persistencia localStorage por `audit_logs` (mantiene `record/list/subscribe` API).
-- `src/auth/InstitutionalSession.tsx` — reemplaza sesión en localStorage por sesión Supabase real (`supabase.auth`). El login institucional del `/institutional` llama a `supabase.auth.signInWithPassword` (email institucional + password) o mantiene el flujo demo actual como fallback si el usuario aún no migró. Se preservan `institutionId`, `membershipId`, `role` derivados de `profiles` + `user_roles` + `organization_memberships`. Backdoor `BASUF-MASTER` se mantiene como *bootstrap* solo mientras no exista `master_admin` real, y desaparece una vez creado el primer admin.
-- `src/data/mock/*` — se conservan como **seed inicial** que se inserta en la migración inicial con `is_demo = true` (50 instituciones, 8 personas, desastres, evidencias, safe IDs, rescates). No se dejan como fuente en runtime.
+### 3. `cloudSync.ts` — retirar fire-and-forget en operaciones críticas
 
-## Seed en migración
+Se elimina el archivo (o queda solo con `persistAudit` como helper). Cada repo escribe directo y espera. `auditLog.record` pasa a insertar en `audit_logs` esperando confirmación (para acciones críticas) o async para eventos secundarios (login/logout).
 
-La migración final ejecuta `INSERT` de:
-- 50 organizaciones de referencia + estados demo (10 aprobadas, 3 pendientes, 1 suspendida).
-- 8 personas actuales de `mockPeople` con sus `disappearance_details`, contactos, y timeline inicial.
-- 6 desastres actuales (Yaracuy incluido con las cifras vigentes).
-- Membresías demo (2 reviewers + 2 viewers).
-- Evidencias, safe IDs y rescate mock actuales.
+### 4. Autenticación institucional real
 
-Todo marcado `is_demo = true` para poder purgar más adelante.
+- **`InstitutionalSession.tsx`** se convierte en wrapper de `supabase.auth`:
+  - `useEffect` inicial con `supabase.auth.getSession()` + `onAuthStateChange`.
+  - `signIn(email, password)` → `supabase.auth.signInWithPassword`.
+  - Al obtener sesión: consulta `profiles`, `user_roles`, `organization_memberships` (una sola RPC `get_session_context()` SECURITY DEFINER para evitar N+1 y no exponer relaciones) que devuelve `{ role, institutionId, membershipId, operatorName, orgName }`.
+  - `signOut` → `supabase.auth.signOut()`.
+  - Cero LS propio (Supabase gestiona su token).
+  - Rol nunca viene del formulario; siempre de Cloud.
+- **`routes/institutional.tsx`**: el login pasa a email + password. Se conserva selector de organización como *hint visual* (no como fuente de verdad). Backdoor `BASUF-MASTER` se retira; en su lugar, la migración crea un usuario `master_admin` inicial con credenciales que se muestran una única vez en la UI del panel si no existe otro admin (o simplemente se documenta que debe crearse manualmente vía tabla `auth.users` con `signUp`). **Decisión**: implemento signup público deshabilitado y creo cuenta admin demo `admin@basuf.example.com` / password fijo vía migración usando `auth.users` insert (soportado en Cloud). La UI del tab BASUF Master muestra esas credenciales demo.
+- Guardas de ruta institucional consultan `session.role`; RLS es la barrera real.
 
-## UX / errores (sin rediseño)
+### 5. Componentes que consumen mocks
 
-Cada repositorio expone errores con mensajes localizados; los componentes ya tienen `try/catch` + toasts (`useToast`) donde corresponde. Se añaden estados de carga en los pocos lugares que hoy son síncronos (formularios de report/create disaster/create institution/invite user) — solo un `disabled` en el submit y un spinner Lucide, sin cambiar layout.
+- `routes/index.tsx` — eventos activos: query a `disaster_events` where `status='active'` order by `start_date desc`.
+- `routes/person.$id.tsx` — carga persona + timeline + updates + matches vía Cloud, con loading/empty/error.
+- `routes/report.tsx`, `routes/search.tsx` — botón submit deshabilitado durante await, toast tras confirmación.
+- `routes/rescue.tsx`, `rescue.$code.tsx`, `safe-id.$code.tsx` — Cloud.
+- `institutional.*` — todas las tablas contra Cloud, paginación server-side donde >100 filas.
+
+### 6. Retiro de mocks
+
+Tras verificar builds:
+- Borro `src/data/mock/people.ts`, `disasters.ts`, `matches.ts`, `evidence.ts`, `safeIds.ts`, `rescue.ts`, `institutions.ts`, `sensitive.ts`.
+- Conservo `nationalities.ts` (catálogo).
+- Borro `cloudSync.ts`.
+- Borro claves LS antiguas con migración limpiadora en `main.tsx` (o `__root.tsx`): `["basuf.institutional.session", "basuf.audit", "basuf.institutions", "basuf.memberships", "basuf.evidence", "basuf.integrations.registry", "basuf.integrations.logs"].forEach(k => localStorage.removeItem(k))`.
+- Preservo LS de `theme`, `locale`, `operational-mode`.
+
+### 7. UX de estados
+
+Cada vista de lista/detalle: skeleton loader mientras `loading`, mensaje "Sin resultados" cuando `data.length===0`, banner de error con botón "Reintentar" que reejecuta la query. Formularios: `disabled + spinner` durante submit, deshabilitan doble envío.
+
+### 8. Pruebas
+
+- `bun run build` limpio.
+- Playwright smoke: crear persona → recargar → aparece; crear evento → aparece en selectors; enviar info adicional → aparece en timeline; login institucional con cuenta demo → dashboard carga; logout → redirige; borrar LS → app sigue funcional.
+
+## Arquitectura resultante
+
+```text
+UI (sin cambios visuales)
+  ↓
+Repositorios async (Promise<T>)
+  ↓
+supabase.from(...) / supabase.rpc(...) / supabase.auth
+  ↓
+Postgres + RLS (única fuente de verdad)
+```
 
 ## Fuera de alcance
-- Rediseño visual, nuevas rutas, nuevas pantallas.
-- IA/embeddings para matching (queda la estructura + función SQL de reglas).
-- Emails reales de invitación (solo se genera el enlace, como ya hoy).
-- Pagos, integraciones externas.
+- Google OAuth (arquitectura queda lista, no se conecta ahora).
+- Rediseño visual.
+- Realtime subscriptions (queries on-demand por ahora).
+- Nuevas funcionalidades.
 
-## Verificación
-- Habilitar Cloud → migración crea todas las tablas + seed → build pasa.
-- Login como demo `BASUF-MASTER` crea el primer `master_admin` y desactiva el backdoor.
-- Crear evento, reportar persona, enviar "Tengo información", aprobar institución, invitar usuario, aceptar invitación → todo persiste tras F5 (ya no depende de localStorage).
-- `/search` público muestra solo columnas seguras vía vista.
-- Panel de auditoría muestra entradas reales de `audit_logs`.
-- Coincidencias sugeridas aparecen tras crear una persona nueva vía trigger + RPC.
+## Riesgos
+- Volumen de cambios grande (~30 archivos). Mitigo con edits quirúrgicos y una sola migración SQL adicional.
+- Firmas de repos ya eran mayormente async → ruptura mínima en componentes.
 
-## Nota sobre créditos
-Todo se implementa en una sola tanda: (1) `supabase--enable`, (2) una migración SQL única con todas las tablas/enums/funciones/triggers/policies/seed, (3) reemplazo interno de repositorios en paralelo, (4) verificación con build. Sin iteraciones cosméticas.
+¿Procedo con esta migración integral?
