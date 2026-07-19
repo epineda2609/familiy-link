@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowLeft,
   MapPin,
@@ -25,7 +25,7 @@ import type {
 } from "../domain/types";
 import type { MessageKey } from "../i18n/messages";
 import { CaseNarrative } from "../components/CaseNarrative";
-import { getCaseHistoryByPerson } from "../repositories/CaseTimelineRepository";
+import { getCaseHistoryByPerson, useCaseTimeline } from "../repositories/CaseTimelineRepository";
 import { findSafeIdByPersonId } from "../data/mock/safeIds";
 import { EvidenceGallery } from "../components/evidence/EvidenceGallery";
 import { AudiencePreviewTabs } from "../components/evidence/AudiencePreviewTabs";
@@ -87,9 +87,15 @@ function PersonDetailPage() {
   const [evidenceAudience, setEvidenceAudience] = useState<SafeIdAudience>(() =>
     resolveAudience(mode),
   );
+  const [, forceTick] = useState(0);
+  useEffect(
+    () => evidenceRepository.subscribe(() => forceTick((v) => v + 1)),
+    [],
+  );
   const evidenceItems = evidenceRepository.listByCase(person.id);
-  // Subscribe to citizen updates so the case history refreshes reactively.
+  // Subscribe to citizen updates + cloud timeline hydration so the case history refreshes reactively.
   useCaseUpdates(person.id);
+  useCaseTimeline(person.id);
   const [shareOpen, setShareOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
 

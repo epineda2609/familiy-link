@@ -1,9 +1,13 @@
+import { useSyncExternalStore } from "react";
 import { mockPeople } from "../data/mock/people";
 import { mockRescueRecords } from "../data/mock/rescue";
 import { mockMatches } from "../data/mock/matches";
-import type { CaseEvent, CaseHistory, CaseSourceKind } from "../domain/caseTimeline";
+import type { CaseEvent, CaseEventType, CaseHistory, CaseSourceKind } from "../domain/caseTimeline";
 import type { ActorKind } from "../domain/rescue";
 import { caseUpdateRepository, type CaseUpdateRecord } from "./CaseUpdateRepository";
+import { supabase } from "../integrations/supabase/client";
+
+// ---------- Local synthesizers (mock/legacy sources) ----------
 
 function summarizeUpdate(u: CaseUpdateRecord): string {
   const bits: string[] = [];
@@ -52,77 +56,177 @@ function actorKindToSource(k: ActorKind): CaseSourceKind {
   }
 }
 
-/** Build a unified case history for a given person id (public). */
+// ---------- Cloud cache (case_timeline) ----------
+
+interface TimelineRow {
+  id: string;
+  person_id: string;
+  event_type: string;
+  title: string;
+  description: string | null;
+  event_date: string;
+  location: string | null;
+  visibility: string | null;
+  source_entity_type: string | null;
+  source_entity_id: string | null;
+}
+
+const cloudCache = new Map<string, CaseEvent[]>();
+const loaded = new Set<string>();
+const inflight = new Map<string, Promise<void>>();
+const listeners = new Set<() => void>();
+
+function notify() {
+  listeners.forEach((l) => l());
+}
+
+function isUuid(v: string): boolean {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
+}
+
+function rowToEvent(r: TimelineRow): CaseEvent {
+  const known: CaseEventType[] = [
+    "reported_missing",
+    "partial_id",
+    "possible_match",
+    "critical_review",
+    "deceased_review",
+    "citizen_update",
+  ];
+  const type: CaseEventType =
+    (known as string[]).includes(r.event_type)
+      ? (r.event_type as CaseEventType)
+      : (r.event_type as CaseEventType); // rescue chain types also valid
+  return {
+    id: r.id,
+    type,
+    at: r.event_date,
+    actorOrg: r.source_entity_type ?? "BASUF",
+    sourceKind: "system",
+    location: r.location ?? undefined,
+    note: r.description ?? undefined,
+    summary: r.title,
+  };
+}
+
+async function hydratePerson(personId: string): Promise<void> {
+  if (loaded.has(personId) || typeof window === "undefined") return;
+  if (!isUuid(personId)) {
+    loaded.add(personId);
+    return;
+  }
+  const existing = inflight.get(personId);
+  if (existing) return existing;
+  const p = (async () => {
+    try {
+      const { data, error } = await supabase
+        .from("case_timeline")
+        .select(
+          "id, person_id, event_type, title, description, event_date, location, visibility, source_entity_type, source_entity_id",
+        )
+        .eq("person_id", personId)
+        .order("event_date", { ascending: true })
+        .returns<TimelineRow[]>();
+      if (!error && data) {
+        cloudCache.set(personId, data.map(rowToEvent));
+        notify();
+      }
+    } catch {
+      /* silent */
+    } finally {
+      loaded.add(personId);
+      inflight.delete(personId);
+    }
+  })();
+  inflight.set(personId, p);
+  return p;
+}
+
+// ---------- Public API ----------
+
+/** Build a unified case history for a given person id (public). Sync — returns whatever is cached. */
 export function getCaseHistoryByPerson(personId: string): CaseHistory | null {
   const person = mockPeople.find((p) => p.id === personId);
-  if (!person) return null;
+  const cloudEvents = cloudCache.get(personId) ?? [];
+  // Not in mocks and no cloud events yet — bail if there's truly nothing to render.
+  if (!person && cloudEvents.length === 0) {
+    // Kick off hydration for the next render.
+    void hydratePerson(personId);
+    return null;
+  }
 
-  const events: CaseEvent[] = [];
+  const events: CaseEvent[] = [...cloudEvents];
 
-  events.push({
-    id: `e-report-${person.id}`,
-    type: "reported_missing",
-    at: `${person.reportedAt}T00:00:00Z`,
-    actorOrg: "Reportante familiar",
-    sourceKind: "family",
-    location: person.lastSeenLocation,
-    note: person.distinctiveFeatures,
-  });
+  if (person) {
+    events.push({
+      id: `e-report-${person.id}`,
+      type: "reported_missing",
+      at: `${person.reportedAt}T00:00:00Z`,
+      actorOrg: "Reportante familiar",
+      sourceKind: "family",
+      location: person.lastSeenLocation,
+      note: person.distinctiveFeatures,
+    });
 
-  // Any rescue record linked to this person?
-  const rescue = mockRescueRecords.find((r) => r.linkedPersonId === person.id);
-  if (rescue) {
-    for (const c of rescue.chain) {
+    const rescue = mockRescueRecords.find((r) => r.linkedPersonId === person.id);
+    if (rescue) {
+      for (const c of rescue.chain) {
+        events.push({
+          id: `${rescue.code}-${c.id}`,
+          type: c.type,
+          at: c.at,
+          actorOrg: c.actorOrg,
+          sourceKind: actorKindToSource(c.actorKind),
+          location: c.location,
+          note: c.note,
+        });
+      }
+    }
+
+    const approvedMatches = mockMatches.filter(
+      (m) =>
+        m.status === "approved" &&
+        (m.personA_id === person.id || m.personB_id === person.id),
+    );
+    for (const m of approvedMatches) {
       events.push({
-        id: `${rescue.code}-${c.id}`,
-        type: c.type,
-        at: c.at,
-        actorOrg: c.actorOrg,
-        sourceKind: actorKindToSource(c.actorKind),
-        location: c.location,
-        note: c.note,
+        id: `mrev-${m.id}`,
+        type: "possible_match",
+        at: `${m.reviewedAt ?? new Date().toISOString().slice(0, 10)}T00:00:00Z`,
+        actorOrg: m.reviewedBy ?? "BASUF",
+        sourceKind: "ngo",
+        note: m.note,
+      });
+    }
+
+    for (const u of caseUpdateRepository.listByCase(person.id)) {
+      events.push({
+        id: `cu-${u.id}`,
+        type: "citizen_update",
+        at: u.createdAt,
+        actorOrg: updateActor(u),
+        sourceKind: "citizen",
+        location: updateLocation(u),
+        summary: summarizeUpdate(u),
+        validation: u.validation,
+        proposedStatus: u.proposedStatus || undefined,
       });
     }
   }
 
-  // Approved matches involving this person
-  const approvedMatches = mockMatches.filter(
-    (m) =>
-      m.status === "approved" &&
-      (m.personA_id === person.id || m.personB_id === person.id),
-  );
-  for (const m of approvedMatches) {
-    events.push({
-      id: `mrev-${m.id}`,
-      type: "possible_match",
-      at: `${m.reviewedAt ?? new Date().toISOString().slice(0, 10)}T00:00:00Z`,
-      actorOrg: m.reviewedBy ?? "BASUF",
-      sourceKind: "ngo",
-      note: m.note,
-    });
-  }
+  // De-dup by id (cloud may already carry mirrors of the same event)
+  const seen = new Set<string>();
+  const deduped = events.filter((e) => (seen.has(e.id) ? false : (seen.add(e.id), true)));
+  deduped.sort((a, b) => (a.at < b.at ? -1 : 1));
 
-  // Citizen updates ("Tengo información") linked to this case
-  for (const u of caseUpdateRepository.listByCase(person.id)) {
-    events.push({
-      id: `cu-${u.id}`,
-      type: "citizen_update",
-      at: u.createdAt,
-      actorOrg: updateActor(u),
-      sourceKind: "citizen",
-      location: updateLocation(u),
-      summary: summarizeUpdate(u),
-      validation: u.validation,
-      proposedStatus: u.proposedStatus || undefined,
-    });
-  }
+  // Kick off async cloud hydration on first access.
+  void hydratePerson(personId);
 
-  events.sort((a, b) => (a.at < b.at ? -1 : 1));
-
+  const rescue = person ? mockRescueRecords.find((r) => r.linkedPersonId === person.id) : undefined;
   return {
-    personId: person.id,
+    personId,
     rescueCode: rescue?.code,
-    events,
+    events: deduped,
   };
 }
 
@@ -141,7 +245,6 @@ export function getCaseHistoryByRescue(code: string): CaseHistory | null {
     note: c.note,
   }));
 
-  // If linked to a person, prepend the "reported missing" event.
   if (rescue.linkedPersonId) {
     const person = mockPeople.find((p) => p.id === rescue.linkedPersonId);
     if (person) {
@@ -154,6 +257,9 @@ export function getCaseHistoryByRescue(code: string): CaseHistory | null {
         location: person.lastSeenLocation,
         note: person.distinctiveFeatures,
       });
+      // Merge cloud events for the linked person
+      for (const ev of cloudCache.get(person.id) ?? []) events.push(ev);
+      void hydratePerson(person.id);
     }
   }
 
@@ -164,4 +270,21 @@ export function getCaseHistoryByRescue(code: string): CaseHistory | null {
     rescueCode: rescue.code,
     events,
   };
+}
+
+/**
+ * React hook that hydrates the Cloud-backed case_timeline cache for a person
+ * and re-renders when new events arrive. Consumers still call
+ * `getCaseHistoryByPerson(id)` for the merged data.
+ */
+export function useCaseTimeline(personId: string | undefined): void {
+  useSyncExternalStore(
+    (cb) => {
+      listeners.add(cb);
+      if (personId) void hydratePerson(personId);
+      return () => listeners.delete(cb);
+    },
+    () => (personId ? loaded.has(personId) : true),
+    () => true,
+  );
 }
