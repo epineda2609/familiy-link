@@ -157,7 +157,7 @@ function RescuePage() {
             </p>
           </div>
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {mockRescueRecords.map((r) => {
+            {records.map((r) => {
               const last = r.chain[r.chain.length - 1];
               return (
                 <li key={r.code}>
