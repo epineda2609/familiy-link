@@ -1260,6 +1260,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      claim_master_admin: { Args: { _code: string }; Returns: boolean }
       compute_person_matches: { Args: { _person_id: string }; Returns: number }
       has_role: {
         Args: {
@@ -1269,6 +1270,7 @@ export type Database = {
         Returns: boolean
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_master: { Args: { _user_id: string }; Returns: boolean }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
       purge_demo_data: { Args: never; Returns: undefined }
       show_limit: { Args: never; Returns: number }
