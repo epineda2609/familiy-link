@@ -11,11 +11,13 @@ import type { AuditEntry } from "@/audit/auditLog";
 const isBrowser = typeof window !== "undefined";
 
 /** Fire-and-forget: registra errores pero no lanza para no romper la UI. */
-function safe<T>(promise: Promise<T>): Promise<T | null> {
-  return promise.catch((err) => {
-    if (isBrowser) console.warn("[cloudSync]", err?.message ?? err);
+async function safe<T>(builder: PromiseLike<T>): Promise<T | null> {
+  try {
+    return await builder;
+  } catch (err) {
+    if (isBrowser) console.warn("[cloudSync]", (err as Error)?.message ?? err);
     return null;
-  });
+  }
 }
 
 export const cloudSync = {
