@@ -53,7 +53,7 @@ const esDict = {
   "home.how.step2.title": "Coincidencias verificadas",
   "home.how.step2.desc":
     "El sistema propone posibles coincidencias y las organizaciones aliadas las validan.",
-  "home.how.step3.title": "Recibe/Actualiza el estado y comparte el QR",
+  "home.how.step3.title": "Recibe/Actualiza el estado y comparte el enlace",
   "home.how.step3.desc":
     "Coordinamos el contacto respetando privacidad y protocolos humanitarios.",
   "search.title": "Buscar personas",
