@@ -136,14 +136,6 @@ export function SiteHeader() {
             >
               {t("nav.about")}
             </Link>
-            <Link
-              to="/modes"
-              className={mobileLinkCls}
-              onClick={close}
-              activeProps={{ className: `${mobileLinkCls} ${activeCls}` }}
-            >
-              {t("nav.modes")}
-            </Link>
           </div>
         </nav>
       )}
