@@ -9,7 +9,7 @@ import { CaseNarrative } from "../components/CaseNarrative";
 import { getCaseHistoryByRescue, useCaseTimeline } from "../repositories/CaseTimelineRepository";
 import { useT } from "../i18n/LocaleProvider";
 import type { MessageKey } from "../i18n/messages";
-import { findRescueByCode } from "../data/mock/rescue";
+import { rescueRepository, useRescue } from "../repositories/RescueRepository";
 import { findSafeIdByRescueCode } from "../data/mock/safeIds";
 
 export const Route = createFileRoute("/rescue/$code")({
