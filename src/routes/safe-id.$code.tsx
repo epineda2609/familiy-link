@@ -129,20 +129,10 @@ function SafeIdDetail() {
               record={record}
               onPrint={() => {
                 safeIdRepository.record(record.shortCode, audience, "print");
-                auditLog.record({
-                  actor: { operatorName: "Anónimo", orgName: "—", role: mode },
-                  action: "safeId.print",
-                  targetId: record.shortCode,
-                });
                 setTick((v) => v + 1);
               }}
               onShare={() => {
                 safeIdRepository.record(record.shortCode, audience, "share");
-                auditLog.record({
-                  actor: { operatorName: "Anónimo", orgName: "—", role: mode },
-                  action: "safeId.share",
-                  targetId: record.shortCode,
-                });
                 setTick((v) => v + 1);
               }}
             />
