@@ -234,15 +234,15 @@ function toEnriched(row: MatchRow): EnrichedMatch {
   const reviewState: ReviewState =
     uiStatus === "approved" ? "approved" : uiStatus === "rejected" ? "rejected" : "pending";
   const score = Number(row.match_score) || 0;
-  const explanation: MatchExplanation = isFullExplanation(row.explanation)
-    ? { ...row.explanation, reviewState }
+  const parsed = parseExplanation(row.explanation);
+  const explanation: MatchExplanation = isFullExplanation(parsed)
+    ? { ...parsed, reviewState }
     : synthesizeExplanation(score, reviewState, personA, personB, row.matching_fields);
 
-  // Persist reviewer note if it lives inside explanation
   const note =
-    isFullExplanation(row.explanation) &&
-    typeof (row.explanation as { note?: unknown }).note === "string"
-      ? ((row.explanation as { note?: string }).note as string)
+    parsed && typeof parsed === "object" && "note" in (parsed as object) &&
+    typeof (parsed as { note?: unknown }).note === "string"
+      ? ((parsed as { note?: string }).note as string)
       : undefined;
 
   return {
