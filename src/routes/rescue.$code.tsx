@@ -60,7 +60,9 @@ function RescueNotFound() {
 
 function RescueDetail() {
   const { t, locale } = useT();
-  const { record } = Route.useLoaderData();
+  const { record: initial } = Route.useLoaderData();
+  const live = useRescue(initial.code);
+  const record = live ?? initial;
   const last = record.chain[record.chain.length - 1];
   const safeId = findSafeIdByRescueCode(record.code);
   useCaseTimeline(record.linkedPersonId);
