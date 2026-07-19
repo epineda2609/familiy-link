@@ -63,6 +63,7 @@ function RescueDetail() {
   const { record } = Route.useLoaderData();
   const last = record.chain[record.chain.length - 1];
   const safeId = findSafeIdByRescueCode(record.code);
+  useCaseTimeline(record.linkedPersonId);
 
   return (
     <div className="min-h-dvh bg-background">
