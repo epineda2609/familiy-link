@@ -130,6 +130,10 @@ class MockPeopleRepository implements IPeopleRepository {
       reportedAt: new Date().toISOString().slice(0, 10),
     };
     mockPeople.unshift(record);
+    void cloudSync.persistPerson(record, {
+      reporterName: input.reporterName,
+      reporterContact: input.reporterContact,
+    });
     return record;
   }
   async createDisaster(input: CreateDisasterInput): Promise<Disaster> {
