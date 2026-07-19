@@ -1,6 +1,6 @@
-// BASUF — Registro de auditoría simulado.
-// Persiste en localStorage y notifica a suscriptores para vistas reactivas.
-// En producción, este log sería inmutable y firmado en el backend.
+// BASUF — Registro de auditoría respaldado en Lovable Cloud (tabla audit_logs).
+// Mantiene una caché en memoria para vistas reactivas; la fuente de verdad es Cloud.
+import { supabase } from "@/integrations/supabase/client";
 
 export type AuditAction =
   | "auth.signIn"
@@ -47,98 +47,134 @@ export interface AuditEntry {
   metadata?: Record<string, string | undefined>;
 }
 
-const STORAGE_KEY = "basuf.audit.log";
 const MAX_ENTRIES = 500;
 
-let entries: AuditEntry[] = load();
+let entries: AuditEntry[] = [];
 const listeners = new Set<() => void>();
+let loaded = false;
+let loadingPromise: Promise<void> | null = null;
 
-function load(): AuditEntry[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return seed();
-    const parsed = JSON.parse(raw) as AuditEntry[];
-    return Array.isArray(parsed) ? parsed : seed();
-  } catch {
-    return seed();
-  }
+interface AuditRow {
+  id: string;
+  created_at: string;
+  actor_name: string | null;
+  actor_org: string | null;
+  actor_role: string | null;
+  action: string;
+  entity_id: string | null;
+  target_label: string | null;
+  metadata: Record<string, string | undefined> | null;
 }
 
-function seed(): AuditEntry[] {
-  // Semilla mínima para que el panel de auditoría no aparezca vacío en el prototipo.
-  const now = Date.now();
-  const iso = (ms: number) => new Date(now - ms).toISOString();
-  const initial: AuditEntry[] = [
-    {
-      id: `a-seed-1`,
-      timestamp: iso(1000 * 60 * 60 * 26),
-      actor: { operatorName: "Sistema", orgName: "BASUF", role: "system" },
-      action: "auth.signIn",
-      metadata: { note: "Inicialización del entorno de demostración" },
+function rowToEntry(r: AuditRow): AuditEntry {
+  return {
+    id: r.id,
+    timestamp: r.created_at,
+    actor: {
+      operatorName: r.actor_name ?? "Sistema",
+      orgName: r.actor_org ?? "BASUF",
+      role: r.actor_role ?? "system",
     },
-    {
-      id: `a-seed-2`,
-      timestamp: iso(1000 * 60 * 60 * 20),
-      actor: { operatorName: "L. Ortega", orgName: "Cruz Roja LATAM", role: "reviewer" },
-      action: "match.approve",
-      targetId: "m-001",
-      targetLabel: "Coincidencia p-001 ↔ p-004",
-      metadata: { score: "88" },
-    },
-    {
-      id: `a-seed-3`,
-      timestamp: iso(1000 * 60 * 60 * 8),
-      actor: { operatorName: "M. Silva", orgName: "ACNUR LATAM", role: "admin" },
-      action: "case.verify",
-      targetId: "p-005",
-      targetLabel: "Caso p-005",
-    },
-  ];
-  persist(initial);
-  return initial;
-}
-
-function persist(list: AuditEntry[]) {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-  } catch {
-    /* ignore */
-  }
+    action: r.action as AuditAction,
+    targetId: r.entity_id ?? undefined,
+    targetLabel: r.target_label ?? undefined,
+    metadata: r.metadata ?? undefined,
+  };
 }
 
 function notify() {
   listeners.forEach((l) => l());
 }
 
-function genId() {
+async function loadFromCloud(): Promise<void> {
+  if (loaded || typeof window === "undefined") return;
+  if (loadingPromise) return loadingPromise;
+  loadingPromise = (async () => {
+    try {
+      const { data, error } = await supabase
+        .from("audit_logs")
+        .select(
+          "id, created_at, actor_name, actor_org, actor_role, action, entity_id, target_label, metadata",
+        )
+        .order("created_at", { ascending: false })
+        .limit(MAX_ENTRIES)
+        .returns<AuditRow[]>();
+      if (!error && data) {
+        entries = data.map(rowToEntry);
+        loaded = true;
+        notify();
+      }
+    } catch {
+      /* solo lectura; los inserts siguen funcionando */
+    }
+  })();
+  return loadingPromise;
+}
+
+// Kick off initial load in the browser.
+if (typeof window !== "undefined") {
+  void loadFromCloud();
+}
+
+function tempId() {
   return `a-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
 export const auditLog = {
   record(input: Omit<AuditEntry, "id" | "timestamp">) {
-    const entry: AuditEntry = {
+    const optimistic: AuditEntry = {
       ...input,
-      id: genId(),
+      id: tempId(),
       timestamp: new Date().toISOString(),
     };
-    entries = [entry, ...entries].slice(0, MAX_ENTRIES);
-    persist(entries);
+    entries = [optimistic, ...entries].slice(0, MAX_ENTRIES);
     notify();
-    // Espejar a Lovable Cloud (fire-and-forget) para auditoría persistente.
-    void import("../lib/cloudSync").then((m) => m.cloudSync.persistAudit(entry));
+
+    if (typeof window === "undefined") return;
+    void (async () => {
+      try {
+        const { data } = await supabase
+          .from("audit_logs")
+          .insert({
+            actor_name: input.actor.operatorName,
+            actor_org: input.actor.orgName,
+            actor_role: input.actor.role,
+            action: input.action,
+            target_label: input.targetLabel ?? null,
+            metadata: input.metadata ?? null,
+          })
+          .select("id, created_at")
+          .maybeSingle();
+        if (data?.id) {
+          entries = entries.map((e) =>
+            e.id === optimistic.id
+              ? { ...e, id: data.id, timestamp: data.created_at ?? e.timestamp }
+              : e,
+          );
+          notify();
+        }
+      } catch {
+        /* mantener entrada optimista; la UI ya la muestra */
+      }
+    })();
   },
   list(): AuditEntry[] {
     return entries;
   },
+  async refresh() {
+    loaded = false;
+    loadingPromise = null;
+    await loadFromCloud();
+  },
   clear() {
+    // Solo limpia la vista local; los registros persistidos son inmutables.
     entries = [];
-    persist(entries);
     notify();
   },
   subscribe(fn: () => void) {
     listeners.add(fn);
+    // Asegura carga inicial si un consumidor se suscribe temprano.
+    void loadFromCloud();
     return () => {
       listeners.delete(fn);
     };
