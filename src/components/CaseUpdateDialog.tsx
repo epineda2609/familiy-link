@@ -101,7 +101,7 @@ export function CaseUpdateDialog({
     };
     // Simulate small delay for UX
     setTimeout(() => {
-      caseUpdateRepository.create(input);
+      void caseUpdateRepository.create(input);
       toast.success(t("info.success.title"), t("info.success.desc"));
       setSubmitting(false);
       onOpenChange(false);
