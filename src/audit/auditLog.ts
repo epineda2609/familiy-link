@@ -126,6 +126,8 @@ export const auditLog = {
     entries = [entry, ...entries].slice(0, MAX_ENTRIES);
     persist(entries);
     notify();
+    // Espejar a Lovable Cloud (fire-and-forget) para auditoría persistente.
+    void import("../lib/cloudSync").then((m) => m.cloudSync.persistAudit(entry));
   },
   list(): AuditEntry[] {
     return entries;
