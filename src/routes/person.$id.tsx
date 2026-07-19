@@ -87,6 +87,11 @@ function PersonDetailPage() {
   const [evidenceAudience, setEvidenceAudience] = useState<SafeIdAudience>(() =>
     resolveAudience(mode),
   );
+  const [, forceTick] = useState(0);
+  useEffect(
+    () => evidenceRepository.subscribe(() => forceTick((v) => v + 1)),
+    [],
+  );
   const evidenceItems = evidenceRepository.listByCase(person.id);
   // Subscribe to citizen updates + cloud timeline hydration so the case history refreshes reactively.
   useCaseUpdates(person.id);
