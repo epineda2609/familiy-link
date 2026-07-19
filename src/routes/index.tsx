@@ -21,7 +21,8 @@ import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
 import { SkipLink } from "../components/SkipLink";
 import { useT } from "../i18n/LocaleProvider";
-import { mockDisasters } from "../data/mock/disasters";
+import { peopleRepository } from "../repositories/PeopleRepository";
+import type { Disaster } from "../domain/types";
 import type { DisasterType } from "../domain/types";
 import type { MessageKey } from "../i18n/messages";
 
