@@ -3,6 +3,7 @@
 // sin sobrescribir los datos oficiales. Repositorio en memoria (mock).
 import { useSyncExternalStore, useMemo } from "react";
 import type { Gender, PersonStatus } from "../domain/types";
+import { cloudSync } from "../lib/cloudSync";
 
 export type CaseUpdateValidation = "pending" | "verified" | "rejected";
 
