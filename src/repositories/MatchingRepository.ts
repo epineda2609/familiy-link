@@ -307,17 +307,22 @@ class CloudMatchingRepository implements IMatchingRepository {
       .select("explanation")
       .eq("id", id)
       .maybeSingle();
-    let nextExplanation: unknown = current?.explanation ?? null;
-    if (isFullExplanation(nextExplanation)) {
+    const parsedCurrent = parseExplanation(current?.explanation ?? null);
+    let nextExplanation: unknown;
+    if (isFullExplanation(parsedCurrent)) {
       nextExplanation = {
-        ...(nextExplanation as MatchExplanation),
+        ...parsedCurrent,
         reviewState: patch.reviewState,
         note: patch.note ?? undefined,
       };
     } else {
-      // preserve as text but attach reviewState + note as a JSON wrapper
       nextExplanation = {
-        text: typeof current?.explanation === "string" ? current.explanation : null,
+        text:
+          typeof parsedCurrent === "string"
+            ? parsedCurrent
+            : parsedCurrent && typeof parsedCurrent === "object"
+              ? parsedCurrent
+              : null,
         reviewState: patch.reviewState,
         note: patch.note ?? undefined,
       };
