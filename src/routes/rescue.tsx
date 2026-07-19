@@ -17,7 +17,7 @@ import { DistributedContributions } from "../components/DistributedContributions
 import { WhatHappensNow } from "../components/ux/WhatHappensNow";
 import { useT } from "../i18n/LocaleProvider";
 import type { MessageKey } from "../i18n/messages";
-import { mockRescueRecords, findRescueByCode } from "../data/mock/rescue";
+import { rescueRepository, useRescueList } from "../repositories/RescueRepository";
 
 export const Route = createFileRoute("/rescue")({
   head: () => ({
@@ -44,11 +44,12 @@ function RescuePage() {
   const navigate = useNavigate();
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const records = useRescueList();
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!code.trim()) return;
-    const found = findRescueByCode(code);
+    const found = rescueRepository.find(code);
     if (!found) {
       setError(t("rescue.lookup.notFound"));
       return;
@@ -156,7 +157,7 @@ function RescuePage() {
             </p>
           </div>
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {mockRescueRecords.map((r) => {
+            {records.map((r) => {
               const last = r.chain[r.chain.length - 1];
               return (
                 <li key={r.code}>

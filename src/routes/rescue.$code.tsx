@@ -9,12 +9,12 @@ import { CaseNarrative } from "../components/CaseNarrative";
 import { getCaseHistoryByRescue, useCaseTimeline } from "../repositories/CaseTimelineRepository";
 import { useT } from "../i18n/LocaleProvider";
 import type { MessageKey } from "../i18n/messages";
-import { findRescueByCode } from "../data/mock/rescue";
+import { rescueRepository, useRescue } from "../repositories/RescueRepository";
 import { findSafeIdByRescueCode } from "../data/mock/safeIds";
 
 export const Route = createFileRoute("/rescue/$code")({
   loader: ({ params }) => {
-    const record = findRescueByCode(params.code);
+    const record = rescueRepository.find(params.code);
     if (!record) throw notFound();
     return { record };
   },
@@ -60,7 +60,9 @@ function RescueNotFound() {
 
 function RescueDetail() {
   const { t, locale } = useT();
-  const { record } = Route.useLoaderData();
+  const { record: initial } = Route.useLoaderData();
+  const live = useRescue(initial.code);
+  const record = live ?? initial;
   const last = record.chain[record.chain.length - 1];
   const safeId = findSafeIdByRescueCode(record.code);
   useCaseTimeline(record.linkedPersonId);
