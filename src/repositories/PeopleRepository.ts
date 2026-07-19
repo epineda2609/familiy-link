@@ -307,6 +307,23 @@ class CloudPeopleRepository implements IPeopleRepository {
         last_seen_date: input.lastSeenAt || null,
       });
     }
+    // Persist reporter as the primary contact so staff can reach out on match.
+    // Detect email vs phone with a simple heuristic and split accordingly.
+    const contactRaw = input.reporterContact.trim();
+    if (input.reporterName.trim() && contactRaw) {
+      const looksLikeEmail = /@/.test(contactRaw);
+      await supabase.from("person_contacts").insert({
+        person_id: data.id,
+        full_name: input.reporterName.trim().slice(0, 200),
+        relationship: "reporter",
+        email: looksLikeEmail ? contactRaw.slice(0, 255) : null,
+        phone: looksLikeEmail ? null : contactRaw.slice(0, 60),
+        preferred_contact_method: looksLikeEmail ? "email" : "phone",
+        country: input.country,
+        is_primary: true,
+        consent_to_contact: input.consent === true,
+      });
+    }
     const created = await this.getPublicById(data.id);
     if (!created) throw new Error("create_report_reload_failed");
     return created;
