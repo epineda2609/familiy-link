@@ -7,6 +7,7 @@ import type {
 import { mockPeople } from "../data/mock/people";
 import { mockDisasters, mockCountries } from "../data/mock/disasters";
 import { mockNationalities } from "../data/mock/nationalities";
+import { cloudSync } from "../lib/cloudSync";
 
 export interface SearchFilters {
   name?: string;
@@ -129,6 +130,10 @@ class MockPeopleRepository implements IPeopleRepository {
       reportedAt: new Date().toISOString().slice(0, 10),
     };
     mockPeople.unshift(record);
+    void cloudSync.persistPerson(record, {
+      reporterName: input.reporterName,
+      reporterContact: input.reporterContact,
+    });
     return record;
   }
   async createDisaster(input: CreateDisasterInput): Promise<Disaster> {
@@ -168,6 +173,7 @@ class MockPeopleRepository implements IPeopleRepository {
       createdByOrg: input.createdByOrg,
     };
     mockDisasters.unshift(record);
+    void cloudSync.persistDisaster(record);
     return record;
   }
 }
