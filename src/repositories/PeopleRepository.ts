@@ -173,6 +173,7 @@ class MockPeopleRepository implements IPeopleRepository {
       createdByOrg: input.createdByOrg,
     };
     mockDisasters.unshift(record);
+    void cloudSync.persistDisaster(record);
     return record;
   }
 }
