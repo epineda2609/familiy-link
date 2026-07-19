@@ -86,7 +86,11 @@ export function disasterTypeLabel(t: DisasterType): string {
 
 function Home() {
   const { t } = useT();
-  const activeDisasters = mockDisasters
+  const [disasters, setDisasters] = useState<Disaster[]>([]);
+  useEffect(() => {
+    peopleRepository.listDisasters().then(setDisasters);
+  }, []);
+  const activeDisasters = disasters
     .filter((d) => d.active)
     .slice()
     .sort((a, b) => (a.startedAt < b.startedAt ? 1 : -1))
