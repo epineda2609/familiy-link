@@ -80,10 +80,10 @@ export function EvidenceUploader({
   const remove = (idx: number) =>
     setItems((prev) => prev.filter((_, i) => i !== idx));
 
-  const saveAll = () => {
+  const saveAll = async () => {
     let count = 0;
     for (const it of items) {
-      const added = evidenceRepository.add({
+      const added = await evidenceRepository.add({
         caseRef,
         kind: it.file.type.startsWith("image/") ? "person_photo" : "document",
         visibility: it.visibility,
