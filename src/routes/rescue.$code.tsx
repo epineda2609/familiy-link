@@ -6,7 +6,7 @@ import { SiteFooter } from "../components/SiteFooter";
 import { SkipLink } from "../components/SkipLink";
 import { RescueBadgePreview } from "../components/RescueBadgePreview";
 import { CaseNarrative } from "../components/CaseNarrative";
-import { getCaseHistoryByRescue } from "../repositories/CaseTimelineRepository";
+import { getCaseHistoryByRescue, useCaseTimeline } from "../repositories/CaseTimelineRepository";
 import { useT } from "../i18n/LocaleProvider";
 import type { MessageKey } from "../i18n/messages";
 import { findRescueByCode } from "../data/mock/rescue";
