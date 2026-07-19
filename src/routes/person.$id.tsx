@@ -25,7 +25,7 @@ import type {
 } from "../domain/types";
 import type { MessageKey } from "../i18n/messages";
 import { CaseNarrative } from "../components/CaseNarrative";
-import { getCaseHistoryByPerson } from "../repositories/CaseTimelineRepository";
+import { getCaseHistoryByPerson, useCaseTimeline } from "../repositories/CaseTimelineRepository";
 import { findSafeIdByPersonId } from "../data/mock/safeIds";
 import { EvidenceGallery } from "../components/evidence/EvidenceGallery";
 import { AudiencePreviewTabs } from "../components/evidence/AudiencePreviewTabs";
