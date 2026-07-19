@@ -7,6 +7,7 @@ import type {
 import { mockPeople } from "../data/mock/people";
 import { mockDisasters, mockCountries } from "../data/mock/disasters";
 import { mockNationalities } from "../data/mock/nationalities";
+import { cloudSync } from "../lib/cloudSync";
 
 export interface SearchFilters {
   name?: string;
