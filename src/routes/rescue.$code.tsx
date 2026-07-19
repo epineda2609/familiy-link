@@ -14,7 +14,7 @@ import { findSafeIdByRescueCode } from "../data/mock/safeIds";
 
 export const Route = createFileRoute("/rescue/$code")({
   loader: ({ params }) => {
-    const record = findRescueByCode(params.code);
+    const record = rescueRepository.find(params.code);
     if (!record) throw notFound();
     return { record };
   },
