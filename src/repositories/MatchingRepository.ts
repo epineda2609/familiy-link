@@ -310,12 +310,12 @@ class CloudMatchingRepository implements IMatchingRepository {
       };
     }
 
-    const update: Record<string, unknown> = {
+    const update = {
       status: patch.status,
       reviewed_by: patch.reviewedBy ?? null,
       reviewed_at:
         patch.status === "suggested" ? null : new Date().toISOString(),
-      explanation: nextExplanation,
+      explanation: JSON.stringify(nextExplanation),
     };
     const { error } = await supabase
       .from("potential_matches")
