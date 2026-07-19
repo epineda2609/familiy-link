@@ -63,6 +63,7 @@ export const caseUpdateRepository = {
     };
     records = [...records, record];
     emit();
+    void cloudSync.persistCaseUpdate(record);
     return record;
   },
   listByCase(caseId: string): CaseUpdateRecord[] {
