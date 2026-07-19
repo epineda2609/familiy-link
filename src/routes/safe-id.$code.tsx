@@ -16,7 +16,7 @@ import { safeIdRepository } from "../repositories/SafeIdRepository";
 import { resolveAudience, type SafeIdAudience } from "../domain/safeId";
 import { useMode } from "../modes/OperationalModeProvider";
 import { useT } from "../i18n/LocaleProvider";
-import { auditLog } from "../audit/auditLog";
+
 
 export const Route = createFileRoute("/safe-id/$code")({
   loader: ({ params }) => {
@@ -74,22 +74,15 @@ function SafeIdDetail() {
     ? findRescueByCode(record.linkedRescueCode)
     : undefined;
 
-  // record view on mount + audience changes
+  // record view on mount + audience changes (audit_logs is source of truth)
   useEffect(() => {
     safeIdRepository.record(record.shortCode, audience, "view");
-    auditLog.record({
-      actor: {
-        operatorName: "Anónimo",
-        orgName: "—",
-        role: mode,
-      },
-      action: "safeId.view",
-      targetId: record.shortCode,
-      metadata: { audience },
-    });
     setTick((v) => v + 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [record.shortCode, audience]);
+
+  // Re-render when new safeId events land in the audit log cache
+  useEffect(() => safeIdRepository.subscribe(() => setTick((v) => v + 1)), []);
 
   const events = safeIdRepository.list(record.shortCode);
 
@@ -136,20 +129,10 @@ function SafeIdDetail() {
               record={record}
               onPrint={() => {
                 safeIdRepository.record(record.shortCode, audience, "print");
-                auditLog.record({
-                  actor: { operatorName: "Anónimo", orgName: "—", role: mode },
-                  action: "safeId.print",
-                  targetId: record.shortCode,
-                });
                 setTick((v) => v + 1);
               }}
               onShare={() => {
                 safeIdRepository.record(record.shortCode, audience, "share");
-                auditLog.record({
-                  actor: { operatorName: "Anónimo", orgName: "—", role: mode },
-                  action: "safeId.share",
-                  targetId: record.shortCode,
-                });
                 setTick((v) => v + 1);
               }}
             />
