@@ -214,6 +214,19 @@ function isFullExplanation(x: unknown): x is MatchExplanation {
   );
 }
 
+function parseExplanation(raw: unknown): unknown {
+  if (raw == null) return null;
+  if (typeof raw === "object") return raw;
+  if (typeof raw === "string") {
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return raw;
+    }
+  }
+  return raw;
+}
+
 function toEnriched(row: MatchRow): EnrichedMatch {
   const personA = mapPerson(row.source_person);
   const personB = mapPerson(row.matched_person);
