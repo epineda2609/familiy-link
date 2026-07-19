@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import {
   ShieldCheck,
   LogOut,
@@ -51,7 +51,13 @@ function InstitutionalLayout() {
 
 function SignInGate() {
   const { signIn } = useInstitutionalSession();
-  const approved = useMemo(() => institutionsRepository.listApproved(), []);
+  const [tick, setTick] = useState(0);
+  useEffect(() => institutionsRepository.subscribe(() => setTick((v) => v + 1)), []);
+  const approved = useMemo(
+    () => institutionsRepository.listApproved(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [tick],
+  );
 
   const [tab, setTab] = useState<"institutional" | "basuf">("institutional");
 
