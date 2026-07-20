@@ -6,10 +6,7 @@ import {
   ShieldAlert,
   WifiOff,
   ArrowRight,
-  Clock,
-  MapPin,
   ShieldCheck,
-  BadgeCheck,
 } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
@@ -19,7 +16,7 @@ import { DistributedContributions } from "../components/DistributedContributions
 import { WhatHappensNow } from "../components/ux/WhatHappensNow";
 import { useT } from "../i18n/LocaleProvider";
 import type { MessageKey } from "../i18n/messages";
-import { rescueRepository, useRescueList } from "../repositories/RescueRepository";
+import { rescueRepository } from "../repositories/RescueRepository";
 import { peopleRepository } from "../repositories/PeopleRepository";
 import type { PublicPersonCard, Disaster } from "../domain/types";
 
@@ -43,34 +40,52 @@ export const Route = createFileRoute("/rescue")({
   component: RescuePage,
 });
 
-// Preferred real cases (ordered): try Karla P. first, fall back to Carla Perez.
-const REAL_CASE_CODES = ["BASUF-MX-643D", "BASUF-MX-E472"] as const;
+// Real cases to feature (BASUF IDs from the production DB).
+const REAL_CASE_CODES = [
+  "BASUF-MX-643D", // Karla P.
+  "BASUF-MX-E472", // Carla Perez
+  "BASUF-MX-65DF", // Miguel T.
+  "BASUF-VE-9AA3", // María S.
+  "BASUF-CL-9D5F", // Diego H.
+  "BASUF-BR-F7C3", // Camila R.
+  "BASUF-VE-C3B6", // Lucía Guerrero
+] as const;
 
-function useFeaturedRealCase() {
-  const [person, setPerson] = useState<PublicPersonCard | null>(null);
-  const [disaster, setDisaster] = useState<Disaster | null>(null);
+interface RealCase {
+  person: PublicPersonCard;
+  disaster: Disaster | null;
+}
+
+function useRealCases() {
+  const [cases, setCases] = useState<RealCase[]>([]);
   useEffect(() => {
     let cancelled = false;
     (async () => {
+      const results: RealCase[] = [];
+      const disasterCache = new Map<string, Disaster | null>();
       for (const code of REAL_CASE_CODES) {
-        const p = await peopleRepository.getPublicByCaseCode(code);
-        if (p) {
-          if (cancelled) return;
-          setPerson(p);
-          if (p.disasterId) {
-            const d = await peopleRepository.getDisasterById(p.disasterId);
-            if (!cancelled) setDisaster(d);
+        const person = await peopleRepository.getPublicByCaseCode(code);
+        if (!person) continue;
+        let disaster: Disaster | null = null;
+        if (person.disasterId) {
+          if (disasterCache.has(person.disasterId)) {
+            disaster = disasterCache.get(person.disasterId) ?? null;
+          } else {
+            disaster = await peopleRepository.getDisasterById(person.disasterId);
+            disasterCache.set(person.disasterId, disaster);
           }
-          return;
         }
+        results.push({ person, disaster });
       }
+      if (!cancelled) setCases(results);
     })();
     return () => {
       cancelled = true;
     };
   }, []);
-  return { person, disaster };
+  return cases;
 }
+
 
 function RescuePage() {
   const { t, locale } = useT();
