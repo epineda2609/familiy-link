@@ -271,7 +271,7 @@ function Home() {
                 <h3 className="font-semibold leading-tight">{d.name}</h3>
                 <p className="mt-1 text-xs text-muted-foreground">
                   {d.region ? `${d.region} · ` : ""}
-                  <span className="uppercase">{d.country}</span>
+                  <span className="uppercase">{countryDisplay}</span>
                 </p>
                 <p className="mt-1 text-xs text-muted-foreground">
                   {new Date(d.startedAt).toLocaleDateString(undefined, {
