@@ -420,30 +420,15 @@ function PersonDetailPage() {
         )}
 
 
-        <section className="mt-10 rounded-xl border border-border bg-card p-6 shadow-sm">
-          <div className="mb-4 flex items-center gap-2">
-            <Camera className="h-4 w-4 text-primary" aria-hidden />
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              {t("evidence.title")}
-            </h2>
-          </div>
-          <p className="mb-4 text-xs text-muted-foreground">
-            {t("evidence.subtitle")}
-          </p>
-          <div className="mb-4">
-            <AudiencePreviewTabs
-              value={evidenceAudience}
-              onChange={setEvidenceAudience}
-            />
-          </div>
-          <EvidenceGallery
-            items={evidenceItems}
-            audience={evidenceAudience}
-            actorName="Vista previa"
-            actorOrg="—"
-            actorRole={mode}
-          />
-        </section>
+        <CaseEvidenceSection
+          person={person}
+          history={getCaseHistoryByPerson(person.id)}
+          evidence={evidenceItems}
+          matches={matches}
+          audience={evidenceAudience}
+          onAudienceChange={setEvidenceAudience}
+        />
+
 
 
         <section className="mt-10">
