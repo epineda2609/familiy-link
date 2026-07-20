@@ -6,10 +6,7 @@ import {
   ShieldAlert,
   WifiOff,
   ArrowRight,
-  Clock,
-  MapPin,
   ShieldCheck,
-  BadgeCheck,
 } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
@@ -19,7 +16,7 @@ import { DistributedContributions } from "../components/DistributedContributions
 import { WhatHappensNow } from "../components/ux/WhatHappensNow";
 import { useT } from "../i18n/LocaleProvider";
 import type { MessageKey } from "../i18n/messages";
-import { rescueRepository, useRescueList } from "../repositories/RescueRepository";
+import { rescueRepository } from "../repositories/RescueRepository";
 import { peopleRepository } from "../repositories/PeopleRepository";
 import type { PublicPersonCard, Disaster } from "../domain/types";
 
@@ -43,34 +40,52 @@ export const Route = createFileRoute("/rescue")({
   component: RescuePage,
 });
 
-// Preferred real cases (ordered): try Karla P. first, fall back to Carla Perez.
-const REAL_CASE_CODES = ["BASUF-MX-643D", "BASUF-MX-E472"] as const;
+// Real cases to feature (BASUF IDs from the production DB).
+const REAL_CASE_CODES = [
+  "BASUF-MX-643D", // Karla P.
+  "BASUF-MX-E472", // Carla Perez
+  "BASUF-MX-65DF", // Miguel T.
+  "BASUF-VE-9AA3", // María S.
+  "BASUF-CL-9D5F", // Diego H.
+  "BASUF-BR-F7C3", // Camila R.
+  "BASUF-VE-C3B6", // Lucía Guerrero
+] as const;
 
-function useFeaturedRealCase() {
-  const [person, setPerson] = useState<PublicPersonCard | null>(null);
-  const [disaster, setDisaster] = useState<Disaster | null>(null);
+interface RealCase {
+  person: PublicPersonCard;
+  disaster: Disaster | null;
+}
+
+function useRealCases() {
+  const [cases, setCases] = useState<RealCase[]>([]);
   useEffect(() => {
     let cancelled = false;
     (async () => {
+      const results: RealCase[] = [];
+      const disasterCache = new Map<string, Disaster | null>();
       for (const code of REAL_CASE_CODES) {
-        const p = await peopleRepository.getPublicByCaseCode(code);
-        if (p) {
-          if (cancelled) return;
-          setPerson(p);
-          if (p.disasterId) {
-            const d = await peopleRepository.getDisasterById(p.disasterId);
-            if (!cancelled) setDisaster(d);
+        const person = await peopleRepository.getPublicByCaseCode(code);
+        if (!person) continue;
+        let disaster: Disaster | null = null;
+        if (person.disasterId) {
+          if (disasterCache.has(person.disasterId)) {
+            disaster = disasterCache.get(person.disasterId) ?? null;
+          } else {
+            disaster = await peopleRepository.getDisasterById(person.disasterId);
+            disasterCache.set(person.disasterId, disaster);
           }
-          return;
         }
+        results.push({ person, disaster });
       }
+      if (!cancelled) setCases(results);
     })();
     return () => {
       cancelled = true;
     };
   }, []);
-  return { person, disaster };
+  return cases;
 }
+
 
 function RescuePage() {
   const { t, locale } = useT();
@@ -78,8 +93,7 @@ function RescuePage() {
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const records = useRescueList();
-  const featured = useFeaturedRealCase();
+  const cases = useRealCases();
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -230,26 +244,21 @@ function RescuePage() {
           </div>
 
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {/* Featured: real connected case */}
-            {featured.person && (
-              <li>
+            {cases.map(({ person, disaster }) => (
+              <li key={person.id}>
                 <Link
                   to="/person/$id"
-                  params={{ id: featured.person.id }}
-                  className="group flex h-full flex-col rounded-xl border-2 border-primary/50 bg-card p-5 shadow-sm transition hover:border-primary hover:shadow-md"
+                  params={{ id: person.id }}
+                  className="group flex h-full flex-col rounded-xl border border-border bg-card p-5 shadow-sm transition hover:border-primary/50 hover:shadow-md"
                 >
-                  <span className="mb-2 inline-flex w-fit items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
-                    <BadgeCheck className="h-3 w-3" aria-hidden />
-                    {t("rescue.records.featuredLabel")}
-                  </span>
                   <h3 className="text-lg font-bold text-foreground">
-                    {featured.person.displayName}
+                    {person.displayName}
                   </h3>
                   <p className="mt-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
                     {t("rescue.card.basufIdLabel")}
                   </p>
                   <p className="font-mono text-xl font-black tracking-wider text-foreground">
-                    {featured.person.publicCaseCode ?? "—"}
+                    {person.publicCaseCode ?? "—"}
                   </p>
                   <dl className="mt-4 space-y-1.5 text-xs">
                     <div className="flex justify-between gap-2">
@@ -257,44 +266,36 @@ function RescuePage() {
                         {t("rescue.featured.status")}
                       </dt>
                       <dd className="font-medium text-foreground">
-                        {t(`status.${featured.person.status}` as MessageKey)}
+                        {t(`status.${person.status}` as MessageKey)}
                       </dd>
                     </div>
-                    {featured.disaster && (
+                    {disaster && (
                       <div className="flex justify-between gap-2">
                         <dt className="text-muted-foreground">
                           {t("rescue.featured.disaster")}
                         </dt>
                         <dd className="text-right font-medium text-foreground">
-                          {featured.disaster.name}
+                          {disaster.name}
                         </dd>
                       </div>
                     )}
-                    {featured.person.originOrgName && (
+                    {person.originOrgName && (
                       <div className="flex justify-between gap-2">
                         <dt className="text-muted-foreground">
                           {t("rescue.featured.org")}
                         </dt>
                         <dd className="text-right font-medium text-foreground">
-                          {featured.person.originOrgName}
+                          {person.originOrgName}
                         </dd>
                       </div>
                     )}
-                    <div className="flex justify-between gap-2">
-                      <dt className="text-muted-foreground">
-                        {t("rescue.featured.match")}
-                      </dt>
-                      <dd className="text-right font-medium text-foreground">
-                        {t("rescue.featured.matchPending")}
-                      </dd>
-                    </div>
-                    {featured.person.reportedAt && (
+                    {person.reportedAt && (
                       <div className="flex justify-between gap-2">
                         <dt className="text-muted-foreground">
                           {t("rescue.featured.updatedAt")}
                         </dt>
                         <dd className="text-right font-medium text-foreground">
-                          {new Date(featured.person.reportedAt).toLocaleDateString(
+                          {new Date(person.reportedAt).toLocaleDateString(
                             locale,
                             { dateStyle: "medium" },
                           )}
@@ -303,73 +304,14 @@ function RescuePage() {
                     )}
                   </dl>
                   <span className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-primary">
-                    {t("rescue.featured.openChain")}
+                    {t("rescue.records.openChain")}
                     <ArrowRight className="h-3.5 w-3.5" aria-hidden />
                   </span>
                 </Link>
               </li>
-            )}
-
-            {records.map((r) => {
-              const last = r.chain[r.chain.length - 1];
-              return (
-                <li key={r.code}>
-                  <Link
-                    to="/rescue/$code"
-                    params={{ code: r.code }}
-                    className="group flex h-full flex-col rounded-xl border border-border bg-card p-5 shadow-sm transition hover:border-primary/40 hover:shadow-md"
-                  >
-                    <span className="mb-2 inline-flex w-fit items-center rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                      {t("rescue.records.demoLabel")}
-                    </span>
-                    <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-                      {t("rescue.card.rescueCodeLabel")}
-                    </p>
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="font-mono text-2xl font-black tracking-wider text-foreground">
-                        {r.code}
-                      </span>
-                      <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                        {t(
-                          `rescue.chain.event.${r.currentStatus}` as MessageKey,
-                        )}
-                      </span>
-                    </div>
-                    {r.displayHint && (
-                      <p className="mt-3 text-sm text-foreground/90">
-                        {r.displayHint}
-                      </p>
-                    )}
-                    <div className="mt-4 space-y-1 text-xs text-muted-foreground">
-                      <p className="flex items-center gap-1.5">
-                        <Clock className="h-3.5 w-3.5" aria-hidden />
-                        {new Date(last.at).toLocaleString(locale, {
-                          dateStyle: "short",
-                          timeStyle: "short",
-                        })}
-                      </p>
-                      {last.location && (
-                        <p className="flex items-center gap-1.5">
-                          <MapPin className="h-3.5 w-3.5" aria-hidden />
-                          {last.location}
-                        </p>
-                      )}
-                    </div>
-                    <p className="mt-4 text-[10px] uppercase tracking-wide text-muted-foreground/70">
-                      {t("rescue.card.tempRefLabel")}:{" "}
-                      <span className="font-mono normal-case tracking-normal">
-                        {r.tempId}
-                      </span>
-                    </p>
-                    <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary opacity-0 transition group-hover:opacity-100">
-                      {t("rescue.chain.title")}
-                      <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
+            ))}
           </ul>
+
         </section>
 
         <DistributedContributions />
