@@ -401,6 +401,30 @@ function PersonDetailPage() {
                   `person.match.status.${primaryMatch.status}` as MessageKey,
                 )}
               />
+              {matchOrgType && (
+                <Row
+                  label={t("person.match.matchedPerson")}
+                  value={matchOrgType.displayName}
+                />
+              )}
+              {matchOrgType?.originOrgName && (
+                <Row
+                  label={t("person.match.organization")}
+                  value={matchOrgType.originOrgName}
+                />
+              )}
+              {matchOrgType && (
+                <Row
+                  label={t("person.match.currentStatus")}
+                  value={t(`status.${matchOrgType.status}` as MessageKey)}
+                />
+              )}
+              {matchOrgType?.originOrgType && (
+                <Row
+                  label={t("person.match.instType")}
+                  value={t(`org.type.${matchOrgType.originOrgType}` as MessageKey)}
+                />
+              )}
               {primaryMatch.reviewedAt && (
                 <Row
                   label={t("person.match.detectedAt")}
@@ -414,6 +438,9 @@ function PersonDetailPage() {
                 />
               )}
             </dl>
+            <p className="mt-4 rounded-md border border-primary/30 bg-background/60 p-3 text-xs text-muted-foreground">
+              {t("person.match.disclaimer")}
+            </p>
           </section>
         )}
 
