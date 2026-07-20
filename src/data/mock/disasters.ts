@@ -68,7 +68,7 @@ export const mockDisasters: Disaster[] = [
     id: "d-ve-2025-conflict",
     type: "war",
     name: "Desplazamiento frontera sur",
-    country: "VENEZUELA",
+    country: "VE",
     region: "Zona fronteriza",
     startedAt: "2025-01-22",
     active: true,
