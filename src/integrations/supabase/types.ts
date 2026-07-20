@@ -1262,6 +1262,15 @@ export type Database = {
     Functions: {
       claim_master_admin: { Args: { _code: string }; Returns: boolean }
       compute_person_matches: { Args: { _person_id: string }; Returns: number }
+      event_case_counters: {
+        Args: never
+        Returns: {
+          event_id: string
+          potential_matches: number
+          registered_reports: number
+          verified_cases: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
