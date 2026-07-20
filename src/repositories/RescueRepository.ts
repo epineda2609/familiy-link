@@ -24,10 +24,25 @@ let hydrated = false;
 let inflight: Promise<void> | null = null;
 const listeners = new Set<() => void>();
 
+// Memoized snapshots so useSyncExternalStore's getSnapshot returns a stable
+// reference between notify() calls. Rebuilding the array on every read caused
+// "Maximum update depth exceeded" because React saw a new snapshot each render.
+let listSnapshot: RescueRecord[] = [];
+const findSnapshots = new Map<string, RescueRecord | undefined>();
+
+function rebuildSnapshots() {
+  listSnapshot = Array.from(cache.values()).sort((a, b) =>
+    a.createdAt < b.createdAt ? 1 : -1,
+  );
+  findSnapshots.clear();
+}
+
 // Seed cache with mocks so the first paint has data even before hydration.
 mockRescueRecords.forEach((r) => cache.set(r.code.toUpperCase(), r));
+rebuildSnapshots();
 
 function notify() {
+  rebuildSnapshots();
   listeners.forEach((l) => l());
 }
 
@@ -98,22 +113,28 @@ function normalizeCode(code: string): string {
 export const rescueRepository = {
   list(): RescueRecord[] {
     void hydrate();
-    return Array.from(cache.values()).sort((a, b) =>
-      a.createdAt < b.createdAt ? 1 : -1,
-    );
+    return listSnapshot;
   },
   find(code: string): RescueRecord | undefined {
     void hydrate();
     const norm = normalizeCode(code);
-    const direct = cache.get(norm);
-    if (direct) return direct;
-    // Fallback: match by tempId or bare 4-char suffix.
-    const bare = code.trim().toUpperCase().replace(/\s+/g, "");
-    for (const rec of cache.values()) {
-      if (rec.tempId.toUpperCase() === bare) return rec;
-      if (rec.code.toUpperCase().replace("R-", "") === bare) return rec;
+    if (findSnapshots.has(norm)) return findSnapshots.get(norm);
+    let result = cache.get(norm);
+    if (!result) {
+      const bare = code.trim().toUpperCase().replace(/\s+/g, "");
+      for (const rec of cache.values()) {
+        if (rec.tempId.toUpperCase() === bare) {
+          result = rec;
+          break;
+        }
+        if (rec.code.toUpperCase().replace("R-", "") === bare) {
+          result = rec;
+          break;
+        }
+      }
     }
-    return undefined;
+    findSnapshots.set(norm, result);
+    return result;
   },
   subscribe(fn: () => void) {
     listeners.add(fn);

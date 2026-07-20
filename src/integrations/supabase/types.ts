@@ -1260,6 +1260,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      basuf_id_from_uuid: {
+        Args: { _attempt?: number; _country: string; _id: string }
+        Returns: string
+      }
       compute_person_matches: { Args: { _person_id: string }; Returns: number }
       event_case_counters: {
         Args: never

@@ -44,17 +44,42 @@ function RescuePage() {
   const navigate = useNavigate();
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
   const records = useRescueList();
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!code.trim()) return;
-    const found = rescueRepository.find(code);
+    const raw = code.trim();
+    if (!raw) {
+      setError(t("rescue.lookup.notFound"));
+      return;
+    }
+    const normalized = raw.toUpperCase().replace(/\s+/g, "");
+    setError(null);
+    // 1) BASUF-XX-XXXX ID → open the public person profile.
+    if (normalized.startsWith("BASUF-")) {
+      setBusy(true);
+      try {
+        const { peopleRepository } = await import(
+          "../repositories/PeopleRepository"
+        );
+        const person = await peopleRepository.getPublicByCaseCode(normalized);
+        if (person) {
+          navigate({ to: "/person/$id", params: { id: person.id } });
+          return;
+        }
+        setError(t("rescue.lookup.notFound"));
+      } finally {
+        setBusy(false);
+      }
+      return;
+    }
+    // 2) Legacy rescue intake short codes (R-XXXX / TMP-…).
+    const found = rescueRepository.find(raw);
     if (!found) {
       setError(t("rescue.lookup.notFound"));
       return;
     }
-    setError(null);
     navigate({ to: "/rescue/$code", params: { code: found.code } });
   }
 
@@ -128,7 +153,8 @@ function RescuePage() {
               />
               <button
                 type="submit"
-                className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
+                disabled={busy}
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
               >
                 <Search className="h-4 w-4" aria-hidden />
                 {t("rescue.lookup.submit")}

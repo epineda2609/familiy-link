@@ -67,6 +67,7 @@ export class DuplicateDisasterError extends Error {
 export interface IPeopleRepository {
   searchPublic(filters: SearchFilters): Promise<PublicPersonCard[]>;
   getPublicById(id: string): Promise<PublicPersonCard | null>;
+  getPublicByCaseCode(code: string): Promise<PublicPersonCard | null>;
   getDisasterById(id: string): Promise<Disaster | null>;
   listDisasters(): Promise<Disaster[]>;
   listCountries(): Promise<Country[]>;
@@ -79,6 +80,7 @@ export interface IPeopleRepository {
 
 interface PersonRow {
   id: string;
+  public_case_code: string | null;
   display_name: string;
   approximate_age: number | null;
   gender: string | null;
@@ -163,6 +165,7 @@ function mapPerson(row: PersonRow): PublicPersonCard {
     : "citizen";
   return {
     id: row.id,
+    publicCaseCode: row.public_case_code ?? undefined,
     displayName: row.display_name,
     approximateAge: row.approximate_age ?? undefined,
     gender: normGender(row.gender),
@@ -207,7 +210,7 @@ function mapDisaster(row: EventRow): Disaster {
 }
 
 const PERSON_SELECT =
-  "id, display_name, approximate_age, gender, current_status, event_id, country, nationality, document_number, distinguishing_features, photo_url, reported_at, reported_by_organization_id, disappearance_details(last_seen_location, last_seen_date), organizations:reported_by_organization_id(id, name, organization_type, country, region)";
+  "id, public_case_code, display_name, approximate_age, gender, current_status, event_id, country, nationality, document_number, distinguishing_features, photo_url, reported_at, reported_by_organization_id, disappearance_details(last_seen_location, last_seen_date), organizations:reported_by_organization_id(id, name, organization_type, country, region)";
 const EVENT_SELECT =
   "id, name, event_type, custom_type, country, region, start_date, status, description, magnitude, affected_estimate, fatalities, missing_count, created_at";
 
@@ -257,6 +260,24 @@ class CloudPeopleRepository implements IPeopleRepository {
       .returns<PersonRow | null>();
     if (error) {
       console.error("[people.getPublicById]", error);
+      return null;
+    }
+    return data ? mapPerson(data) : null;
+  }
+
+  async getPublicByCaseCode(code: string): Promise<PublicPersonCard | null> {
+    const normalized = code.trim().toUpperCase().replace(/\s+/g, "");
+    if (!normalized) return null;
+    const sel: string = PERSON_SELECT;
+    const { data, error } = await supabase
+      .from("persons")
+      .select(sel)
+      .eq("public_case_code", normalized)
+      .is("archived_at", null)
+      .maybeSingle()
+      .returns<PersonRow | null>();
+    if (error) {
+      console.error("[people.getPublicByCaseCode]", error);
       return null;
     }
     return data ? mapPerson(data) : null;

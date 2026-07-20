@@ -43,6 +43,8 @@ export type ReportOrigin = "citizen" | "institution";
 /** Perfil público — SIN datos sensibles. Nunca incluye fotos de fallecidos ni contactos. */
 export interface PublicPersonCard {
   id: string;
+  /** Canonical BASUF ID, e.g. `BASUF-MX-7F2A`. Stable per case, safe to display. */
+  publicCaseCode?: string;
   displayName: string; // nombre o apodo público
   approximateAge?: number;
   gender: Gender;
