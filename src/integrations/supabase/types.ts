@@ -1260,6 +1260,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      accept_institutional_invite: {
+        Args: never
+        Returns: {
+          activated_count: number
+        }[]
+      }
       basuf_id_from_uuid: {
         Args: { _attempt?: number; _country: string; _id: string }
         Returns: string
