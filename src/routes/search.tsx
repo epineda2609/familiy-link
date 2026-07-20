@@ -49,6 +49,11 @@ function SearchPage() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [nationalities, setNationalities] = useState<Country[]>([]);
 
+  const activeStatuses = new Set<PersonStatus>(["missing", "searching", "found"]);
+  const visibleResults = activeOnly
+    ? results.filter((r) => activeStatuses.has(r.status))
+    : results;
+
   useEffect(() => {
     peopleRepository.listDisasters().then(setDisasters);
     peopleRepository.listCountries().then(setCountries);
