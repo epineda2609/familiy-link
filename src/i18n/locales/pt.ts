@@ -96,6 +96,7 @@ export const pt: MessageDict = {
   "footer.privacy": "Privacidade",
   "footer.protocols": "Protocolos humanitários",
   "footer.contact": "Contato",
+  "footer.slogan": "Connecting information. Reuniting families.",
   "footer.rights": "Protótipo humanitário — Uso restrito.",
   "person.back": "Voltar aos resultados",
   "person.notFound.title": "Ficha não encontrada",

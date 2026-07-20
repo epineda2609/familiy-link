@@ -96,6 +96,7 @@ export const ar: MessageDict = {
   "footer.privacy": "الخصوصية",
   "footer.protocols": "البروتوكولات الإنسانية",
   "footer.contact": "تواصل",
+  "footer.slogan": "Connecting information. Reuniting families.",
   "footer.rights": "نموذج أولي إنساني — استخدام مقيّد.",
   "person.back": "العودة إلى النتائج",
   "person.notFound.title": "الملف غير موجود",
