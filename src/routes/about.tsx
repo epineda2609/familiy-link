@@ -53,6 +53,9 @@ function AboutPage() {
               <p className="mt-4 text-lg text-muted-foreground">
                 {t("app.mission")}
               </p>
+              <p className="mt-4 text-lg font-semibold text-foreground">
+                {t("about.tagline")}
+              </p>
             </div>
           </div>
         </section>
