@@ -163,7 +163,7 @@ function RescueDetail() {
             {(() => {
               const history = getCaseHistoryByRescue(record.code);
               return history ? (
-                <CaseNarrative history={history} defaultView="timeline" />
+                <CaseNarrative history={history} />
               ) : null;
             })()}
 
