@@ -104,6 +104,33 @@ function PersonDetailPage() {
   useCaseTimeline(person.id);
   const [shareOpen, setShareOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
+  const [matches, setMatches] = useState<EnrichedMatch[]>([]);
+  useEffect(() => {
+    let alive = true;
+    matchingRepository.list().then((all) => {
+      if (!alive) return;
+      setMatches(
+        all.filter(
+          (m) => m.personA_id === person.id || m.personB_id === person.id,
+        ),
+      );
+    });
+    return () => {
+      alive = false;
+    };
+  }, [person.id]);
+  const primaryMatch = matches[0];
+  const orgTypeKey = person.originOrgType
+    ? (`org.type.${person.originOrgType}` as MessageKey)
+    : null;
+  const matchOrgType = (() => {
+    if (!primaryMatch) return null;
+    const otherPerson =
+      primaryMatch.personA?.id === person.id
+        ? primaryMatch.personB
+        : primaryMatch.personA;
+    return otherPerson ?? null;
+  })();
 
 
   const countryName =
