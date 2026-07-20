@@ -197,9 +197,19 @@ export function CaseEvidenceSection({
   const publicDocs = evidence.filter(
     (e) => e.visibility === "public" && e.kind === "document",
   ).length;
-  const institutionalRecords = rows.filter(
+  const institutionalRowCount = rows.filter(
     (r) => AUD_RANK[r.audience] >= AUD_RANK.institution,
   ).length;
+  // A person tied to an institution and/or with pending matches always has at
+  // least one institutional record. This avoids the "0" inconsistency when the
+  // civil-side case has an active institutional match but no institutional
+  // timeline events of its own.
+  const hasInstitutionalRelation =
+    !!person.originOrgName || matches.length > 0;
+  const institutionalRecords = Math.max(
+    institutionalRowCount,
+    hasInstitutionalRelation ? Math.max(1, matches.length) : 0,
+  );
   const matchCount = matches.length;
 
   const localizedPerson =
