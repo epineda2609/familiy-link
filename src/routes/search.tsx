@@ -15,7 +15,7 @@ import {
   peopleRepository,
   type SearchFilters,
 } from "../repositories/PeopleRepository";
-import type { PublicPersonCard, Disaster, Country } from "../domain/types";
+import type { PublicPersonCard, Disaster, Country, PersonStatus } from "../domain/types";
 
 export const Route = createFileRoute("/search")({
   head: () => ({
@@ -44,9 +44,15 @@ function SearchPage() {
   const [filters, setFilters] = useState<SearchFilters>(emptyFilters);
   const [applied, setApplied] = useState<SearchFilters>(emptyFilters);
   const [results, setResults] = useState<PublicPersonCard[]>([]);
+  const [activeOnly, setActiveOnly] = useState(true);
   const [disasters, setDisasters] = useState<Disaster[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
   const [nationalities, setNationalities] = useState<Country[]>([]);
+
+  const activeStatuses = new Set<PersonStatus>(["missing", "searching", "found"]);
+  const visibleResults = activeOnly
+    ? results.filter((r) => activeStatuses.has(r.status))
+    : results;
 
   useEffect(() => {
     peopleRepository.listDisasters().then(setDisasters);
@@ -105,11 +111,24 @@ function SearchPage() {
           <div className="mb-4 flex items-baseline justify-between">
             <h2 className="text-lg font-semibold">{t("search.results")}</h2>
             <span className="text-sm text-muted-foreground">
-              {results.length}
+              {visibleResults.length}
             </span>
           </div>
 
-          {results.length === 0 ? (
+          <div className="mb-4 flex items-center gap-2">
+            <input
+              id="active-only"
+              type="checkbox"
+              className="h-4 w-4 rounded border-input"
+              checked={activeOnly}
+              onChange={(e) => setActiveOnly(e.target.checked)}
+            />
+            <label htmlFor="active-only" className="text-sm text-foreground">
+              {t("search.activeOnly")}
+            </label>
+          </div>
+
+          {visibleResults.length === 0 ? (
             <EmptyState
               icon={SearchX}
               title={t("empty.search.title")}
@@ -120,7 +139,7 @@ function SearchPage() {
               key={JSON.stringify(applied)}
               className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 animate-in fade-in duration-300"
             >
-              {results.map((p) => (
+              {visibleResults.map((p) => (
                 <PersonCard key={p.id} person={p} />
               ))}
             </div>

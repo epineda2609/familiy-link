@@ -71,6 +71,7 @@ export const ja: MessageDict = {
   "search.submit": "検索",
   "search.reset": "リセット",
   "search.results": "結果",
+  "search.activeOnly": "アクティブなケースのみ表示",
   "search.noResults":
     "一致が見つかりません。フィルタを広げてお試しください。",
   "status.missing": "行方不明",
