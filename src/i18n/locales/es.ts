@@ -3,7 +3,7 @@ const esDict = {
   "app.name": "BASUF",
   "app.tagline": "Brother And Sister Uniendo Familias",
   "app.mission":
-    "Somos una red humanitaria para reconectar a personas separadas por catástrofes.",
+    "BASUF es una plataforma humanitaria diseñada para ayudar a localizar, identificar y reunificar personas separadas durante emergencias, desastres naturales y crisis humanitarias, conectando a familias con organizaciones de respuesta de forma segura, responsable y respetando la privacidad de las personas.",
   "demo.banner":
     "Entorno de demostración — Todos los datos mostrados son ficticios.",
   "nav.home": "Inicio",
@@ -24,21 +24,27 @@ const esDict = {
     "BASUF conecta reportes de familiares, rescatistas, hospitales, refugios y organizaciones humanitarias en Latinoamerica para ayudar a localizar e identificar personas de forma segura.",
   "home.cta.search": "Buscar una persona",
   "home.cta.report": "Reportar una persona",
+  "about.tagline": "Conectamos información. Reunimos familias.",
   "mission.title": "Nuestra misión",
   "mission.subtitle":
-    "Tres compromisos que sostienen cada ficha, cada búsqueda y cada reencuentro.",
+    "Tres compromisos que sostienen cada búsqueda, cada reporte y cada posible reencuentro.",
   "mission.pillar.humanity.title": "Humanidad",
   "mission.pillar.humanity.desc":
-    "Cada ficha es una persona con historia, no un registro. Diseñamos con cuidado, respeto y dignidad.",
+    "Cada ficha representa una persona, una familia y una historia. Diseñamos BASUF con empatía, respeto y dignidad para quienes atraviesan los momentos más difíciles.",
   "mission.pillar.traceability.title": "Trazabilidad",
   "mission.pillar.traceability.desc":
-    "Origen claro, confiabilidad verificable y auditoría inmutable de cada dato sensible que se revela.",
+    "Cada dato conserva su origen y nivel de verificación, promoviendo transparencia, confianza y un manejo responsable de la información durante todo el proceso.",
   "mission.pillar.hope.title": "Esperanza",
   "mission.pillar.hope.desc":
-    "Un puente entre el caos y la reunificación, construido para ONG, hospitales, refugios y brigadas.",
+    "Creemos que la tecnología puede convertirse en un puente entre la incertidumbre y el reencuentro, facilitando la colaboración entre familias y organizaciones humanitarias.",
   "mission.originTitle": "Por qué existe BASUF",
   "mission.originBody":
-    "Nace del dolor de una devastadora catástrofe y de la necesidad y meta de dos hermanos Venezolanos: crear una herramienta simple y funcional que ayude a familias reales cuando los sistemas tradicionales fallan conectando todos los eslavones para encontrar al familar.\u00A0\n\n\nHoy nuestro portal es una base abierta para colaborar con organizaciones humanitarias en cualquier parte del mundo.",
+    "BASUF nació de una pregunta muy sencilla:\n\n¿Cómo puede una familia encontrar a un ser querido cuando todo lo demás ha dejado de funcionar?\n\nDespués de un desastre natural o una crisis humanitaria, las comunicaciones fallan, los registros se fragmentan y la información queda dispersa entre hospitales, refugios, brigadas y organizaciones de ayuda.\n\nLa idea surgió de la experiencia y la preocupación compartida por dos hermanos venezolanos que comprendieron que, en una emergencia, el tiempo y la información pueden marcar la diferencia entre la incertidumbre y el reencuentro.\n\nAsí nació BASUF: una plataforma diseñada para conectar a quienes buscan con quienes pueden ayudar, respetando siempre la privacidad, la dignidad y los protocolos humanitarios.",
+  "about.differenceTitle": "¿Qué hace diferente a BASUF?",
+  "about.differenceBody":
+    "BASUF no es únicamente un registro de personas desaparecidas.\n\nIntegra reportes realizados por ciudadanos con información registrada por organizaciones humanitarias para generar posibles coincidencias que ayuden a acelerar la localización y reunificación familiar.\n\nCada coincidencia conserva el origen de la información y permite un proceso de revisión antes de compartir datos sensibles, promoviendo una respuesta más coordinada, segura y confiable durante una emergencia.",
+  "about.closing":
+    "Hoy BASUF es un prototipo funcional orientado a colaborar con organizaciones humanitarias, hospitales, refugios y equipos de respuesta para mejorar la coordinación durante emergencias.\n\nPorque detrás de cada reporte hay una familia esperando volver a encontrarse.",
   "home.stats.cases": "Casos registrados",
   "home.stats.reunions": "Reencuentros",
   "home.stats.orgs": "Organizaciones aliadas",
