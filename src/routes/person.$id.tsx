@@ -256,23 +256,6 @@ function PersonDetailPage() {
             </dl>
           </section>
 
-          <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
-            <h2 className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              <MapPin className="h-4 w-4" aria-hidden />
-              {t("person.section.lastSeen")}
-            </h2>
-            <dl className="space-y-2.5 text-sm">
-              <Row
-                label={t("person.field.location")}
-                value={person.lastSeenLocation ?? "—"}
-              />
-              <Row
-                label={t("person.field.date")}
-                value={person.lastSeenAt ?? "—"}
-                icon={<Calendar className="h-3.5 w-3.5" aria-hidden />}
-              />
-            </dl>
-          </section>
 
           {person.distinctiveFeatures && (
             <section className="rounded-xl border border-border bg-card p-6 shadow-sm md:col-span-2">
