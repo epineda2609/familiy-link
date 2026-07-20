@@ -22,8 +22,8 @@ const esDict = {
   "home.hero.title": "Reunir familias es posible\nEncuentra a tus seres queridos despues de una emergencia.\u00a0",
   "home.hero.subtitle":
     "BASUF conecta reportes de familiares, rescatistas, hospitales, refugios y organizaciones humanitarias en Latinoamerica para ayudar a localizar e identificar personas de forma segura.",
-  "home.cta.search": "Buscar a alguien",
-  "home.cta.report": "Reportar persona",
+  "home.cta.search": "Buscar una persona",
+  "home.cta.report": "Reportar una persona",
   "mission.title": "Nuestra misión",
   "mission.subtitle":
     "Tres compromisos que sostienen cada ficha, cada búsqueda y cada reencuentro.",
