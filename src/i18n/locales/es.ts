@@ -55,7 +55,7 @@ const esDict = {
     "BASUF analiza la información del caso y compara registros relacionados con la emergencia para identificar posibles coincidencias. Todas las coincidencias son preliminares y requieren verificación.",
   "home.how.step3.title": "Verificación y reunificación",
   "home.how.step3.desc":
-    "Una organización autorizada valida la identidad y el estado de la persona antes de coordinar el contacto entre las familias, respetando la privacidad, el consentimiento y los protocolos humanitarios.\u00a0Importante: BASUF propone posibles coincidencias, pero ninguna identidad se considera confirmada hasta que una organización autorizada complete el proceso de verificación.",
+    "Una organización autorizada valida la identidad y el estado de la persona antes de coordinar el contacto entre las familias, respetando la privacidad, el consentimiento y los protocolos humanitarios.\u00a0",
   "search.title": "Buscar personas",
   "search.subtitle":
     "Usa filtros para encontrar coincidencias. Los datos sensibles no se muestran en el panel público.",
