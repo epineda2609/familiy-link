@@ -277,56 +277,110 @@ class CloudPeopleRepository implements IPeopleRepository {
   }
 
   async createReport(input: ReportPersonInput): Promise<PublicPersonCard> {
-    const { data, error } = await supabase
-      .from("persons")
-      .insert({
-        display_name: input.displayName.trim(),
+    const displayName = input.displayName.trim();
+    const country = input.country.trim();
+    const nationality = input.nationality?.trim() || "";
+    const disasterId = input.disasterId.trim();
+    const reporterName = input.reporterName.trim();
+    const reporterContact = input.reporterContact.trim();
+    const approximateAge = input.approximateAge;
+
+    if (
+      !displayName ||
+      !country ||
+      !nationality ||
+      !disasterId ||
+      !reporterName ||
+      !reporterContact ||
+      !["f", "m", "o"].includes(input.gender) ||
+      input.consent !== true ||
+      (approximateAge !== undefined &&
+        (!Number.isFinite(approximateAge) || approximateAge < 0 || approximateAge > 120))
+    ) {
+      throw new Error("missing_required_fields");
+    }
+
+    const id = crypto.randomUUID();
+    const reportedAt = new Date().toISOString();
+
+    let insertError: { code?: string } | null = null;
+    try {
+      const { error } = await supabase.from("persons").insert({
+        id,
+        display_name: displayName,
         approximate_age: input.approximateAge ?? null,
         gender: input.gender,
-        country: input.country,
-        nationality: input.nationality?.trim() || null,
+        country,
+        nationality,
         document_number: input.documentId?.trim() || null,
-        event_id: input.disasterId || null,
+        event_id: disasterId,
         distinguishing_features: input.distinctiveFeatures?.trim() || null,
-        reporter_name: input.reporterName.trim(),
-        reporter_contact: input.reporterContact.trim(),
+        reporter_name: reporterName,
+        reporter_contact: reporterContact,
         current_status: "missing",
         privacy_level: "public",
-      })
-      .select("id")
-      .single();
-    if (error || !data) {
-      console.error("[people.createReport]", error);
-      throw new Error("create_report_failed");
+        reported_at: reportedAt,
+      });
+      insertError = error;
+    } catch (error) {
+      console.error("[people.createReport.persons]", error);
+      throw error instanceof Error ? error : new Error("create_report_failed");
     }
+    if (insertError) {
+      console.error("[people.createReport.persons]", insertError);
+      throw new Error(
+        insertError.code === "42501" ? "report_insert_not_authorized" : "create_report_failed",
+      );
+    }
+
     // Best-effort side write for last-seen info.
     if (input.lastSeenLocation || input.lastSeenAt) {
-      await supabase.from("disappearance_details").insert({
-        person_id: data.id,
-        last_seen_location: input.lastSeenLocation?.trim() || null,
-        last_seen_date: input.lastSeenAt || null,
-      });
+      try {
+        const { error } = await supabase.from("disappearance_details").insert({
+          person_id: id,
+          last_seen_location: input.lastSeenLocation?.trim() || null,
+          last_seen_date: input.lastSeenAt || null,
+        });
+        if (error) console.error("[people.createReport.disappearanceDetails]", error);
+      } catch (error) {
+        console.error("[people.createReport.disappearanceDetails]", error);
+      }
     }
     // Persist reporter as the primary contact so staff can reach out on match.
     // Detect email vs phone with a simple heuristic and split accordingly.
-    const contactRaw = input.reporterContact.trim();
-    if (input.reporterName.trim() && contactRaw) {
-      const looksLikeEmail = /@/.test(contactRaw);
-      await supabase.from("person_contacts").insert({
-        person_id: data.id,
-        full_name: input.reporterName.trim().slice(0, 200),
+    const looksLikeEmail = /@/.test(reporterContact);
+    try {
+      const { error } = await supabase.from("person_contacts").insert({
+        person_id: id,
+        full_name: reporterName.slice(0, 200),
         relationship: "reporter",
-        email: looksLikeEmail ? contactRaw.slice(0, 255) : null,
-        phone: looksLikeEmail ? null : contactRaw.slice(0, 60),
+        email: looksLikeEmail ? reporterContact.slice(0, 255) : null,
+        phone: looksLikeEmail ? null : reporterContact.slice(0, 60),
         preferred_contact_method: looksLikeEmail ? "email" : "phone",
-        country: input.country,
+        country,
         is_primary: true,
-        consent_to_contact: input.consent === true,
+        consent_to_contact: true,
       });
+      if (error) console.error("[people.createReport.personContact]", error);
+    } catch (error) {
+      console.error("[people.createReport.personContact]", error);
     }
-    const created = await this.getPublicById(data.id);
-    if (!created) throw new Error("create_report_reload_failed");
-    return created;
+
+    return {
+      id,
+      displayName,
+      approximateAge,
+      gender: input.gender,
+      status: "missing",
+      disasterId,
+      country,
+      nationality,
+      documentId: input.documentId?.trim() || undefined,
+      lastSeenLocation: input.lastSeenLocation?.trim() || undefined,
+      lastSeenAt: input.lastSeenAt || undefined,
+      distinctiveFeatures: input.distinctiveFeatures?.trim() || undefined,
+      reportedAt: reportedAt.slice(0, 10),
+    };
   }
 
   async createDisaster(input: CreateDisasterInput): Promise<Disaster> {

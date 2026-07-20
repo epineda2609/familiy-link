@@ -87,6 +87,7 @@ function ReportPage() {
   const [form, setForm] = useState<FormState>(emptyState);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [created, setCreated] = useState<PublicPersonCard | null>(null);
   const [disasters, setDisasters] = useState<Disaster[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
@@ -120,13 +121,14 @@ function ReportPage() {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setSubmitError(null);
     if (!validate()) return;
     setSubmitting(true);
     try {
-      const ageNum = form.approximateAge ? Number(form.approximateAge) : undefined;
+      const ageNum = form.approximateAge === "" ? undefined : Number(form.approximateAge);
       const payload: ReportPersonInput = {
         displayName: form.displayName.trim(),
-        approximateAge: ageNum && !Number.isNaN(ageNum) ? ageNum : undefined,
+        approximateAge: ageNum !== undefined && !Number.isNaN(ageNum) ? ageNum : undefined,
         gender: form.gender as Gender,
         country: form.country,
         nationality: form.nationality,
@@ -142,6 +144,13 @@ function ReportPage() {
       const record = await peopleRepository.createReport(payload);
       setCreated(record);
       if (typeof window !== "undefined") window.scrollTo({ top: 0 });
+    } catch (error) {
+      console.error("[report.onSubmit] Failed to create report", error);
+      setSubmitError(
+        error instanceof Error && error.message === "report_insert_not_authorized"
+          ? t("report.submitError.notAuthorized")
+          : t("report.submitError.generic"),
+      );
     } finally {
       setSubmitting(false);
     }
@@ -173,6 +182,8 @@ function ReportPage() {
                 onClick={() => {
                   setCreated(null);
                   setForm(emptyState);
+                  setErrors({});
+                  setSubmitError(null);
                 }}
                 className="inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition hover:bg-accent"
               >
@@ -487,6 +498,16 @@ function ReportPage() {
             </div>
           )}
 
+          {submitError && (
+            <div
+              role="alert"
+              className="rounded-md border border-destructive/40 bg-destructive/5 p-3 text-sm"
+            >
+              <p className="font-medium text-destructive">{t("report.submitError.title")}</p>
+              <p className="mt-0.5 text-muted-foreground">{submitError}</p>
+            </div>
+          )}
+
           <div className="flex flex-wrap items-center gap-2">
             <button
               type="submit"
@@ -494,7 +515,7 @@ function ReportPage() {
               className="inline-flex items-center gap-1.5 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:opacity-60"
             >
               <Send className="h-4 w-4" aria-hidden />
-              {t("report.submit")}
+              {submitting ? t("report.submitting") : t("report.submit")}
             </button>
             <button
               type="button"
