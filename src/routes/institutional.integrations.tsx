@@ -19,13 +19,15 @@ import {
   type IntegrationDescriptor,
   type IntegrationStatus,
 } from "../integrations/simulatedIntegrations";
-import { useIntegrationLog, useIntegrationRegistry } from "../integrations/useIntegrations";
+import {
+  useIntegrationLog,
+  useIntegrationRegistry,
+} from "../integrations/useIntegrations";
 import { auditLog } from "../audit/auditLog";
 import { toast } from "../components/Toast";
 import { EmptyState } from "../components/EmptyState";
 import { Inbox } from "lucide-react";
 import type { MessageKey } from "../i18n/messages";
-import { T } from "../i18n/T";
 
 export const Route = createFileRoute("/institutional/integrations")({
   head: () => ({
@@ -117,7 +119,9 @@ function IntegrationsPage() {
             <Radio className="h-5 w-5 text-primary" aria-hidden />
             {t("integrations.title")}
           </h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t("integrations.subtitle")}</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {t("integrations.subtitle")}
+          </p>
         </div>
       </header>
 
@@ -129,7 +133,10 @@ function IntegrationsPage() {
         {registry.map((r) => {
           const Icon = r.kind === "registry" ? Database : Radio;
           return (
-            <article key={r.id} className="rounded-xl border border-border bg-card p-4 shadow-sm">
+            <article
+              key={r.id}
+              className="rounded-xl border border-border bg-card p-4 shadow-sm"
+            >
               <header className="mb-2 flex items-start justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <span className="grid h-8 w-8 place-items-center rounded-md bg-primary/10 text-primary">
@@ -198,15 +205,9 @@ function IntegrationsPage() {
                 onChange={(e) => setTestChannel(e.target.value as DispatchChannel)}
                 className="rounded-md border border-input bg-background px-3 py-2 text-sm"
               >
-                <option value="whatsapp">
-                  <T k="audit.routes.institutionalIntegrations.whatsApp" />
-                </option>
-                <option value="sms">
-                  <T k="audit.routes.institutionalIntegrations.sMS" />
-                </option>
-                <option value="email">
-                  <T k="audit.routes.institutionalIntegrations.email" />
-                </option>
+                <option value="whatsapp">WhatsApp</option>
+                <option value="sms">SMS</option>
+                <option value="email">Email</option>
               </select>
             </div>
             <div className="flex flex-col gap-1 md:col-span-2">
@@ -284,7 +285,10 @@ function IntegrationsPage() {
                   ? "border-urgent/40 bg-urgent/10"
                   : "border-destructive/30 bg-destructive/10";
             return (
-              <li key={d.id} className={`rounded-lg border px-4 py-3 text-sm ${tone}`}>
+              <li
+                key={d.id}
+                className={`rounded-lg border px-4 py-3 text-sm ${tone}`}
+              >
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div className="flex items-start gap-2">
                     <Icon className="mt-0.5 h-4 w-4 text-muted-foreground" aria-hidden />
@@ -297,7 +301,9 @@ function IntegrationsPage() {
                     </div>
                   </div>
                   <div className="text-right text-[11px] text-muted-foreground">
-                    <div className="font-mono">{new Date(d.timestamp).toLocaleString()}</div>
+                    <div className="font-mono">
+                      {new Date(d.timestamp).toLocaleString()}
+                    </div>
                     <div className="mt-1 font-semibold uppercase tracking-wide">
                       {t(`integrations.dispatch.${d.status}` as MessageKey)}
                     </div>

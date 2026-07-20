@@ -21,7 +21,6 @@ import { SiteFooter } from "../components/SiteFooter";
 import { SkipLink } from "../components/SkipLink";
 import { useT } from "../i18n/LocaleProvider";
 import { useInstitutionalSession } from "../auth/InstitutionalSession";
-import { T } from "../i18n/T";
 
 export const Route = createFileRoute("/institutional")({
   head: () => ({
@@ -60,19 +59,20 @@ function SignInGate() {
               <Lock className="h-6 w-6" aria-hidden />
             </span>
             <div>
-              <h1 className="text-xl font-bold">
-                <T k="audit.routes.institutional.accesoInstitucional" />
-              </h1>
+              <h1 className="text-xl font-bold">Acceso institucional</h1>
               <p className="text-xs text-muted-foreground">
-                <T k="audit.routes.institutional.soloInstitucionesAprobadasPorBASUFYPersonal" />
+                Sólo instituciones aprobadas por BASUF y personal interno.
               </p>
             </div>
           </div>
 
           <div className="mb-5 flex items-start gap-2 rounded-md border border-urgent/40 bg-urgent/10 p-3">
-            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-urgent-foreground" aria-hidden />
+            <AlertTriangle
+              className="mt-0.5 h-4 w-4 shrink-0 text-urgent-foreground"
+              aria-hidden
+            />
             <p className="text-xs text-muted-foreground">
-              <T k="audit.routes.institutional.cadaAccesoQuedaRegistradoEnAuditoriaUsa" />
+              Cada acceso queda registrado en auditoría. Usa tu correo institucional.
             </p>
           </div>
 
@@ -86,7 +86,7 @@ function SignInGate() {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <T k="audit.routes.institutional.iniciarSesion" />
+              Iniciar sesión
             </button>
             <button
               type="button"
@@ -97,19 +97,16 @@ function SignInGate() {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <T k="audit.routes.institutional.crearCuenta" />
+              Crear cuenta
             </button>
           </div>
 
           {mode === "signin" ? <SignInForm /> : <SignUpForm />}
 
           <p className="mt-4 text-[11px] leading-relaxed text-muted-foreground">
-            <T k="audit.routes.institutional.losUsuariosInstitucionalesDebenHaberSidoInvitados" />
-            <span className="font-mono">
-              {" "}
-              <T k="audit.routes.institutional.bASUFMASTER" />
-            </span>{" "}
-            <T k="audit.routes.institutional.trasIniciarSesion" />
+            Los usuarios institucionales deben haber sido invitados previamente por
+            un administrador BASUF. El personal interno usa el código maestro
+            <span className="font-mono"> BASUF-MASTER</span> tras iniciar sesión.
           </p>
         </div>
       </main>
@@ -119,7 +116,6 @@ function SignInGate() {
 }
 
 function SignInForm() {
-  const { t } = useT();
   const { signInWithPassword } = useInstitutionalSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -133,7 +129,7 @@ function SignInForm() {
     try {
       await signInWithPassword(email, password);
     } catch (err) {
-      setError(err instanceof Error ? err.message : t("audit.institutional.signInError"));
+      setError(err instanceof Error ? err.message : "Error al iniciar sesión.");
     } finally {
       setBusy(false);
     }
@@ -141,23 +137,8 @@ function SignInForm() {
 
   return (
     <form onSubmit={submit} className="space-y-4">
-      <Field
-        id="si-email"
-        label={t("audit.institutional.emailLabel")}
-        type="email"
-        value={email}
-        onChange={setEmail}
-        placeholder={t("audit.common.institutionalEmailPlaceholder")}
-        required
-      />
-      <Field
-        id="si-pass"
-        label={t("audit.institutional.passwordLabel")}
-        type="password"
-        value={password}
-        onChange={setPassword}
-        required
-      />
+      <Field id="si-email" label="Correo institucional" type="email" value={email} onChange={setEmail} placeholder="tu.nombre@institucion.org" required />
+      <Field id="si-pass" label="Contraseña" type="password" value={password} onChange={setPassword} required />
       {error && (
         <p className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-xs text-destructive">
           {error}
@@ -169,14 +150,13 @@ function SignInForm() {
         className="inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:opacity-60"
       >
         <ShieldCheck className="h-4 w-4" aria-hidden />
-        {busy ? t("audit.institutional.verifying") : t("audit.routes.institutional.iniciarSesion")}
+        {busy ? "Verificando…" : "Iniciar sesión"}
       </button>
     </form>
   );
 }
 
 function SignUpForm() {
-  const { t } = useT();
   const { signUp, signInWithPassword } = useInstitutionalSession();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -190,20 +170,22 @@ function SignUpForm() {
     setError(null);
     setInfo(null);
     if (password.length < 8) {
-      setError(t("audit.institutional.passwordTooShort"));
+      setError("La contraseña debe tener al menos 8 caracteres.");
       return;
     }
     setBusy(true);
     try {
       const res = await signUp({ email, password, fullName });
       if (res.needsConfirmation) {
-        setInfo(t("audit.institutional.confirmEmail"));
+        setInfo(
+          "Revisa tu correo para confirmar la cuenta. Después vuelve aquí e inicia sesión.",
+        );
       } else {
         // Auto-signed-in; try to sign in explicitly if needed
         await signInWithPassword(email, password).catch(() => {});
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : t("audit.institutional.signUpError"));
+      setError(err instanceof Error ? err.message : "No se pudo crear la cuenta.");
     } finally {
       setBusy(false);
     }
@@ -211,30 +193,9 @@ function SignUpForm() {
 
   return (
     <form onSubmit={submit} className="space-y-4">
-      <Field
-        id="su-name"
-        label={t("audit.institutional.fullNameLabel")}
-        value={fullName}
-        onChange={setFullName}
-        required
-      />
-      <Field
-        id="su-email"
-        label={t("audit.institutional.emailLabel")}
-        type="email"
-        value={email}
-        onChange={setEmail}
-        placeholder={t("audit.common.institutionalEmailPlaceholder")}
-        required
-      />
-      <Field
-        id="su-pass"
-        label={t("audit.institutional.passwordMinimumLabel")}
-        type="password"
-        value={password}
-        onChange={setPassword}
-        required
-      />
+      <Field id="su-name" label="Nombre completo" value={fullName} onChange={setFullName} required />
+      <Field id="su-email" label="Correo institucional" type="email" value={email} onChange={setEmail} placeholder="tu.nombre@institucion.org" required />
+      <Field id="su-pass" label="Contraseña (mín. 8)" type="password" value={password} onChange={setPassword} required />
       {error && (
         <p className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-xs text-destructive">
           {error}
@@ -252,10 +213,11 @@ function SignUpForm() {
         className="inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:opacity-60"
       >
         <UserPlus className="h-4 w-4" aria-hidden />
-        {busy ? t("audit.institutional.creating") : t("audit.routes.institutional.crearCuenta")}
+        {busy ? "Creando…" : "Crear cuenta"}
       </button>
       <p className="text-[11px] text-muted-foreground">
-        <T k="audit.routes.institutional.siTuCorreoCoincideConUnaInvitacion" />
+        Si tu correo coincide con una invitación institucional, tu acceso se
+        activará automáticamente al crear la cuenta.
       </p>
     </form>
   );
@@ -297,7 +259,6 @@ function Field({
 }
 
 function UnauthorizedGate() {
-  const { t } = useT();
   const { error, signOut, claimMasterAdmin } = useInstitutionalSession();
   const [code, setCode] = useState("");
   const [claimError, setClaimError] = useState<string | null>(null);
@@ -310,7 +271,7 @@ function UnauthorizedGate() {
     try {
       await claimMasterAdmin(code);
     } catch (err) {
-      setClaimError(err instanceof Error ? err.message : t("audit.institutional.invalidCode"));
+      setClaimError(err instanceof Error ? err.message : "Código inválido.");
     } finally {
       setBusy(false);
     }
@@ -327,11 +288,10 @@ function UnauthorizedGate() {
               <AlertTriangle className="h-6 w-6" aria-hidden />
             </span>
             <div>
-              <h1 className="text-xl font-bold">
-                <T k="audit.routes.institutional.cuentaSinAccesoInstitucional" />
-              </h1>
+              <h1 className="text-xl font-bold">Cuenta sin acceso institucional</h1>
               <p className="text-xs text-muted-foreground">
-                <T k="audit.routes.institutional.tuCuentaEstaAutenticadaPeroAunNo" />
+                Tu cuenta está autenticada pero aún no tiene una membresía
+                activa vinculada.
               </p>
             </div>
           </div>
@@ -341,39 +301,28 @@ function UnauthorizedGate() {
             </p>
           )}
           <div className="mb-6 space-y-1 text-sm text-muted-foreground">
-            <p>
-              <T k="audit.routes.institutional.siEresPersonalDeUnaInstitucionAprobada" />
-            </p>
+            <p>Si eres personal de una institución aprobada:</p>
             <ul className="list-disc pl-5 text-xs">
-              <li>
-                <T k="audit.routes.institutional.solicitaAlAdministradorBASUFUnaInvitacionAl" />
-              </li>
-              <li>
-                <T k="audit.routes.institutional.unaVezEnviadaLaInvitacionCierraSesion" />
-              </li>
+              <li>Solicita al administrador BASUF una invitación al correo con que iniciaste sesión.</li>
+              <li>Una vez enviada la invitación, cierra sesión y vuelve a entrar para activarla.</li>
             </ul>
           </div>
 
-          <form
-            onSubmit={submit}
-            className="space-y-3 rounded-lg border border-primary/30 bg-primary/5 p-4"
-          >
+          <form onSubmit={submit} className="space-y-3 rounded-lg border border-primary/30 bg-primary/5 p-4">
             <p className="text-xs font-semibold text-foreground">
-              <T k="audit.routes.institutional.personalInternoBASUFIngresaElCodigoMaestro" />
+              ¿Personal interno BASUF? Ingresa el código maestro para obtener rol
+              de administrador.
             </p>
             <input
               type="password"
               required
-              placeholder={t("audit.institutional.internalCodePlaceholder")}
+              placeholder="Código interno BASUF"
               className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-ring"
               value={code}
               onChange={(e) => setCode(e.target.value)}
             />
             <p className="text-[11px] text-muted-foreground">
-              <T k="audit.routes.institutional.demo" />
-              <span className="font-mono">
-                <T k="audit.routes.institutional.bASUFMASTER" />
-              </span>
+              Demo: <span className="font-mono">BASUF-MASTER</span>
             </p>
             {claimError && (
               <p className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-xs text-destructive">
@@ -386,7 +335,7 @@ function UnauthorizedGate() {
               className="inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:opacity-60"
             >
               <KeyRound className="h-4 w-4" aria-hidden />
-              {busy ? t("audit.institutional.verifying") : t("audit.institutional.claimMaster")}
+              {busy ? "Verificando…" : "Reclamar rol BASUF Master"}
             </button>
           </form>
 
@@ -396,7 +345,7 @@ function UnauthorizedGate() {
             className="mt-6 inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium transition hover:bg-accent"
           >
             <LogOut className="h-4 w-4" aria-hidden />
-            <T k="audit.routes.institutional.cerrarSesion" />
+            Cerrar sesión
           </button>
         </div>
       </main>
@@ -406,7 +355,7 @@ function UnauthorizedGate() {
 }
 
 function Shell() {
-  const { t } = useT();
+  const { t: _t } = useT();
   const { session, signOut } = useInstitutionalSession();
   const isAdmin = session?.role === "admin";
 
@@ -427,17 +376,17 @@ function Shell() {
             </span>
             <div>
               <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                <T k="audit.routes.institutional.sesionActivaComo" />
+                Sesión activa como
               </p>
               <p className="text-sm font-semibold">
                 {session?.operatorName} · {session?.orgName}
               </p>
               <p className="text-xs text-muted-foreground">
                 {session?.role === "admin"
-                  ? t("audit.roles.admin")
+                  ? "Administrador BASUF"
                   : session?.role === "reviewer"
-                    ? t("audit.roles.reviewer")
-                    : t("audit.roles.viewer")}
+                  ? "Revisor"
+                  : "Consulta"}
               </p>
             </div>
           </div>
@@ -447,20 +396,20 @@ function Shell() {
             className="inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium transition hover:bg-accent"
           >
             <LogOut className="h-4 w-4" aria-hidden />
-            <T k="audit.routes.institutional.cerrarSesion" />
+            Cerrar sesión
           </button>
         </div>
 
         <header className="mb-6">
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            <T k="audit.routes.institutional.panelInstitucional" />
+            Panel institucional
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            <T k="audit.routes.institutional.coordinacionDeCasosCoincidenciasYDatosSensibles" />
+            Coordinación de casos, coincidencias y datos sensibles bajo auditoría.
           </p>
         </header>
 
-        <nav className="mb-6 flex flex-wrap gap-1" aria-label={t("audit.institutional.sections")}>
+        <nav className="mb-6 flex flex-wrap gap-1" aria-label="Secciones institucionales">
           <Link
             to="/institutional"
             className={tabCls}
@@ -468,7 +417,7 @@ function Shell() {
             activeOptions={{ exact: true }}
           >
             <LayoutDashboard className="h-4 w-4" aria-hidden />
-            <T k="audit.routes.institutional.casos" />
+            Casos
           </Link>
           <Link
             to="/institutional/matches"
@@ -476,7 +425,7 @@ function Shell() {
             activeProps={{ className: `${tabCls} ${activeTabCls}` }}
           >
             <GitCompareArrows className="h-4 w-4" aria-hidden />
-            <T k="audit.routes.institutional.coincidencias" />
+            Coincidencias
           </Link>
           {isAdmin && (
             <Link
@@ -485,7 +434,7 @@ function Shell() {
               activeProps={{ className: `${tabCls} ${activeTabCls}` }}
             >
               <Building2 className="h-4 w-4" aria-hidden />
-              <T k="audit.routes.institutional.instituciones" />
+              Instituciones
             </Link>
           )}
           <Link
@@ -494,7 +443,7 @@ function Shell() {
             activeProps={{ className: `${tabCls} ${activeTabCls}` }}
           >
             <ScrollText className="h-4 w-4" aria-hidden />
-            <T k="audit.routes.institutional.auditoria" />
+            Auditoría
           </Link>
           <Link
             to="/institutional/integrations"
@@ -502,7 +451,7 @@ function Shell() {
             activeProps={{ className: `${tabCls} ${activeTabCls}` }}
           >
             <Radio className="h-4 w-4" aria-hidden />
-            <T k="audit.routes.institutional.integraciones" />
+            Integraciones
           </Link>
         </nav>
 

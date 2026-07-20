@@ -8,8 +8,6 @@ import { SkipLink } from "../components/SkipLink";
 import { institutionsRepository } from "../repositories/InstitutionsRepository";
 import type { Institution, InstitutionMembership } from "../domain/institutions";
 import { auditLog } from "../audit/auditLog";
-import { T } from "../i18n/T";
-import { useT } from "../i18n/LocaleProvider";
 
 export const Route = createFileRoute("/institutional/accept-invite")({
   head: () => ({
@@ -25,7 +23,6 @@ export const Route = createFileRoute("/institutional/accept-invite")({
 });
 
 function AcceptInvitePage() {
-  const { t } = useT();
   const { token } = useSearch({ from: "/institutional/accept-invite" });
   const [membership, setMembership] = useState<InstitutionMembership | null>(null);
   const [institution, setInstitution] = useState<Institution | null>(null);
@@ -34,23 +31,25 @@ function AcceptInvitePage() {
 
   useEffect(() => {
     if (!token) {
-      setError(t("audit.acceptInvite.missingToken"));
+      setError("Falta el token de invitación.");
       return;
     }
-    const m = institutionsRepository.listMemberships().find((mm) => mm.inviteToken === token);
+    const m = institutionsRepository
+      .listMemberships()
+      .find((mm) => mm.inviteToken === token);
     if (!m) {
-      setError(t("audit.acceptInvite.notFound"));
+      setError("La invitación no existe o ya fue procesada.");
       return;
     }
     setMembership(m);
     setInstitution(institutionsRepository.getById(m.institutionId));
-  }, [t, token]);
+  }, [token]);
 
   const activate = () => {
     if (!membership) return;
     const updated = institutionsRepository.activateInvite(membership.inviteToken!);
     if (!updated) {
-      setError(t("audit.acceptInvite.activationError"));
+      setError("No se pudo activar la invitación.");
       return;
     }
     setMembership(updated);
@@ -79,11 +78,9 @@ function AcceptInvitePage() {
               <ShieldCheck className="h-6 w-6" aria-hidden />
             </span>
             <div>
-              <h1 className="text-xl font-bold">
-                <T k="audit.routes.institutionalAcceptInvite.aceptarInvitacion" />
-              </h1>
+              <h1 className="text-xl font-bold">Aceptar invitación</h1>
               <p className="text-xs text-muted-foreground">
-                <T k="audit.routes.institutionalAcceptInvite.activaTuAccesoInstitucionalEnBASUF" />
+                Activa tu acceso institucional en BASUF.
               </p>
             </div>
           </div>
@@ -100,7 +97,7 @@ function AcceptInvitePage() {
               <dl className="space-y-2 rounded-lg border border-border bg-muted/30 p-3 text-sm">
                 <div>
                   <dt className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                    <T k="audit.routes.institutionalAcceptInvite.institucion" />
+                    Institución
                   </dt>
                   <dd className="font-medium">
                     {institution.name}
@@ -109,28 +106,28 @@ function AcceptInvitePage() {
                 </div>
                 <div>
                   <dt className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                    <T k="audit.routes.institutionalAcceptInvite.usuario" />
+                    Usuario
                   </dt>
                   <dd>
                     {membership.userName} ·{" "}
-                    <span className="font-mono text-muted-foreground">{membership.userEmail}</span>
+                    <span className="font-mono text-muted-foreground">
+                      {membership.userEmail}
+                    </span>
                   </dd>
                 </div>
                 <div>
                   <dt className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                    <T k="audit.routes.institutionalAcceptInvite.rol" />
+                    Rol
                   </dt>
                   <dd>
-                    {t(
-                      membership.institutionalRole === "reviewer"
-                        ? "audit.roles.reviewer"
-                        : "audit.roles.viewer",
-                    )}
+                    {membership.institutionalRole === "reviewer"
+                      ? "Revisor"
+                      : "Consulta"}
                   </dd>
                 </div>
                 <div>
                   <dt className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                    <T k="audit.routes.institutionalAcceptInvite.estado" />
+                    Estado
                   </dt>
                   <dd className="capitalize">{membership.status}</dd>
                 </div>
@@ -140,21 +137,23 @@ function AcceptInvitePage() {
                 <div className="mt-4 flex items-start gap-2 rounded-md border border-hope/40 bg-hope/10 p-3 text-sm text-hope-foreground">
                   <CheckCircle2 className="mt-0.5 h-4 w-4" aria-hidden />
                   <div>
-                    <p className="font-semibold">
-                      <T k="audit.routes.institutionalAcceptInvite.accesoActivo" />
-                    </p>
+                    <p className="font-semibold">Acceso activo.</p>
                     <p className="text-xs">
-                      <T k="audit.routes.institutionalAcceptInvite.yaPuedesIniciarSesionDesde" />{" "}
-                      <Link to="/institutional" className="underline">
-                        <T k="audit.routes.institutionalAcceptInvite.accesoInstitucional" />
+                      Ya puedes iniciar sesión desde{" "}
+                      <Link
+                        to="/institutional"
+                        className="underline"
+                      >
+                        Acceso Institucional
                       </Link>{" "}
-                      <T k="audit.routes.institutionalAcceptInvite.conTuCorreoYElRolAsignado" />
+                      con tu correo y el rol asignado.
                     </p>
                   </div>
                 </div>
               ) : institution.status !== "approved" ? (
                 <p className="mt-4 rounded-md border border-urgent/40 bg-urgent/10 px-3 py-2 text-xs text-muted-foreground">
-                  <T k="audit.routes.institutionalAcceptInvite.laInstitucionNoEstaAprobadaActualmenteContacta" />
+                  La institución no está aprobada actualmente. Contacta al
+                  administrador BASUF.
                 </p>
               ) : (
                 <button
@@ -163,7 +162,7 @@ function AcceptInvitePage() {
                   className="mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
                 >
                   <CheckCircle2 className="h-4 w-4" aria-hidden />
-                  <T k="audit.routes.institutionalAcceptInvite.activarMiAcceso" />
+                  Activar mi acceso
                 </button>
               )}
             </>

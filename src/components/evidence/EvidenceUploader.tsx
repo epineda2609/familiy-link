@@ -1,6 +1,9 @@
 import { useRef, useState } from "react";
 import { Upload, X } from "lucide-react";
-import type { EvidenceItem, EvidenceVisibility } from "../../domain/evidence";
+import type {
+  EvidenceItem,
+  EvidenceVisibility,
+} from "../../domain/evidence";
 import { evidenceRepository } from "../../repositories/EvidenceRepository";
 import { useT } from "../../i18n/LocaleProvider";
 import type { MessageKey } from "../../i18n/messages";
@@ -74,7 +77,8 @@ export function EvidenceUploader({
   const update = (idx: number, patch: Partial<Pending>) => {
     setItems((prev) => prev.map((it, i) => (i === idx ? { ...it, ...patch } : it)));
   };
-  const remove = (idx: number) => setItems((prev) => prev.filter((_, i) => i !== idx));
+  const remove = (idx: number) =>
+    setItems((prev) => prev.filter((_, i) => i !== idx));
 
   const saveAll = async () => {
     let count = 0;
@@ -111,7 +115,9 @@ export function EvidenceUploader({
   return (
     <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
       <h3 className="text-sm font-semibold">{t("evidence.uploader.title")}</h3>
-      <p className="mt-1 text-xs text-muted-foreground">{t("evidence.uploader.help")}</p>
+      <p className="mt-1 text-xs text-muted-foreground">
+        {t("evidence.uploader.help")}
+      </p>
 
       <div className="mt-3">
         <input
@@ -188,7 +194,7 @@ export function EvidenceUploader({
                 type="button"
                 onClick={() => remove(i)}
                 className="self-start rounded-md border border-input bg-background p-1 text-muted-foreground hover:bg-accent"
-                aria-label={t("audit.common.remove")}
+                aria-label="Quitar"
               >
                 <X className="h-3.5 w-3.5" />
               </button>

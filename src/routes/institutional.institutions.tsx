@@ -20,6 +20,8 @@ import {
   type CreateInstitutionInput,
 } from "../repositories/InstitutionsRepository";
 import {
+  INSTITUTION_STATUS_LABELS_ES,
+  INSTITUTION_TYPE_LABELS_ES,
   verificationLevel,
   type Institution,
   type InstitutionStatus,
@@ -28,9 +30,6 @@ import {
 } from "../domain/institutions";
 import { auditLog } from "../audit/auditLog";
 import { toast } from "../components/Toast";
-import { T } from "../i18n/T";
-import { useT } from "../i18n/LocaleProvider";
-import type { MessageKey } from "../i18n/messages";
 
 export const Route = createFileRoute("/institutional/institutions")({
   head: () => ({
@@ -76,33 +75,7 @@ const STATUSES: InstitutionStatus[] = [
   "reference",
 ];
 
-const TYPE_KEYS: Record<InstitutionType, MessageKey> = {
-  un_agency: "audit.institutionTypes.unAgency",
-  red_cross: "audit.institutionTypes.redCross",
-  civil_protection: "audit.institutionTypes.civilProtection",
-  fire: "audit.institutionTypes.fire",
-  usar: "audit.institutionTypes.usar",
-  hospital: "audit.institutionTypes.hospital",
-  forensic: "audit.institutionTypes.forensic",
-  shelter: "audit.institutionTypes.shelter",
-  humanitarian: "audit.institutionTypes.humanitarian",
-  child_protection: "audit.institutionTypes.childProtection",
-  migration: "audit.institutionTypes.migration",
-  government: "audit.institutionTypes.government",
-  other: "audit.institutionTypes.other",
-};
-
-const STATUS_KEYS: Record<InstitutionStatus, MessageKey> = {
-  pending: "audit.institutionStatus.pending",
-  approved: "audit.institutionStatus.approved",
-  rejected: "audit.institutionStatus.rejected",
-  suspended: "audit.institutionStatus.suspended",
-  archived: "audit.institutionStatus.archived",
-  reference: "audit.institutionStatus.reference",
-};
-
 function InstitutionsAdminPage() {
-  const { t } = useT();
   const { session } = useInstitutionalSession();
   const isAdmin = session?.role === "admin";
 
@@ -145,13 +118,13 @@ function InstitutionsAdminPage() {
     return (
       <div className="rounded-xl border border-destructive/40 bg-destructive/10 p-6">
         <p className="text-sm font-medium text-destructive">
-          <T k="audit.routes.institutionalInstitutions.seccionRestringidaSoloParaAdministradoresBASUF" />
+          Sección restringida. Sólo para administradores BASUF.
         </p>
         <Link
           to="/institutional"
           className="mt-3 inline-block text-xs font-medium text-primary hover:underline"
         >
-          <T k="audit.routes.institutionalInstitutions.volverAlPanel" />
+          ← Volver al panel
         </Link>
       </div>
     );
@@ -163,18 +136,23 @@ function InstitutionsAdminPage() {
     role: session!.role,
   };
 
-  const changeStatus = (inst: Institution, next: InstitutionStatus, note?: string) => {
+  const changeStatus = (
+    inst: Institution,
+    next: InstitutionStatus,
+    label: string,
+    note?: string,
+  ) => {
     institutionsRepository.updateStatus(inst.id, next, actor.operatorName, note);
     const action =
       next === "approved"
         ? "institution.approve"
         : next === "rejected"
-          ? "institution.reject"
-          : next === "suspended"
-            ? "institution.suspend"
-            : next === "archived"
-              ? "institution.archive"
-              : "institution.reactivate";
+        ? "institution.reject"
+        : next === "suspended"
+        ? "institution.suspend"
+        : next === "archived"
+        ? "institution.archive"
+        : "institution.reactivate";
     auditLog.record({
       actor,
       action: action as
@@ -187,42 +165,26 @@ function InstitutionsAdminPage() {
       targetLabel: inst.name,
       metadata: { note },
     });
-    toast.success(
-      t("audit.institutions.statusChangedToast", { status: t(STATUS_KEYS[next]) }),
-      inst.name,
-    );
+    toast.success(`Institución ${label}`, inst.name);
   };
 
   return (
     <>
       {/* Indicadores */}
       <section className="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-        <MiniStat label={t("audit.institutions.approvedStat")} value={stats.approved} tone="hope" />
-        <MiniStat label={t("audit.institutions.pendingStat")} value={stats.pending} tone="urgent" />
-        <MiniStat
-          label={t("audit.institutions.suspendedStat")}
-          value={stats.suspended}
-          tone="urgent"
-        />
-        <MiniStat
-          label={t("audit.institutions.activeUsersStat")}
-          value={stats.activeUsers}
-          tone="primary"
-        />
-        <MiniStat
-          label={t("audit.institutions.countriesStat")}
-          value={stats.countries}
-          tone="default"
-        />
+        <MiniStat label="Aprobadas" value={stats.approved} tone="hope" />
+        <MiniStat label="Pendientes" value={stats.pending} tone="urgent" />
+        <MiniStat label="Suspendidas" value={stats.suspended} tone="urgent" />
+        <MiniStat label="Usuarios activos" value={stats.activeUsers} tone="primary" />
+        <MiniStat label="Países representados" value={stats.countries} tone="default" />
       </section>
 
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold">
-            <T k="audit.routes.institutionalInstitutions.instituciones" />
-          </h2>
+          <h2 className="text-lg font-semibold">Instituciones</h2>
           <p className="text-xs text-muted-foreground">
-            <T k="audit.routes.institutionalInstitutions.registroAprobacionYMembresiasSoloInstitucionesAprobadas" />
+            Registro, aprobación y membresías. Sólo instituciones aprobadas
+            aparecen en Acceso Institucional.
           </p>
         </div>
         <button
@@ -231,20 +193,17 @@ function InstitutionsAdminPage() {
           className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
         >
           <Plus className="h-4 w-4" aria-hidden />
-          <T k="audit.routes.institutionalInstitutions.nuevaInstitucion" />
+          Nueva institución
         </button>
       </div>
 
       {/* Filtros */}
       <div className="mb-4 flex flex-wrap items-center gap-2 rounded-lg border border-border bg-card p-3">
         <div className="relative flex-1 min-w-[200px]">
-          <Search
-            className="pointer-events-none absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-            aria-hidden
-          />
+          <Search className="pointer-events-none absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
           <input
             type="search"
-            placeholder={t("audit.institutions.searchPlaceholder")}
+            placeholder="Buscar por nombre, sigla o país"
             className="w-full rounded-md border border-input bg-background pl-8 pr-3 py-1.5 text-sm"
             value={q}
             onChange={(e) => {
@@ -261,12 +220,10 @@ function InstitutionsAdminPage() {
           }}
           className="rounded-md border border-input bg-background px-2 py-1.5 text-sm"
         >
-          <option value="">
-            <T k="audit.routes.institutionalInstitutions.todosLosEstados" />
-          </option>
+          <option value="">Todos los estados</option>
           {STATUSES.map((s) => (
             <option key={s} value={s}>
-              {t(STATUS_KEYS[s])}
+              {INSTITUTION_STATUS_LABELS_ES[s]}
             </option>
           ))}
         </select>
@@ -278,9 +235,7 @@ function InstitutionsAdminPage() {
           }}
           className="rounded-md border border-input bg-background px-2 py-1.5 text-sm"
         >
-          <option value="">
-            <T k="audit.routes.institutionalInstitutions.todosLosPaises" />
-          </option>
+          <option value="">Todos los países</option>
           {countries.map((c) => (
             <option key={c} value={c}>
               {c}
@@ -295,12 +250,10 @@ function InstitutionsAdminPage() {
           }}
           className="rounded-md border border-input bg-background px-2 py-1.5 text-sm"
         >
-          <option value="">
-            <T k="audit.routes.institutionalInstitutions.todosLosTipos" />
-          </option>
+          <option value="">Todos los tipos</option>
           {TYPES.map((tp) => (
             <option key={tp} value={tp}>
-              {t(TYPE_KEYS[tp])}
+              {INSTITUTION_TYPE_LABELS_ES[tp]}
             </option>
           ))}
         </select>
@@ -311,70 +264,59 @@ function InstitutionsAdminPage() {
         <table className="min-w-full text-sm">
           <thead className="border-b border-border bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
             <tr>
-              <th className="px-4 py-3 font-medium">
-                <T k="audit.routes.institutionalInstitutions.nombre" />
-              </th>
-              <th className="px-4 py-3 font-medium">
-                <T k="audit.routes.institutionalInstitutions.sigla" />
-              </th>
-              <th className="px-4 py-3 font-medium">
-                <T k="audit.routes.institutionalInstitutions.pais" />
-              </th>
-              <th className="px-4 py-3 font-medium">
-                <T k="audit.routes.institutionalInstitutions.tipo" />
-              </th>
-              <th className="px-4 py-3 font-medium">
-                <T k="audit.routes.institutionalInstitutions.estado" />
-              </th>
-              <th className="px-4 py-3 font-medium">
-                <T k="audit.routes.institutionalInstitutions.usuarios" />
-              </th>
-              <th className="px-4 py-3 font-medium">
-                <T k="audit.routes.institutionalInstitutions.solicitud" />
-              </th>
-              <th className="px-4 py-3 font-medium">
-                <T k="audit.routes.institutionalInstitutions.aprobacion" />
-              </th>
-              <th className="px-4 py-3 font-medium">
-                <T k="audit.routes.institutionalInstitutions.acciones" />
-              </th>
+              <th className="px-4 py-3 font-medium">Nombre</th>
+              <th className="px-4 py-3 font-medium">Sigla</th>
+              <th className="px-4 py-3 font-medium">País</th>
+              <th className="px-4 py-3 font-medium">Tipo</th>
+              <th className="px-4 py-3 font-medium">Estado</th>
+              <th className="px-4 py-3 font-medium">Usuarios</th>
+              <th className="px-4 py-3 font-medium">Solicitud</th>
+              <th className="px-4 py-3 font-medium">Aprobación</th>
+              <th className="px-4 py-3 font-medium">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {paged.map((i) => (
-              <tr key={i.id} className="border-b border-border/50 last:border-0 hover:bg-muted/30">
+              <tr
+                key={i.id}
+                className="border-b border-border/50 last:border-0 hover:bg-muted/30"
+              >
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2 font-medium">
                     {i.name}
                     {i.status === "approved" && (
                       <span
-                        title={t("audit.institutions.verifiedTitle")}
+                        title="Verificada por BASUF"
                         className="inline-flex items-center gap-1 rounded-full border border-hope/40 bg-hope/20 px-1.5 py-0.5 text-[10px] font-semibold text-hope-foreground"
                       >
                         <ShieldCheck className="h-3 w-3" aria-hidden />
-                        <T k="audit.routes.institutionalInstitutions.verificada" />
+                        Verificada
                       </span>
                     )}
                   </div>
                   <div className="text-[11px] text-muted-foreground">
                     {verificationLevel(i) === "complete"
-                      ? t("audit.institutions.verificationComplete")
+                      ? "Verificación completa"
                       : verificationLevel(i) === "intermediate"
-                        ? t("audit.institutions.verificationIntermediate")
-                        : t("audit.institutions.verificationBasic")}
+                      ? "Verificación intermedia"
+                      : "Verificación básica"}
                   </div>
                 </td>
                 <td className="px-4 py-3 text-xs">{i.acronym ?? "—"}</td>
                 <td className="px-4 py-3 text-xs">{i.country}</td>
-                <td className="px-4 py-3 text-xs">{t(TYPE_KEYS[i.institutionType])}</td>
+                <td className="px-4 py-3 text-xs">
+                  {INSTITUTION_TYPE_LABELS_ES[i.institutionType]}
+                </td>
                 <td className="px-4 py-3">
                   <span
                     className={`rounded-full border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${STATUS_TONE[i.status]}`}
                   >
-                    {t(STATUS_KEYS[i.status])}
+                    {INSTITUTION_STATUS_LABELS_ES[i.status]}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-xs">{institutionsRepository.countUsers(i.id)}</td>
+                <td className="px-4 py-3 text-xs">
+                  {institutionsRepository.countUsers(i.id)}
+                </td>
                 <td className="px-4 py-3 text-xs text-muted-foreground">
                   {i.requestedAt.slice(0, 10)}
                 </td>
@@ -388,7 +330,7 @@ function InstitutionsAdminPage() {
                       onClick={() => setViewing(i)}
                       className="rounded-md border border-input px-2 py-1 text-xs font-medium hover:bg-accent"
                     >
-                      <T k="audit.routes.institutionalInstitutions.ver" />
+                      Ver
                     </button>
                     {(i.status === "pending" ||
                       i.status === "reference" ||
@@ -397,26 +339,26 @@ function InstitutionsAdminPage() {
                         type="button"
                         onClick={() => {
                           const note = window.prompt(
-                            t("audit.institutions.approvePrompt", { institution: i.name }),
+                            `Aprobar "${i.name}". Nota de verificación:`,
                             "",
                           );
                           if (note === null) return;
-                          changeStatus(i, "approved", note);
+                          changeStatus(i, "approved", "aprobada", note);
                         }}
                         className="inline-flex items-center gap-1 rounded-md bg-hope/20 px-2 py-1 text-xs font-semibold text-hope-foreground hover:bg-hope/30"
                       >
                         <ShieldCheck className="h-3 w-3" aria-hidden />
-                        <T k="audit.routes.institutionalInstitutions.aprobar" />
+                        Aprobar
                       </button>
                     )}
                     {i.status === "pending" && (
                       <button
                         type="button"
-                        onClick={() => changeStatus(i, "rejected")}
+                        onClick={() => changeStatus(i, "rejected", "rechazada")}
                         className="inline-flex items-center gap-1 rounded-md border border-destructive/40 bg-destructive/10 px-2 py-1 text-xs font-semibold text-destructive hover:bg-destructive/20"
                       >
                         <X className="h-3 w-3" aria-hidden />
-                        <T k="audit.routes.institutionalInstitutions.rechazar" />
+                        Rechazar
                       </button>
                     )}
                     {i.status === "approved" && (
@@ -427,36 +369,36 @@ function InstitutionsAdminPage() {
                           className="inline-flex items-center gap-1 rounded-md border border-input px-2 py-1 text-xs font-medium hover:bg-accent"
                         >
                           <UserPlus className="h-3 w-3" aria-hidden />
-                          <T k="audit.routes.institutionalInstitutions.invitar" />
+                          Invitar
                         </button>
                         <button
                           type="button"
-                          onClick={() => changeStatus(i, "suspended")}
+                          onClick={() => changeStatus(i, "suspended", "suspendida")}
                           className="inline-flex items-center gap-1 rounded-md border border-input px-2 py-1 text-xs font-medium hover:bg-accent"
                         >
                           <Ban className="h-3 w-3" aria-hidden />
-                          <T k="audit.routes.institutionalInstitutions.suspender" />
+                          Suspender
                         </button>
                       </>
                     )}
                     {i.status === "suspended" && (
                       <button
                         type="button"
-                        onClick={() => changeStatus(i, "approved")}
+                        onClick={() => changeStatus(i, "approved", "reactivada")}
                         className="inline-flex items-center gap-1 rounded-md border border-input px-2 py-1 text-xs font-medium hover:bg-accent"
                       >
                         <RotateCcw className="h-3 w-3" aria-hidden />
-                        <T k="audit.routes.institutionalInstitutions.reactivar" />
+                        Reactivar
                       </button>
                     )}
                     {(i.status === "rejected" || i.status === "suspended") && (
                       <button
                         type="button"
-                        onClick={() => changeStatus(i, "archived")}
+                        onClick={() => changeStatus(i, "archived", "archivada")}
                         className="inline-flex items-center gap-1 rounded-md border border-input px-2 py-1 text-xs font-medium hover:bg-accent"
                       >
                         <Archive className="h-3 w-3" aria-hidden />
-                        <T k="audit.routes.institutionalInstitutions.archivar" />
+                        Archivar
                       </button>
                     )}
                   </div>
@@ -466,7 +408,7 @@ function InstitutionsAdminPage() {
             {paged.length === 0 && (
               <tr>
                 <td colSpan={9} className="px-4 py-8 text-center text-sm text-muted-foreground">
-                  <T k="audit.routes.institutionalInstitutions.sinResultadosConLosFiltrosActuales" />
+                  Sin resultados con los filtros actuales.
                 </td>
               </tr>
             )}
@@ -482,12 +424,10 @@ function InstitutionsAdminPage() {
             onClick={() => setPage((p) => Math.max(0, p - 1))}
             className="rounded-md border border-input px-2 py-1 disabled:opacity-50"
           >
-            <T k="audit.routes.institutionalInstitutions.anterior" />
+            ← Anterior
           </button>
           <span className="text-muted-foreground">
-            <T k="audit.routes.institutionalInstitutions.pagina" />
-            {page + 1} <T k="audit.routes.institutionalInstitutions.de" />
-            {totalPages}
+            Página {page + 1} de {totalPages}
           </span>
           <button
             type="button"
@@ -495,7 +435,7 @@ function InstitutionsAdminPage() {
             onClick={() => setPage((p) => p + 1)}
             className="rounded-md border border-input px-2 py-1 disabled:opacity-50"
           >
-            <T k="audit.routes.institutionalInstitutions.siguiente" />
+            Siguiente →
           </button>
         </div>
       )}
@@ -512,7 +452,7 @@ function InstitutionsAdminPage() {
               targetLabel: inst.name,
               metadata: { country: inst.country, type: inst.institutionType },
             });
-            toast.success(t("audit.institutions.registeredToast"), inst.name);
+            toast.success("Institución registrada", inst.name);
             setCreateOpen(false);
           }}
         />
@@ -530,11 +470,16 @@ function InstitutionsAdminPage() {
               targetLabel: `${m.userName} · ${inviteFor.name}`,
               metadata: { role: m.institutionalRole, email: m.userEmail },
             });
-            toast.success(t("audit.institutions.invitationToast"), m.userEmail);
+            toast.success("Invitación creada", m.userEmail);
           }}
         />
       )}
-      {viewing && <ViewInstitutionModal institution={viewing} onClose={() => setViewing(null)} />}
+      {viewing && (
+        <ViewInstitutionModal
+          institution={viewing}
+          onClose={() => setViewing(null)}
+        />
+      )}
     </>
   );
 }
@@ -573,7 +518,6 @@ function ModalShell({
   onClose: () => void;
   children: React.ReactNode;
 }) {
-  const { t } = useT();
   return (
     <div
       className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/60 p-4"
@@ -591,7 +535,7 @@ function ModalShell({
             type="button"
             onClick={onClose}
             className="rounded-md p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
-            aria-label={t("audit.common.close")}
+            aria-label="Cerrar"
           >
             <X className="h-4 w-4" aria-hidden />
           </button>
@@ -611,7 +555,6 @@ function CreateInstitutionModal({
   onCreated: (i: Institution) => void;
   operator: string;
 }) {
-  const { t } = useT();
   const [form, setForm] = useState<CreateInstitutionInput>({
     name: "",
     acronym: "",
@@ -630,8 +573,10 @@ function CreateInstitutionModal({
   });
   const [error, setError] = useState<string | null>(null);
 
-  const set = <K extends keyof CreateInstitutionInput>(k: K, v: CreateInstitutionInput[K]) =>
-    setForm((prev) => ({ ...prev, [k]: v }));
+  const set = <K extends keyof CreateInstitutionInput>(
+    k: K,
+    v: CreateInstitutionInput[K],
+  ) => setForm((prev) => ({ ...prev, [k]: v }));
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -641,18 +586,20 @@ function CreateInstitutionModal({
       onCreated(inst);
     } catch (err) {
       if (err instanceof DuplicateInstitutionError) {
-        setError(t("audit.institutions.duplicateError"));
+        setError(
+          "Ya existe una institución con ese nombre, correo institucional o número de registro.",
+        );
       } else {
-        setError(t("audit.institutions.requiredError"));
+        setError("Faltan campos obligatorios.");
       }
     }
   };
 
   return (
-    <ModalShell title={t("audit.institutions.newTitle")} onClose={onClose}>
+    <ModalShell title="Nueva institución" onClose={onClose}>
       <form onSubmit={submit} className="space-y-3 text-sm">
         <div className="grid gap-3 sm:grid-cols-2">
-          <Field label={t("audit.institutions.officialNameLabel")}>
+          <Field label="Nombre oficial *">
             <input
               required
               value={form.name}
@@ -660,14 +607,14 @@ function CreateInstitutionModal({
               className="input"
             />
           </Field>
-          <Field label={t("audit.institutions.acronymLabel")}>
+          <Field label="Sigla">
             <input
               value={form.acronym ?? ""}
               onChange={(e) => set("acronym", e.target.value)}
               className="input"
             />
           </Field>
-          <Field label={t("audit.institutions.countryLabel")}>
+          <Field label="País *">
             <input
               required
               value={form.country}
@@ -675,20 +622,22 @@ function CreateInstitutionModal({
               className="input"
             />
           </Field>
-          <Field label={t("audit.institutions.typeLabel")}>
+          <Field label="Tipo de institución *">
             <select
               value={form.institutionType}
-              onChange={(e) => set("institutionType", e.target.value as InstitutionType)}
+              onChange={(e) =>
+                set("institutionType", e.target.value as InstitutionType)
+              }
               className="input"
             >
               {TYPES.map((tp) => (
                 <option key={tp} value={tp}>
-                  {t(TYPE_KEYS[tp])}
+                  {INSTITUTION_TYPE_LABELS_ES[tp]}
                 </option>
               ))}
             </select>
           </Field>
-          <Field label={t("audit.institutions.officialEmailLabel")}>
+          <Field label="Correo institucional *">
             <input
               required
               type="email"
@@ -697,14 +646,14 @@ function CreateInstitutionModal({
               className="input"
             />
           </Field>
-          <Field label={t("audit.institutions.contactNameLabel")}>
+          <Field label="Persona de contacto">
             <input
               value={form.contactName ?? ""}
               onChange={(e) => set("contactName", e.target.value)}
               className="input"
             />
           </Field>
-          <Field label={t("audit.institutions.contactEmailLabel")}>
+          <Field label="Correo de contacto">
             <input
               type="email"
               value={form.contactEmail ?? ""}
@@ -712,14 +661,14 @@ function CreateInstitutionModal({
               className="input"
             />
           </Field>
-          <Field label={t("audit.institutions.phoneLabel")}>
+          <Field label="Teléfono">
             <input
               value={form.contactPhone ?? ""}
               onChange={(e) => set("contactPhone", e.target.value)}
               className="input"
             />
           </Field>
-          <Field label={t("audit.institutions.websiteLabel")}>
+          <Field label="Sitio web">
             <input
               type="url"
               value={form.website ?? ""}
@@ -727,7 +676,7 @@ function CreateInstitutionModal({
               className="input"
             />
           </Field>
-          <Field label={t("audit.institutions.registrationLabel")}>
+          <Field label="Número de registro">
             <input
               value={form.registrationNumber ?? ""}
               onChange={(e) => set("registrationNumber", e.target.value)}
@@ -735,14 +684,14 @@ function CreateInstitutionModal({
             />
           </Field>
         </div>
-        <Field label={t("audit.institutions.addressLabel")}>
+        <Field label="Dirección">
           <input
             value={form.address ?? ""}
             onChange={(e) => set("address", e.target.value)}
             className="input"
           />
         </Field>
-        <Field label={t("audit.institutions.descriptionLabel")}>
+        <Field label="Descripción">
           <textarea
             rows={2}
             value={form.description ?? ""}
@@ -750,7 +699,7 @@ function CreateInstitutionModal({
             className="input"
           />
         </Field>
-        <Field label={t("audit.institutions.notesLabel")}>
+        <Field label="Notas internas de verificación">
           <textarea
             rows={2}
             value={form.verificationNotes ?? ""}
@@ -771,13 +720,13 @@ function CreateInstitutionModal({
             onClick={onClose}
             className="rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium hover:bg-accent"
           >
-            <T k="audit.routes.institutionalInstitutions.cancelar" />
+            Cancelar
           </button>
           <button
             type="submit"
             className="rounded-md bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
           >
-            <T k="audit.routes.institutionalInstitutions.registrarNbsp" />
+            Registrar&nbsp;
           </button>
         </div>
         <style>{`.input{width:100%;border:1px solid hsl(var(--input));background:hsl(var(--background));border-radius:0.375rem;padding:0.375rem 0.5rem;font-size:0.875rem;}`}</style>
@@ -806,7 +755,6 @@ function InviteUserModal({
   onClose: () => void;
   onInvited: (m: ReturnType<typeof institutionsRepository.inviteUser>) => void;
 }) {
-  const { t } = useT();
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [role, setRole] = useState<MembershipRole>("reviewer");
@@ -831,9 +779,11 @@ function InviteUserModal({
       onInvited(m);
     } catch (err) {
       if (err instanceof DuplicateMembershipError) {
-        setError(t("audit.institutions.membershipDuplicateError"));
+        setError(
+          "Ese correo ya está vinculado a una institución. Cada cuenta debe ser única.",
+        );
       } else {
-        setError(t("audit.institutions.requiredError"));
+        setError("Faltan campos obligatorios.");
       }
     }
   };
@@ -854,12 +804,12 @@ function InviteUserModal({
 
   return (
     <ModalShell
-      title={t("audit.institutions.inviteTitle", { institution: institution.name })}
+      title={`Invitar usuario · ${institution.name}`}
       onClose={onClose}
     >
       {!invited ? (
         <form onSubmit={submit} className="space-y-3 text-sm">
-          <Field label={t("audit.institutions.nameRequiredLabel")}>
+          <Field label="Nombre completo *">
             <input
               required
               value={userName}
@@ -867,7 +817,7 @@ function InviteUserModal({
               className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
             />
           </Field>
-          <Field label={t("audit.institutions.emailRequiredLabel")}>
+          <Field label="Correo electrónico *">
             <input
               required
               type="email"
@@ -876,18 +826,14 @@ function InviteUserModal({
               className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
             />
           </Field>
-          <Field label={t("audit.institutions.roleRequiredLabel")}>
+          <Field label="Rol institucional *">
             <select
               value={role}
               onChange={(e) => setRole(e.target.value as MembershipRole)}
               className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
             >
-              <option value="reviewer">
-                <T k="audit.routes.institutionalInstitutions.revisor" />
-              </option>
-              <option value="viewer">
-                <T k="audit.routes.institutionalInstitutions.consulta" />
-              </option>
+              <option value="reviewer">Revisor</option>
+              <option value="viewer">Consulta</option>
             </select>
           </Field>
           {error && (
@@ -901,32 +847,23 @@ function InviteUserModal({
               onClick={onClose}
               className="rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium hover:bg-accent"
             >
-              <T k="audit.routes.institutionalInstitutions.cancelar" />
+              Cancelar
             </button>
             <button
               type="submit"
               className="rounded-md bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
             >
-              <T k="audit.routes.institutionalInstitutions.generarInvitacion" />
+              Generar invitación
             </button>
           </div>
         </form>
       ) : (
         <div className="space-y-3 text-sm">
           <p className="rounded-md border border-hope/40 bg-hope/10 px-3 py-2 text-xs text-hope-foreground">
-            <T k="audit.routes.institutionalInstitutions.invitacionCreadaPara" />
-            <strong>{invited.userEmail}</strong>{" "}
-            <T k="audit.routes.institutionalInstitutions.como" />{" "}
-            <strong>
-              {t(
-                invited.institutionalRole === "reviewer"
-                  ? "audit.roles.reviewer"
-                  : "audit.roles.viewer",
-              )}
-            </strong>
-            .
+            Invitación creada para <strong>{invited.userEmail}</strong> como{" "}
+            <strong>{invited.institutionalRole === "reviewer" ? "Revisor" : "Consulta"}</strong>.
           </p>
-          <Field label={t("audit.institutions.invitationLinkLabel")}>
+          <Field label="Enlace de invitación">
             <input
               readOnly
               value={link}
@@ -935,7 +872,8 @@ function InviteUserModal({
             />
           </Field>
           <p className="text-[11px] text-muted-foreground">
-            <T k="audit.routes.institutionalInstitutions.comparteEsteEnlacePorUnCanalSeguro" />
+            Comparte este enlace por un canal seguro. El usuario lo abrirá para
+            activar su acceso.
           </p>
           <div className="flex justify-end gap-2 pt-2">
             <button
@@ -946,12 +884,12 @@ function InviteUserModal({
               {copied ? (
                 <>
                   <CheckCircle2 className="h-4 w-4 text-hope-foreground" aria-hidden />
-                  <T k="audit.routes.institutionalInstitutions.copiado" />
+                  Copiado
                 </>
               ) : (
                 <>
                   <Copy className="h-4 w-4" aria-hidden />
-                  <T k="audit.routes.institutionalInstitutions.copiarEnlaceDeInvitacion" />
+                  Copiar enlace de invitación
                 </>
               )}
             </button>
@@ -960,7 +898,7 @@ function InviteUserModal({
               onClick={onClose}
               className="rounded-md bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
             >
-              <T k="audit.routes.institutionalInstitutions.cerrar" />
+              Cerrar
             </button>
           </div>
         </div>
@@ -976,7 +914,6 @@ function ViewInstitutionModal({
   institution: Institution;
   onClose: () => void;
 }) {
-  const { t } = useT();
   const members = institutionsRepository.listMemberships(institution.id);
   const level = verificationLevel(institution);
   return (
@@ -986,56 +923,39 @@ function ViewInstitutionModal({
           <span
             className={`rounded-full border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${STATUS_TONE[institution.status]}`}
           >
-            {t(STATUS_KEYS[institution.status])}
+            {INSTITUTION_STATUS_LABELS_ES[institution.status]}
           </span>
           {institution.status === "approved" && (
             <span className="inline-flex items-center gap-1 rounded-full border border-hope/40 bg-hope/20 px-2 py-0.5 text-[11px] font-semibold text-hope-foreground">
               <ShieldCheck className="h-3 w-3" aria-hidden />
-              <T k="audit.routes.institutionalInstitutions.verificadaPorBASUF" />
+              Verificada por BASUF
             </span>
           )}
           <span className="rounded-full border border-primary/30 bg-primary/5 px-2 py-0.5 text-[11px] font-semibold text-primary">
-            <T k="audit.routes.institutionalInstitutions.verificacion" />
-            {level === "complete"
-              ? t("audit.institutions.verificationComplete")
-              : level === "intermediate"
-                ? t("audit.institutions.verificationIntermediate")
-                : t("audit.institutions.verificationBasic")}
+            Verificación {level === "complete" ? "completa" : level === "intermediate" ? "intermedia" : "básica"}
           </span>
         </div>
         <dl className="grid grid-cols-2 gap-3">
-          <Row k={t("audit.institutions.acronymLabel")} v={institution.acronym ?? "—"} />
-          <Row k={t("audit.routes.institutionalInstitutions.pais")} v={institution.country} />
+          <Row k="Sigla" v={institution.acronym ?? "—"} />
+          <Row k="País" v={institution.country} />
           <Row
-            k={t("audit.routes.institutionalInstitutions.tipo")}
-            v={t(TYPE_KEYS[institution.institutionType])}
+            k="Tipo"
+            v={INSTITUTION_TYPE_LABELS_ES[institution.institutionType]}
           />
-          <Row k={t("audit.institutional.emailLabel")} v={institution.officialEmail} />
-          <Row k={t("audit.institutions.contactLabel")} v={institution.contactName ?? "—"} />
-          <Row
-            k={t("audit.institutions.contactEmailShortLabel")}
-            v={institution.contactEmail ?? "—"}
-          />
-          <Row k={t("audit.institutions.phoneLabel")} v={institution.contactPhone ?? "—"} />
-          <Row k={t("audit.institutions.websiteLabel")} v={institution.website ?? "—"} />
-          <Row
-            k={t("audit.institutions.legalRegistrationLabel")}
-            v={institution.registrationNumber ?? "—"}
-          />
-          <Row k={t("audit.institutions.addressLabel")} v={institution.address ?? "—"} />
-          <Row
-            k={t("audit.institutions.requestDateLabel")}
-            v={institution.requestedAt.slice(0, 10)}
-          />
-          <Row
-            k={t("audit.institutions.approvalDateLabel")}
-            v={institution.approvedAt?.slice(0, 10) ?? "—"}
-          />
+          <Row k="Correo institucional" v={institution.officialEmail} />
+          <Row k="Contacto" v={institution.contactName ?? "—"} />
+          <Row k="Correo contacto" v={institution.contactEmail ?? "—"} />
+          <Row k="Teléfono" v={institution.contactPhone ?? "—"} />
+          <Row k="Sitio web" v={institution.website ?? "—"} />
+          <Row k="Registro legal" v={institution.registrationNumber ?? "—"} />
+          <Row k="Dirección" v={institution.address ?? "—"} />
+          <Row k="Solicitud" v={institution.requestedAt.slice(0, 10)} />
+          <Row k="Aprobación" v={institution.approvedAt?.slice(0, 10) ?? "—"} />
         </dl>
         {institution.description && (
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              <T k="audit.routes.institutionalInstitutions.descripcion" />
+              Descripción
             </p>
             <p className="mt-1 text-sm">{institution.description}</p>
           </div>
@@ -1043,20 +963,17 @@ function ViewInstitutionModal({
         {institution.verificationNotes && (
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              <T k="audit.routes.institutionalInstitutions.notasDeVerificacion" />
+              Notas de verificación
             </p>
             <p className="mt-1 text-sm">{institution.verificationNotes}</p>
           </div>
         )}
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            <T k="audit.routes.institutionalInstitutions.usuariosVinculados" />
-            {members.length})
+            Usuarios vinculados ({members.length})
           </p>
           {members.length === 0 ? (
-            <p className="mt-1 text-xs text-muted-foreground">
-              <T k="audit.routes.institutionalInstitutions.sinUsuariosAun" />
-            </p>
+            <p className="mt-1 text-xs text-muted-foreground">Sin usuarios aún.</p>
           ) : (
             <ul className="mt-2 space-y-1">
               {members.map((m) => (
@@ -1066,15 +983,12 @@ function ViewInstitutionModal({
                 >
                   <span>
                     <span className="font-medium">{m.userName}</span> ·{" "}
-                    <span className="font-mono text-muted-foreground">{m.userEmail}</span>
+                    <span className="font-mono text-muted-foreground">
+                      {m.userEmail}
+                    </span>
                   </span>
                   <span className="rounded-full border border-primary/30 bg-primary/5 px-2 py-0.5 text-[10px] font-semibold text-primary">
-                    {t(
-                      m.institutionalRole === "reviewer"
-                        ? "audit.roles.reviewer"
-                        : "audit.roles.viewer",
-                    )}{" "}
-                    · {t(`audit.membershipStatus.${m.status}` as MessageKey)}
+                    {m.institutionalRole === "reviewer" ? "Revisor" : "Consulta"} · {m.status}
                   </span>
                 </li>
               ))}
@@ -1087,7 +1001,7 @@ function ViewInstitutionModal({
             onClick={onClose}
             className="rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium hover:bg-accent"
           >
-            <T k="audit.routes.institutionalInstitutions.cerrar" />
+            Cerrar
           </button>
         </div>
       </div>

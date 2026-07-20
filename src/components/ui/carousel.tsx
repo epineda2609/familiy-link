@@ -4,7 +4,6 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { T } from "../../i18n/T";
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -196,9 +195,7 @@ const CarouselPrevious = React.forwardRef<HTMLButtonElement, React.ComponentProp
         {...props}
       >
         <ArrowLeft className="h-4 w-4" />
-        <span className="sr-only">
-          <T k="audit.components.ui.carousel.previousSlide" />
-        </span>
+        <span className="sr-only">Previous slide</span>
       </Button>
     );
   },
@@ -226,9 +223,7 @@ const CarouselNext = React.forwardRef<HTMLButtonElement, React.ComponentProps<ty
         {...props}
       >
         <ArrowRight className="h-4 w-4" />
-        <span className="sr-only">
-          <T k="audit.components.ui.carousel.nextSlide" />
-        </span>
+        <span className="sr-only">Next slide</span>
       </Button>
     );
   },

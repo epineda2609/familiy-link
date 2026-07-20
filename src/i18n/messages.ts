@@ -9,24 +9,32 @@ import { it } from "./locales/it";
 import { de } from "./locales/de";
 import { tr } from "./locales/tr";
 import { ja } from "./locales/ja";
-import { auditedEs } from "./locales/audited";
-import { generatedTranslations } from "./locales/generatedTranslations";
 
-export type Locale = "es" | "en" | "pt" | "fr" | "ar" | "da" | "it" | "de" | "tr" | "ja";
+export type Locale =
+  | "es"
+  | "en"
+  | "pt"
+  | "fr"
+  | "ar"
+  | "da"
+  | "it"
+  | "de"
+  | "tr"
+  | "ja";
 
 export type { MessageDict, MessageKey };
 
 export const messages: Record<Locale, MessageDict> = {
-  es: { ...es, ...auditedEs },
-  en: { ...en, ...generatedTranslations.en },
-  pt: { ...pt, ...generatedTranslations.pt },
-  fr: { ...fr, ...generatedTranslations.fr },
-  ar: { ...ar, ...generatedTranslations.ar },
-  da: { ...da, ...generatedTranslations.da },
-  it: { ...it, ...generatedTranslations.it },
-  de: { ...de, ...generatedTranslations.de },
-  tr: { ...tr, ...generatedTranslations.tr },
-  ja: { ...ja, ...generatedTranslations.ja },
+  es,
+  en,
+  pt,
+  fr,
+  ar,
+  da,
+  it,
+  de,
+  tr,
+  ja,
 };
 
 export type LocaleMeta = {

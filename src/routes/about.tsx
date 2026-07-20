@@ -53,6 +53,9 @@ function AboutPage() {
               <p className="mt-4 text-lg text-muted-foreground">
                 {t("app.mission")}
               </p>
+              <p className="mt-4 text-lg font-semibold text-foreground">
+                {t("about.tagline")}
+              </p>
             </div>
           </div>
         </section>
@@ -121,6 +124,27 @@ function AboutPage() {
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
               {t("mission.originBody")}
+            </p>
+          </div>
+        </section>
+
+        {/* ¿Qué hace diferente a BASUF? */}
+        <section className="mx-auto max-w-7xl px-4 py-16">
+          <div className="rounded-xl border border-border bg-card p-6 sm:p-8">
+            <h3 className="text-lg font-semibold tracking-tight">
+              {t("about.differenceTitle")}
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
+              {t("about.differenceBody")}
+            </p>
+          </div>
+        </section>
+
+        {/* Cierre */}
+        <section className="mx-auto max-w-7xl px-4 py-16">
+          <div className="rounded-xl border border-border bg-card p-6 sm:p-8">
+            <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
+              {t("about.closing")}
             </p>
           </div>
         </section>

@@ -4,7 +4,7 @@ export const tr: MessageDict = {
   "app.name": "BASUF",
   "app.tagline": "Kardeşler aileleri birleştiriyor",
   "app.mission":
-    "Felaketlerle ayrılan insanları yeniden bir araya getiren insani bir ağ.",
+    "BASUF, acil durumlar, doğal afetler ve insani krizler sırasında ayrılan kişilerin yerini tespit etmeye, kimliklerini doğrulamaya ve yeniden bir araya getirmeye yardımcı olmak için tasarlanmış bir insani platformdur; aileleri yardım kuruluşlarıyla güvenli, sorumlu ve gizliliğe saygılı bir şekilde bağlar.",
   "demo.banner":
     "Demo ortamı — Gösterilen tüm veriler kurgusaldır.",
   "nav.home": "Ana sayfa",
@@ -27,19 +27,27 @@ export const tr: MessageDict = {
   "home.cta.report": "Bir kişiyi bildir",
   "mission.title": "Misyonumuz",
   "mission.subtitle":
-    "Her dosyanın, her aramanın ve her buluşmanın arkasındaki üç taahhüt.",
+    "Her aramayı, her bildirimi ve her mümkün buluşmayı taşıyan üç taahhüt.",
   "mission.pillar.humanity.title": "İnsanlık",
   "mission.pillar.humanity.desc":
-    "Her dosya bir kayıt değil, hikâyesi olan bir kişidir. Özen, saygı ve onurla tasarlıyoruz.",
+    "Her dosya bir kişiyi, bir aileyi ve bir hikâyeyi temsil eder. En zor anları geçirenler için empati, saygı ve onurla BASUF'u tasarladık.",
   "mission.pillar.traceability.title": "İzlenebilirlik",
   "mission.pillar.traceability.desc":
-    "Açık köken, doğrulanabilir güvenilirlik ve açığa çıkarılan her hassas veri için değiştirilemez denetim.",
+    "Her veri noktası kökenini ve doğrulama seviyesini korur; şeffaflığı, güveni ve süreç boyunca bilginin sorumlu şekilde yönetilmesini teşvik eder.",
   "mission.pillar.hope.title": "Umut",
   "mission.pillar.hope.desc":
-    "Kaos ile yeniden buluşma arasında; STK'lar, hastaneler, sığınaklar ve arama-kurtarma ekipleri için bir köprü.",
+    "Teknolojinin, belirsizlik ile yeniden buluşma arasında bir köprüye dönüşebileceğine ve aileler ile insani yardım kuruluşları arasındaki iş birliğini kolaylaştıracağına inanıyoruz.",
   "mission.originTitle": "BASUF neden var",
   "mission.originBody":
-    "İki Venezuelalı kardeşin acısından ve kararlılığından doğdu: geleneksel sistemler başarısız olduğunda gerçek ailelere yardım eden ciddi bir araç oluşturmak. Bugün dünyanın her yerindeki insani yardım kuruluşlarıyla iş birliği için açık bir temel.",
+    "BASUF çok basit bir sorudan doğdu:\n\nDiğer her şey çalışmayı bıraktığında bir aile, sevdiklerini nasıl bulabilir?\n\nDoğal bir afet veya insani kriz sonrasında iletişimler kesilir, kayıtlar parçalanır ve bilgiler hastaneler, sığınaklar, ekipler ve yardım kuruluşları arasında dağılır.\n\nFikir, acil durumlarda zaman ve bilginin belirsizlik ile yeniden buluşma arasındaki farkı yaratabileceğini anlayan iki Venezüellalı kardeşin ortak deneyim ve endişesinden doğdu.\n\nBöylece BASUF doğdu: arayanları yardım edebileceklerle buluşturmak için tasarlanan, her zaman gizlilik, onur ve insani protokollere saygı duyan bir platform.",
+  "about.tagline":
+    "Bilgiyi birleştiriyoruz. Aileleri kavuşturuyoruz.",
+  "about.differenceTitle":
+    "BASUF'u farklı kılan nedir?",
+  "about.differenceBody":
+    "BASUF yalnızca kayıp kişilerin bir kaydı değildir.\n\nVatandaşların bildirimlerini, insani yardım kuruluşlarının kaydettiği bilgilerle birleştirerek ailelerin yerini tespitini ve yeniden bir araya gelmesini hızlandırmaya yardımcı olan olası eşleşmeler üretir.\n\nHer eşleşme, bilginin kökenini korur ve hassas veriler paylaşılmadan önce bir inceleme sürecine olanak tanıyarak acil durumda daha koordineli, güvenli ve güvenilir bir yanıtı teşvik eder.",
+  "about.closing":
+    "Bugün BASUF, insani yardım kuruluşları, hastaneler, sığınaklar ve müdahale ekipleriyle iş birliği yaparak acil durumlarda koordinasyonu iyileştirmeye yönelik işlevsel bir prototiptir.\n\nÇünkü her bildirimin arkasında, birbirini yeniden görmeyi bekleyen bir aile var.",
   "home.stats.cases": "Kayıtlı vaka",
   "home.stats.reunions": "Yeniden buluşma",
   "home.stats.orgs": "Ortak kuruluş",

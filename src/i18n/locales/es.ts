@@ -1,11 +1,11 @@
 // BASUF — Español (locale base, define el shape de MessageKey).
-import type { AuditedMessageKey } from "./audited";
-
 const esDict = {
   "app.name": "BASUF",
   "app.tagline": "Brother And Sister Uniendo Familias",
-  "app.mission": "Somos una red humanitaria para reconectar a personas separadas por catástrofes.",
-  "demo.banner": "Entorno de demostración — Todos los datos mostrados son ficticios.",
+  "app.mission":
+    "BASUF es una plataforma humanitaria diseñada para ayudar a localizar, identificar y reunificar personas separadas durante emergencias, desastres naturales y crisis humanitarias, conectando a familias con organizaciones de respuesta de forma segura, responsable y respetando la privacidad de las personas.",
+  "demo.banner":
+    "Entorno de demostración — Todos los datos mostrados son ficticios.",
   "nav.home": "Inicio",
   "nav.search": "Buscar",
   "nav.report": "Reportar",
@@ -19,33 +19,39 @@ const esDict = {
   "hero.kicker": "Plataforma Humanitaria de reunificación y trazabilidad de personas por evento",
   "hero.contextLine":
     "Inspirada por la urgencia evidenciada tras los sismos de Venezuela del 24 de junio de 2026, BASUF ayuda a encontrar seres queridos cuando los registros, las comunicaciones y la coordinación fallan.",
-  "home.hero.title":
-    "Reunir familias es posible\nEncuentra a tus seres queridos despues de una emergencia.\u00a0",
+  "home.hero.title": "Reunir familias es posible\nEncuentra a tus seres queridos despues de una emergencia.\u00a0",
   "home.hero.subtitle":
     "BASUF conecta reportes de familiares, rescatistas, hospitales, refugios y organizaciones humanitarias en Latinoamerica para ayudar a localizar e identificar personas de forma segura.",
   "home.cta.search": "Buscar una persona",
   "home.cta.report": "Reportar una persona",
+  "about.tagline": "Conectamos información. Reunimos familias.",
   "mission.title": "Nuestra misión",
   "mission.subtitle":
-    "Tres compromisos que sostienen cada ficha, cada búsqueda y cada reencuentro.",
+    "Tres compromisos que sostienen cada búsqueda, cada reporte y cada posible reencuentro.",
   "mission.pillar.humanity.title": "Humanidad",
   "mission.pillar.humanity.desc":
-    "Cada ficha es una persona con historia, no un registro. Diseñamos con cuidado, respeto y dignidad.",
+    "Cada ficha representa una persona, una familia y una historia. Diseñamos BASUF con empatía, respeto y dignidad para quienes atraviesan los momentos más difíciles.",
   "mission.pillar.traceability.title": "Trazabilidad",
   "mission.pillar.traceability.desc":
-    "Origen claro, confiabilidad verificable y auditoría inmutable de cada dato sensible que se revela.",
+    "Cada dato conserva su origen y nivel de verificación, promoviendo transparencia, confianza y un manejo responsable de la información durante todo el proceso.",
   "mission.pillar.hope.title": "Esperanza",
   "mission.pillar.hope.desc":
-    "Un puente entre el caos y la reunificación, construido para ONG, hospitales, refugios y brigadas.",
+    "Creemos que la tecnología puede convertirse en un puente entre la incertidumbre y el reencuentro, facilitando la colaboración entre familias y organizaciones humanitarias.",
   "mission.originTitle": "Por qué existe BASUF",
   "mission.originBody":
-    "Nace del dolor de una devastadora catástrofe y de la necesidad y meta de dos hermanos Venezolanos: crear una herramienta simple y funcional que ayude a familias reales cuando los sistemas tradicionales fallan conectando todos los eslavones para encontrar al familar.\u00A0\n\n\nHoy nuestro portal es una base abierta para colaborar con organizaciones humanitarias en cualquier parte del mundo.",
+    "BASUF nació de una pregunta muy sencilla:\n\n¿Cómo puede una familia encontrar a un ser querido cuando todo lo demás ha dejado de funcionar?\n\nDespués de un desastre natural o una crisis humanitaria, las comunicaciones fallan, los registros se fragmentan y la información queda dispersa entre hospitales, refugios, brigadas y organizaciones de ayuda.\n\nLa idea surgió de la experiencia y la preocupación compartida por dos hermanos venezolanos que comprendieron que, en una emergencia, el tiempo y la información pueden marcar la diferencia entre la incertidumbre y el reencuentro.\n\nAsí nació BASUF: una plataforma diseñada para conectar a quienes buscan con quienes pueden ayudar, respetando siempre la privacidad, la dignidad y los protocolos humanitarios.",
+  "about.differenceTitle": "¿Qué hace diferente a BASUF?",
+  "about.differenceBody":
+    "BASUF no es únicamente un registro de personas desaparecidas.\n\nIntegra reportes realizados por ciudadanos con información registrada por organizaciones humanitarias para generar posibles coincidencias que ayuden a acelerar la localización y reunificación familiar.\n\nCada coincidencia conserva el origen de la información y permite un proceso de revisión antes de compartir datos sensibles, promoviendo una respuesta más coordinada, segura y confiable durante una emergencia.",
+  "about.closing":
+    "Hoy BASUF es un prototipo funcional orientado a colaborar con organizaciones humanitarias, hospitales, refugios y equipos de respuesta para mejorar la coordinación durante emergencias.\n\nPorque detrás de cada reporte hay una familia esperando volver a encontrarse.",
   "home.stats.cases": "Casos registrados",
   "home.stats.reunions": "Reencuentros",
   "home.stats.orgs": "Organizaciones aliadas",
   "home.stats.countries": "Países cubiertos",
   "home.disasters.title": "Emergencias activas",
-  "home.disasters.subtitle": "Contextos donde BASUF está coordinando búsquedas.",
+  "home.disasters.subtitle":
+    "Contextos donde BASUF está coordinando búsquedas.",
   "home.how.title": "Cómo funciona",
   "home.how.step1.title": "Busca o reporta",
   "home.how.step1.desc":
@@ -72,10 +78,10 @@ const esDict = {
   "search.field.any": "Cualquiera",
   "search.submit": "Buscar",
   "search.reset": "Limpiar",
-  "search.results":
-    "Posibles coincidencias - requieren verificación humana antes de confirmar la identidad.\u00a0",
+  "search.results": "Posibles coincidencias - requieren verificación humana antes de confirmar la identidad.\u00a0",
   "search.activeOnly": "Mostrar solo casos activos",
-  "search.noResults": "No se encontraron coincidencias. Intenta ampliar los filtros.",
+  "search.noResults":
+    "No se encontraron coincidencias. Intenta ampliar los filtros.",
   "status.missing": "Desaparecida",
   "status.searching": "En búsqueda",
   "status.found": "Localizada",
@@ -92,7 +98,8 @@ const esDict = {
   "footer.rights": "Prototipo humanitario — Uso restringido.",
   "person.back": "Volver a resultados",
   "person.notFound.title": "Ficha no encontrada",
-  "person.notFound.desc": "La ficha solicitada no existe o fue retirada del panel público.",
+  "person.notFound.desc":
+    "La ficha solicitada no existe o fue retirada del panel público.",
   "person.section.identity": "Identidad pública",
   "person.section.lastSeen": "Último avistamiento",
   "person.section.features": "Señas distintivas",
@@ -129,7 +136,8 @@ const esDict = {
   "report.field.lastSeenLocation": "Lugar del último avistamiento",
   "report.field.lastSeenAt": "Fecha del último avistamiento",
   "report.field.features": "Señas distintivas visibles",
-  "report.field.features.hint": "Ropa, marcas visibles, objetos. No incluyas datos sensibles.",
+  "report.field.features.hint":
+    "Ropa, marcas visibles, objetos. No incluyas datos sensibles.",
   "report.field.reporterName": "Tu nombre",
   "report.field.reporterContact": "Contacto (email o teléfono)",
   "report.field.consent":
@@ -222,8 +230,10 @@ const esDict = {
   "match.empty": "No hay coincidencias con este filtro.",
   "match.personA": "Persona reportada",
   "match.personB": "Posible coincidencia",
-  "match.approvedNotice": "Al aprobar, ambos casos se marcarán como reunidas.",
-  "match.readonly.notice": "Rol de solo lectura: no puedes aprobar ni rechazar coincidencias.",
+  "match.approvedNotice":
+    "Al aprobar, ambos casos se marcarán como reunidas.",
+  "match.readonly.notice":
+    "Rol de solo lectura: no puedes aprobar ni rechazar coincidencias.",
   "inst.sensitive.reveal": "Ver contacto",
   "inst.sensitive.hide": "Ocultar contacto",
   "inst.sensitive.notice":
@@ -246,7 +256,8 @@ const esDict = {
   "audit.clear.confirm":
     "¿Vaciar todo el registro de auditoría? Esta acción no se puede deshacer en la demo.",
   "audit.export": "Exportar JSON",
-  "audit.adminOnly": "Solo los administradores pueden vaciar el registro de auditoría.",
+  "audit.adminOnly":
+    "Solo los administradores pueden vaciar el registro de auditoría.",
   "audit.action.auth.signIn": "Inicio de sesión",
   "audit.action.auth.signOut": "Cierre de sesión",
   "audit.action.case.statusChange": "Cambio de estado",
@@ -258,7 +269,8 @@ const esDict = {
   "audit.action.match.reset": "Coincidencia reabierta",
   "inst.tab.integrations": "Integraciones",
   "integrations.title": "Integraciones humanitarias",
-  "integrations.subtitle": "Conectores simulados con registros aliados y canales de notificación.",
+  "integrations.subtitle":
+    "Conectores simulados con registros aliados y canales de notificación.",
   "integrations.notice":
     "Entorno de demostración: los mensajes no se envían realmente. Los eventos quedan registrados y auditados.",
   "integrations.lastSync": "Última sincronización",
@@ -298,28 +310,28 @@ const esDict = {
   "toast.audit.cleared": "Registros de auditoría vaciados",
   "toast.audit.exported": "Registros exportados",
   "empty.search.title": "Sin coincidencias",
-  "empty.search.desc": "Prueba ampliar los filtros o revisa la ortografía del nombre.",
+  "empty.search.desc":
+    "Prueba ampliar los filtros o revisa la ortografía del nombre.",
   "empty.matches.title": "Sin coincidencias pendientes",
-  "empty.matches.desc": "El motor no encontró casos que revisar con este filtro.",
+  "empty.matches.desc":
+    "El motor no encontró casos que revisar con este filtro.",
   "empty.integrations.title": "Aún no hay envíos",
-  "empty.integrations.desc": "Los mensajes automáticos y de prueba aparecerán aquí.",
+  "empty.integrations.desc":
+    "Los mensajes automáticos y de prueba aparecerán aquí.",
   "empty.audit.title": "Sin registros aún",
   "empty.audit.desc": "Las acciones sensibles aparecerán aquí en tiempo real.",
   "nav.rescue": "Cadena de rescate",
   "rescue.title": "Cadena de Identidad de Rescate",
-  "rescue.subtitle":
-    "Trazabilidad continua desde el momento del rescate hasta la reunificación, incluso cuando aún no se conoce la identidad.",
+  "rescue.subtitle": "Trazabilidad continua desde el momento del rescate hasta la reunificación, incluso cuando aún no se conoce la identidad.",
   "rescue.differentiator.title": "Una identidad temporal que acompaña cada traslado\u00a0",
-  "rescue.differentiator.desc":
-    "Cuando una persona es localizada o rescatada, BASUF genera un código humano único. Las organizaciones autorizadas pueden utilizarlo para registrar traslados y actualizaciones sin exponer públicamente datos sensibles.",
+  "rescue.differentiator.desc": "Cuando una persona es localizada o rescatada, BASUF genera un código humano único. Las organizaciones autorizadas pueden utilizarlo para registrar traslados y actualizaciones sin exponer públicamente datos sensibles.",
   "rescue.home.hint": "INNOVACIÓN CLAVE: IDENTIDAD TRAZABLE DESDE EL RESCATE.",
   "rescue.lookup.title": "Buscar por código",
   "rescue.lookup.desc": "Ingresa el código corto o el ID temporal impreso en la pulsera de triaje.",
   "rescue.lookup.placeholder": "Ej. R-4F7K o TMP-2026-0624-014",
   "rescue.lookup.submit": "Buscar código",
   "rescue.lookup.notFound": "No hay registros con ese código. Verifica y vuelve a intentar.",
-  "rescue.lookup.offlineHint":
-    "Funciona con conectividad mínima: si el QR falla, escribe el código humano.",
+  "rescue.lookup.offlineHint": "Funciona con conectividad mínima: si el QR falla, escribe el código humano.",
   "rescue.record.tempId": "ID temporal",
   "rescue.record.shortCode": "Código corto",
   "rescue.record.status": "Estado en la cadena",
@@ -330,12 +342,10 @@ const esDict = {
   "rescue.record.unidentified": "Identidad aún desconocida",
   "rescue.record.linkedPerson": "Ficha pública vinculada",
   "rescue.badge.title": "Pulsera de triaje",
-  "rescue.badge.desc":
-    "Imprime esta vista y colócala en muñeca, pecho o pertenencias. El código humano es el respaldo cuando el QR no puede leerse.",
+  "rescue.badge.desc": "Imprime esta vista y colócala en muñeca, pecho o pertenencias. El código humano es el respaldo cuando el QR no puede leerse.",
   "rescue.badge.print": "Imprimir vista",
   "rescue.chain.title": "Cadena de custodia",
-  "rescue.chain.subtitle":
-    "Cada actor añade su eslabón. La línea temporal queda registrada de forma inmutable.",
+  "rescue.chain.subtitle": "Cada actor añade su eslabón. La línea temporal queda registrada de forma inmutable.",
   "rescue.chain.event.rescue": "Rescatada entre escombros",
   "rescue.chain.event.triage": "Triaje en campo",
   "rescue.chain.event.ambulance": "Traslado en ambulancia",
@@ -346,32 +356,23 @@ const esDict = {
   "rescue.chain.event.reunion": "Reunificación confirmada",
   "rescue.chain.event.review": "Revisión sensible o cierre",
   "rescue.contrib.title": "Cada actor añade su pieza",
-  "rescue.contrib.subtitle":
-    "La cadena de identidad se construye entre todos: la información aislada no salva vidas.",
+  "rescue.contrib.subtitle": "La cadena de identidad se construye entre todos: la información aislada no salva vidas.",
   "rescue.contrib.family": "Familias",
-  "rescue.contrib.family.desc":
-    "Reportan desapariciones, aportan señas distintivas y verifican coincidencias.",
+  "rescue.contrib.family.desc": "Reportan desapariciones, aportan señas distintivas y verifican coincidencias.",
   "rescue.contrib.rescuer": "Brigadas de rescate",
-  "rescue.contrib.rescuer.desc":
-    "Crean ingresos de rescate en el mismo lugar del hallazgo, con o sin identidad conocida.",
+  "rescue.contrib.rescuer.desc": "Crean ingresos de rescate en el mismo lugar del hallazgo, con o sin identidad conocida.",
   "rescue.contrib.hospital": "Hospitales",
-  "rescue.contrib.hospital.desc":
-    "Registran admisiones, altas, traslados internos y estado clínico general.",
+  "rescue.contrib.hospital.desc": "Registran admisiones, altas, traslados internos y estado clínico general.",
   "rescue.contrib.shelter": "Refugios",
-  "rescue.contrib.shelter.desc":
-    "Documentan la permanencia, custodia y necesidades de las personas resguardadas.",
+  "rescue.contrib.shelter.desc": "Documentan la permanencia, custodia y necesidades de las personas resguardadas.",
   "rescue.contrib.ngo": "ONG y verificadores",
-  "rescue.contrib.ngo.desc":
-    "Cruzan datos, verifican coincidencias y ayudan a corregir errores humanos.",
+  "rescue.contrib.ngo.desc": "Cruzan datos, verifican coincidencias y ayudan a corregir errores humanos.",
   "rescue.contrib.authority": "Autoridades",
-  "rescue.contrib.authority.desc":
-    "Validan cambios sensibles, firman cierres y garantizan cadena legal.",
+  "rescue.contrib.authority.desc": "Validan cambios sensibles, firman cierres y garantizan cadena legal.",
   "rescue.offline.title": "Preparada para baja conectividad",
-  "rescue.offline.desc":
-    "Código humano visible, búsqueda manual por código y arquitectura pensada para operar offline-first en próximas versiones.",
+  "rescue.offline.desc": "Código humano visible, búsqueda manual por código y arquitectura pensada para operar offline-first en próximas versiones.",
   "rescue.records.title": "Rescates recientes (demo)",
-  "rescue.records.subtitle":
-    "Ejemplos ficticios que ilustran la cadena. Toca uno para ver su línea temporal.",
+  "rescue.records.subtitle": "Ejemplos ficticios que ilustran la cadena. Toca uno para ver su línea temporal.",
   "nav.modes": "Modos",
   "mode.selector.label": "Modo operativo",
   "mode.current": "Modo actual",
@@ -427,8 +428,7 @@ const esDict = {
   "case.timeline.showTimeline": "Ver línea temporal",
   "case.timeline.showNarrative": "Ver como historia",
   "case.narrative.title": "Historia narrativa",
-  "case.narrative.disclaimer":
-    "Texto generado a partir de eventos registrados. Nunca inventa datos sin base.",
+  "case.narrative.disclaimer": "Texto generado a partir de eventos registrados. Nunca inventa datos sin base.",
   "case.narrative.empty": "Aún no hay suficientes eventos para construir una historia.",
   "case.event.reported_missing": "Reportada como desaparecida",
   "case.event.partial_id": "Identificación parcial",
@@ -444,8 +444,7 @@ const esDict = {
   "case.source.system": "Sistema",
   // ── Iteración N — Safe ID, evidencia, similitud visual, UX empática ──
   "safeId.title": "Pasaporte Humanitario Digital",
-  "safeId.subtitle":
-    "Referencia segura del caso. Se comparte, se imprime y se escanea sin exponer datos sensibles.",
+  "safeId.subtitle": "Referencia segura del caso. Se comparte, se imprime y se escanea sin exponer datos sensibles.",
   "safeId.short": "Código corto",
   "safeId.notFound": "No encontramos ese Pasaporte. Verifica el código.",
   "safeId.link": "Ver pasaporte digital",
@@ -471,11 +470,9 @@ const esDict = {
   "safeId.access.action.share": "Compartido",
   "safeId.print.subtitle": "Presenta este pasaporte en hospitales, refugios o puestos de control.",
   "evidence.title": "Evidencia y fotos",
-  "evidence.subtitle":
-    "Cada archivo tiene una audiencia. Nunca se exponen datos sensibles al público.",
+  "evidence.subtitle": "Cada archivo tiene una audiencia. Nunca se exponen datos sensibles al público.",
   "evidence.uploader.title": "Adjuntar fotos o documentos",
-  "evidence.uploader.help":
-    "Fotos de personas vivas, ropa, señas o documentos de apoyo. Máx. 5 archivos, 5 MB c/u.",
+  "evidence.uploader.help": "Fotos de personas vivas, ropa, señas o documentos de apoyo. Máx. 5 archivos, 5 MB c/u.",
   "evidence.uploader.add": "Seleccionar archivos",
   "evidence.uploader.visibility": "Visibilidad",
   "evidence.uploader.sensitive": "Marcar como contenido sensible",
@@ -489,19 +486,16 @@ const esDict = {
   "evidence.visibility.authority": "Autoridad",
   "evidence.visibility.restricted": "Restringida",
   "evidence.sensitive.badge": "Sensible",
-  "evidence.sensitive.hidden":
-    "Contenido sensible oculto. Un revisor puede mostrarlo bajo auditoría.",
+  "evidence.sensitive.hidden": "Contenido sensible oculto. Un revisor puede mostrarlo bajo auditoría.",
   "evidence.sensitive.reveal": "Mostrar (auditado)",
   "evidence.empty": "Aún no hay evidencia visible para esta audiencia.",
   "evidence.preview.tabs": "Vista previa por audiencia",
   "evidence.preview.desc.public": "Esto es lo que vería cualquier persona en el panel público.",
-  "evidence.preview.desc.family_verified":
-    "Esto es lo que verían familiares verificados por una ONG aliada.",
+  "evidence.preview.desc.family_verified": "Esto es lo que verían familiares verificados por una ONG aliada.",
   "evidence.preview.desc.institution": "Esto es lo que vería personal hospitalario o de refugio.",
   "evidence.preview.desc.authority": "Esto es lo que vería una autoridad con permisos ampliados.",
   "match.visual.title": "Asistencia por similitud visual",
-  "match.visual.disclaimer":
-    "La similitud fotográfica es solo un factor más. No confirma identidad ni fallecimientos. Requiere verificación humana.",
+  "match.visual.disclaimer": "La similitud fotográfica es solo un factor más. No confirma identidad ni fallecimientos. Requiere verificación humana.",
   "match.visual.level.low": "Similitud baja",
   "match.visual.level.medium": "Similitud media",
   "match.visual.level.high": "Similitud alta",
@@ -571,7 +565,7 @@ const esDict = {
     "Las actualizaciones ciudadanas no modifican automáticamente los datos oficiales. Se validan antes de aplicarse.",
 } as const;
 
-export type MessageKey = keyof typeof esDict | AuditedMessageKey;
-export type MessageDict = Partial<Record<MessageKey, string>>;
+export type MessageDict = Partial<Record<keyof typeof esDict, string>>;
+export type MessageKey = keyof typeof esDict;
 
 export const es: MessageDict = esDict;

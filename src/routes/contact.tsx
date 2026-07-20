@@ -5,8 +5,6 @@ import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
 import { SkipLink } from "../components/SkipLink";
-import { T } from "../i18n/T";
-import { useT } from "../i18n/LocaleProvider";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -32,7 +30,6 @@ export const Route = createFileRoute("/contact")({
 type FieldErrors = { name?: string; email?: string; message?: string };
 
 function ContactPage() {
-  const { t } = useT();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -42,10 +39,11 @@ function ContactPage() {
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const next: FieldErrors = {};
-    if (!name.trim()) next.name = t("audit.contact.nameError");
+    if (!name.trim()) next.name = "Ingresa tu nombre.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()))
-      next.email = t("audit.contact.emailError");
-    if (message.trim().length < 10) next.message = t("audit.contact.messageError");
+      next.email = "Ingresa un correo válido.";
+    if (message.trim().length < 10)
+      next.message = "El mensaje debe tener al menos 10 caracteres.";
     setErrors(next);
     if (Object.keys(next).length === 0) {
       setSent(true);
@@ -61,13 +59,15 @@ function ContactPage() {
         <section className="border-b border-border">
           <div className="mx-auto max-w-5xl px-4 py-12 sm:py-16">
             <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              <T k="audit.routes.contact.contenidoDeEjemploDemostracion" />
+              Contenido de ejemplo · Demostración
             </p>
             <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-              <T k="audit.routes.contact.contacto" />
+              Contacto
             </h1>
             <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
-              <T k="audit.routes.contact.estamosDisponiblesParaOrganizacionesAliadasFamiliasQue" />
+              Estamos disponibles para organizaciones aliadas, familias que
+              buscan a un ser querido y equipos de campo. Elige el canal que
+              te resulte más cómodo.
             </p>
           </div>
         </section>
@@ -82,11 +82,9 @@ function ContactPage() {
                     <MapPin className="h-5 w-5" aria-hidden />
                   </span>
                   <div className="text-sm">
-                    <p className="font-semibold">
-                      <T k="audit.routes.contact.direccion" />
-                    </p>
+                    <p className="font-semibold">Dirección</p>
                     <p className="text-muted-foreground">
-                      <T k="audit.routes.contact.avHumanitaria1234CiudadCentralLaGuaira" />
+                      Av. Humanitaria 1234, Ciudad Central, La Guaira, Venezuela.
                     </p>
                   </div>
                 </li>
@@ -95,14 +93,12 @@ function ContactPage() {
                     <Mail className="h-5 w-5" aria-hidden />
                   </span>
                   <div className="text-sm">
-                    <p className="font-semibold">
-                      <T k="audit.routes.contact.correo" />
-                    </p>
+                    <p className="font-semibold">Correo</p>
                     <a
                       href="mailto:contacto@basuf.org"
                       className="text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
                     >
-                      <T k="audit.routes.contact.contactoBasufOrg" />
+                      contacto@basuf.org
                     </a>
                   </div>
                 </li>
@@ -111,9 +107,7 @@ function ContactPage() {
                     <MessageCircle className="h-5 w-5" aria-hidden />
                   </span>
                   <div className="text-sm">
-                    <p className="font-semibold">
-                      <T k="audit.routes.contact.whatsApp" />
-                    </p>
+                    <p className="font-semibold">WhatsApp</p>
                     <p className="text-muted-foreground">+58 9 11 5555-1234</p>
                   </div>
                 </li>
@@ -122,11 +116,10 @@ function ContactPage() {
                     <Clock className="h-5 w-5" aria-hidden />
                   </span>
                   <div className="text-sm">
-                    <p className="font-semibold">
-                      <T k="audit.routes.contact.horarioDeAtencion" />
-                    </p>
+                    <p className="font-semibold">Horario de atención</p>
                     <p className="text-muted-foreground">
-                      <T k="audit.routes.contact.lunesAViernes9001800" />
+                      Lunes a viernes, 9:00 – 18:00 (hora local). Guardia 24/7
+                      durante emergencias activas.
                     </p>
                   </div>
                 </li>
@@ -135,7 +128,7 @@ function ContactPage() {
               {/* Mapa estático simulado */}
               <div
                 role="img"
-                aria-label={t("audit.contact.mapLabel")}
+                aria-label="Mapa referencial de la ubicación de BASUF"
                 className="relative overflow-hidden rounded-xl border border-border bg-muted"
               >
                 <div
@@ -150,10 +143,10 @@ function ContactPage() {
                   <div className="flex flex-col items-center gap-2 rounded-lg bg-card/90 px-4 py-3 shadow-sm backdrop-blur">
                     <MapPin className="h-6 w-6 text-primary" aria-hidden />
                     <p className="text-xs font-medium">
-                      <T k="audit.routes.contact.avHumanitaria1234CiudadCentralLaGuaira2" />
+                      Av. Humanitaria 1234, Ciudad Central, La Guaira, Venezuela
                     </p>
                     <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                      <T k="audit.routes.contact.mapaReferencialDemostracion" />
+                      Mapa referencial · demostración
                     </p>
                   </div>
                 </div>
@@ -167,10 +160,11 @@ function ContactPage() {
               className="rounded-xl border border-border bg-card p-6"
             >
               <h2 className="text-lg font-semibold tracking-tight">
-                <T k="audit.routes.contact.envianosUnMensaje" />
+                Envíanos un mensaje
               </h2>
               <p className="mt-1 text-xs text-muted-foreground">
-                <T k="audit.routes.contact.formularioDeDemostracionLosMensajesNoSe" />
+                Formulario de demostración. Los mensajes no se envían a un
+                destinatario real.
               </p>
 
               {sent ? (
@@ -179,12 +173,12 @@ function ContactPage() {
                   className="mt-5 rounded-lg border border-hope/40 bg-hope/10 p-4 text-sm"
                 >
                   <p className="font-semibold text-foreground">
-                    <T k="audit.routes.contact.mensajeRecibidoDemo" />
+                    Mensaje recibido (demo)
                   </p>
                   <p className="mt-1 text-muted-foreground">
-                    <T k="audit.routes.contact.gracias" />
-                    {name || "visitante"}
-                    <T k="audit.routes.contact.estaEsUnaFuncionalidadDeDemostracionTu" />
+                    Gracias, {name || "visitante"}. Esta es una funcionalidad
+                    de demostración: tu mensaje no ha sido enviado a ningún
+                    destinatario real.
                   </p>
                   <button
                     type="button"
@@ -196,14 +190,17 @@ function ContactPage() {
                     }}
                     className="mt-3 inline-flex items-center rounded-md border border-input bg-background px-3 py-1.5 text-xs font-medium hover:bg-accent"
                   >
-                    <T k="audit.routes.contact.enviarOtro" />
+                    Enviar otro
                   </button>
                 </div>
               ) : (
                 <div className="mt-5 space-y-4">
                   <div>
-                    <label htmlFor="contact-name" className="block text-xs font-medium">
-                      <T k="audit.routes.contact.nombre" />
+                    <label
+                      htmlFor="contact-name"
+                      className="block text-xs font-medium"
+                    >
+                      Nombre*
                     </label>
                     <input
                       id="contact-name"
@@ -215,15 +212,21 @@ function ContactPage() {
                       aria-describedby={errors.name ? "err-name" : undefined}
                     />
                     {errors.name && (
-                      <p id="err-name" className="mt-1 text-xs text-destructive">
+                      <p
+                        id="err-name"
+                        className="mt-1 text-xs text-destructive"
+                      >
                         {errors.name}
                       </p>
                     )}
                   </div>
 
                   <div>
-                    <label htmlFor="contact-email" className="block text-xs font-medium">
-                      <T k="audit.routes.contact.email" />
+                    <label
+                      htmlFor="contact-email"
+                      className="block text-xs font-medium"
+                    >
+                      Email*
                     </label>
                     <input
                       id="contact-email"
@@ -235,15 +238,21 @@ function ContactPage() {
                       aria-describedby={errors.email ? "err-email" : undefined}
                     />
                     {errors.email && (
-                      <p id="err-email" className="mt-1 text-xs text-destructive">
+                      <p
+                        id="err-email"
+                        className="mt-1 text-xs text-destructive"
+                      >
                         {errors.email}
                       </p>
                     )}
                   </div>
 
                   <div>
-                    <label htmlFor="contact-message" className="block text-xs font-medium">
-                      <T k="audit.routes.contact.mensaje" />
+                    <label
+                      htmlFor="contact-message"
+                      className="block text-xs font-medium"
+                    >
+                      Mensaje*
                     </label>
                     <textarea
                       id="contact-message"
@@ -252,10 +261,15 @@ function ContactPage() {
                       onChange={(e) => setMessage(e.target.value)}
                       className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
                       aria-invalid={Boolean(errors.message)}
-                      aria-describedby={errors.message ? "err-message" : undefined}
+                      aria-describedby={
+                        errors.message ? "err-message" : undefined
+                      }
                     />
                     {errors.message && (
-                      <p id="err-message" className="mt-1 text-xs text-destructive">
+                      <p
+                        id="err-message"
+                        className="mt-1 text-xs text-destructive"
+                      >
                         {errors.message}
                       </p>
                     )}
@@ -265,7 +279,7 @@ function ContactPage() {
                     type="submit"
                     className="inline-flex w-full items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
                   >
-                    <T k="audit.routes.contact.enviarMensajeDemo" />
+                    Enviar mensaje (demo)
                   </button>
                 </div>
               )}
