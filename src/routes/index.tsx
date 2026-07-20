@@ -291,7 +291,7 @@ function Home() {
                 {d.affectedEstimate && (
                   <p className="mt-3 text-xs text-muted-foreground">
                     <span className="font-semibold text-foreground">
-                      {d.id === "d-ve-2026-sismo-yaracuy" ? "68" : "61"}
+                      {d.id === "d-ve-2026-sismo-yaracuy" ? "68" : "49"}
                     </span>{" "}
                     reportes registrados
                   </p>
@@ -299,7 +299,7 @@ function Home() {
                 {d.fatalities !== undefined && (
                   <p className="mt-1 text-xs text-muted-foreground">
                     <span className="font-semibold text-destructive">
-                      {d.id === "d-ve-2026-sismo-yaracuy" ? "12" : "25"}
+                      {d.id === "d-ve-2026-sismo-yaracuy" ? "12" : "11"}
                     </span>{" "}
                     posibles coincidencias
                   </p>
@@ -307,7 +307,7 @@ function Home() {
                 {d.missing !== undefined && (
                   <p className="mt-1 text-xs text-muted-foreground">
                     <span className="font-semibold text-urgent-foreground">
-                      {d.id === "d-ve-2026-sismo-yaracuy" ? "3" : "11"}
+                      {d.id === "d-ve-2026-sismo-yaracuy" ? "3" : "5"}
                     </span>{" "}
                     casos verificados
                   </p>
