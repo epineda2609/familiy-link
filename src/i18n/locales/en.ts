@@ -131,7 +131,15 @@ export const en: MessageDict = {
   "person.actions.share": "Share file",
   "report.title": "Report a missing person",
   "report.subtitle":
-    "The information you provide will help coordinate searches. Only public information will be displayed in the file.",
+    "This form is available to anyone who wants to report a relative or a missing person during an emergency.",
+  "report.preSubmit.title": "Before submitting information",
+  "report.preSubmit.desc1":
+    "The information submitted will be reviewed by humanitarian organizations before being incorporated into the case.",
+  "report.preSubmit.desc2":
+    "Do not publish third-party sensitive information that is not necessary to facilitate the search.",
+  "report.success.basufTitle": "Case BASUF ID",
+  "report.success.matching":
+    "Our system will begin searching for possible matches with citizen and institutional records.",
   "report.section.person": "About the person",
   "report.section.lastSeen": "Last contact",
   "report.section.reporter": "About you",

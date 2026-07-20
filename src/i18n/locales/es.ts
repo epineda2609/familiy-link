@@ -126,9 +126,17 @@ const esDict = {
     "Esta ficha muestra únicamente información pública autorizada. Los datos sensibles, fotografías restringidas y contactos están reservados a organizaciones aliadas verificadas.",
   "person.actions.report": "Tengo información",
   "person.actions.share": "Compartir ficha",
-  "report.title": "Reportar persona desaparecida",
+  "report.title": "Reportar una persona desaparecida",
   "report.subtitle":
-    "Los datos que aportes ayudarán a coordinar búsquedas. Solo información pública se mostrará en la ficha.",
+    "Este formulario está disponible para cualquier persona que desee reportar un familiar o una persona desaparecida durante una emergencia.",
+  "report.preSubmit.title": "Antes de enviar información",
+  "report.preSubmit.desc1":
+    "La información enviada será revisada por organizaciones humanitarias antes de incorporarse al caso.",
+  "report.preSubmit.desc2":
+    "No publique información sensible de terceros que no sea necesaria para facilitar la búsqueda.",
+  "report.success.basufTitle": "ID BASUF del caso",
+  "report.success.matching":
+    "Nuestro sistema comenzará a buscar posibles coincidencias con registros ciudadanos e institucionales.",
   "report.section.person": "Sobre la persona",
   "report.section.lastSeen": "Último contacto",
   "report.section.reporter": "Sobre ti",
