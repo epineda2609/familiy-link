@@ -94,8 +94,33 @@ export function disasterTypeLabel(t: DisasterType): string {
 function Home() {
   const { t } = useT();
   const [disasters, setDisasters] = useState<Disaster[]>([]);
+  const [counters, setCounters] = useState<Record<string, EventCounters>>({});
   useEffect(() => {
     peopleRepository.listDisasters().then(setDisasters);
+  }, []);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data, error } = await supabase.rpc("event_case_counters");
+      if (cancelled || error || !data) return;
+      const map: Record<string, EventCounters> = {};
+      for (const row of data as Array<{
+        event_id: string;
+        registered_reports: number | string;
+        potential_matches: number | string;
+        verified_cases: number | string;
+      }>) {
+        map[row.event_id] = {
+          registeredReports: Number(row.registered_reports) || 0,
+          potentialMatches: Number(row.potential_matches) || 0,
+          verifiedCases: Number(row.verified_cases) || 0,
+        };
+      }
+      setCounters(map);
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
   const activeDisasters = disasters
     .filter((d) => d.active)
