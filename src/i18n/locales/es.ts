@@ -97,9 +97,9 @@ const esDict = {
   "footer.contact": "Contacto",
   "footer.rights": "Prototipo humanitario — Uso restringido.",
   "person.back": "Volver a resultados",
-  "person.notFound.title": "Ficha no encontrada",
+  "person.notFound.title": "Persona no encontrada",
   "person.notFound.desc":
-    "La ficha solicitada no existe o fue retirada del panel público.",
+    "No encontramos este caso o ya no está disponible en el panel público.",
   "person.section.identity": "Identidad pública",
   "person.section.lastSeen": "Último avistamiento",
   "person.section.features": "Señas distintivas",
@@ -563,6 +563,61 @@ const esDict = {
     "Tu aporte quedó registrado como pendiente de revisión. Aparecerá en la Historia del caso.",
   "info.pendingNotice":
     "Las actualizaciones ciudadanas no modifican automáticamente los datos oficiales. Se validan antes de aplicarse.",
+  // ── Origen del reporte / posible coincidencia (iteración fichas públicas) ──
+  "person.origin.title": "Origen del reporte",
+  "person.origin.citizen": "Reporte ciudadano",
+  "person.origin.citizenDesc":
+    "Este caso fue reportado por un familiar o ciudadano.",
+  "person.origin.institution": "Registro institucional",
+  "person.origin.institutionDesc":
+    "Este caso fue registrado por una organización humanitaria autorizada.",
+  "person.origin.institutionField": "Institución",
+  "person.origin.institutionType": "Tipo",
+  "person.origin.region": "País / Región",
+  "person.origin.reportedAt": "Fecha del registro",
+  "person.match.title": "Posible coincidencia institucional",
+  "person.match.civilTitle": "Posible coincidencia con un reporte ciudadano",
+  "person.match.body":
+    "El sistema encontró un registro compatible. Esta coincidencia requiere verificación humana y no confirma la identidad.",
+  "person.match.confidence": "Nivel de compatibilidad",
+  "person.match.detectedAt": "Detectada el",
+  "person.match.review": "Estado de revisión",
+  "person.match.status.pending": "Pendiente de revisión",
+  "person.match.status.approved": "Validada por revisor",
+  "person.match.status.rejected": "Descartada",
+  "person.match.instType": "Tipo de institución",
+  "person.match.region": "Región general",
+  "person.match.viewTimeline": "Ver línea temporal",
+  "case.timeline.pageTitle": "Línea temporal del caso",
+  "case.timeline.pageSubtitle":
+    "Esta línea temporal muestra únicamente eventos públicos. Los datos sensibles permanecen restringidos a organizaciones autorizadas.",
+  "case.timeline.back": "Volver a la ficha",
+  "case.timeline.empty":
+    "Todavía no hay eventos públicos disponibles para este caso.",
+  "case.timeline.error":
+    "No fue posible cargar la línea temporal. Intenta nuevamente.",
+  "case.timeline.retry": "Reintentar",
+  "case.timeline.loading": "Cargando línea temporal…",
+  "case.event.last_seen": "Persona vista",
+  "case.event.report_received": "Reporte recibido",
+  "case.event.case_created": "Caso registrado",
+  "case.event.received_by_organization": "Recibida por una organización",
+  "case.event.transferred_to_organization": "Trasladada a otra organización",
+  "case.event.status_changed": "Estado actualizado",
+  "case.event.located": "Persona localizada",
+  "case.event.possible_match_detected": "Posible coincidencia detectada",
+  "case.event.match_review_started": "Revisión humana iniciada",
+  "case.event.match_review_pending": "Pendiente de revisión humana",
+  "case.event.reunited": "Persona reunida",
+  "case.event.generic": "Evento del caso",
+  "org.type.hospital": "Hospital",
+  "org.type.shelter": "Refugio",
+  "org.type.usar": "Brigada de rescate",
+  "org.type.humanitarian": "Brigada humanitaria",
+  "org.type.civil_protection": "Protección civil",
+  "org.type.reception_center": "Centro de acogida",
+  "org.type.ngo": "Organización humanitaria",
+  "org.type.other": "Organización humanitaria",
 } as const;
 
 export type MessageDict = Partial<Record<keyof typeof esDict, string>>;

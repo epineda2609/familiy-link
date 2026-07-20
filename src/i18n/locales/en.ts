@@ -100,9 +100,9 @@ export const en: MessageDict = {
   "footer.contact": "Contact",
   "footer.rights": "Humanitarian prototype — Restricted use.",
   "person.back": "Back to results",
-  "person.notFound.title": "File not found",
+  "person.notFound.title": "Person not found",
   "person.notFound.desc":
-    "The requested file does not exist or has been withdrawn from the public panel.",
+    "We could not find this case or it is no longer available in the public panel.",
   "person.section.identity": "Public identity",
   "person.section.lastSeen": "Last sighting",
   "person.section.features": "Distinctive features",
