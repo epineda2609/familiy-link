@@ -23,6 +23,7 @@ export const pt: MessageDict = {
   "home.hero.title": "Reunir famílias é possível.",
   "home.hero.subtitle":
     "A BASUF ajuda a localizar pessoas desaparecidas por terremotos, guerras e enchentes na América Latina.",
+  "home.hero.slogan": "Connecting information. Reuniting families.",
   "home.cta.search": "Buscar alguém",
   "home.cta.report": "Reportar pessoa",
   "mission.title": "Nossa missão",
