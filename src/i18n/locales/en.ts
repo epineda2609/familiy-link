@@ -334,7 +334,7 @@ export const en: MessageDict = {
   "rescue.lookup.placeholder": "e.g. BASUF-VE-4K9P",
   "rescue.lookup.submit": "Search",
   "rescue.lookup.notFound": "No records match that identifier. Please check and try again.",
-  "rescue.lookup.offlineHint": "Works with minimal connectivity: if the QR fails, type the human code.",
+  "rescue.lookup.offlineHint": "Works with minimal connectivity for areas with poor phone signal.",
   "rescue.lookup.altHint": "You can also search by a rescue code, such as R-4F7K.",
   "rescue.privacy.title": "Safe code",
   "rescue.privacy.line1": "The BASUF ID does not contain names, documents, phone numbers, addresses or medical information.",
