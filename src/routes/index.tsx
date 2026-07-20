@@ -246,6 +246,15 @@ function Home() {
             const typeLabel = isKnown
               ? t(`disaster.${d.type}` as MessageKey)
               : (d.customType || disasterTypeLabel(d.type));
+
+            const countryNameMap: Record<string, string> = {
+              VE: "VENEZUELA",
+              BR: "BRASIL",
+              CL: "CHILE",
+              MX: "MEXICO",
+              CO: "COLOMBIA",
+            };
+            const countryDisplay = countryNameMap[d.country] || d.country;
             return (
               <article
                 key={d.id}
