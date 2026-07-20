@@ -90,8 +90,13 @@ interface PersonRow {
   distinguishing_features: string | null;
   photo_url: string | null;
   reported_at: string;
+  reported_by_organization_id: string | null;
   disappearance_details:
     | { last_seen_location: string | null; last_seen_date: string | null }[]
+    | null;
+  organizations:
+    | { id: string; name: string; organization_type: string | null; country: string | null; region: string | null }
+    | { id: string; name: string; organization_type: string | null; country: string | null; region: string | null }[]
     | null;
 }
 
@@ -152,6 +157,10 @@ function normEventType(t: string): DisasterType {
 
 function mapPerson(row: PersonRow): PublicPersonCard {
   const dd = row.disappearance_details?.[0];
+  const org = Array.isArray(row.organizations) ? row.organizations[0] : row.organizations;
+  const reportOrigin: "citizen" | "institution" = row.reported_by_organization_id
+    ? "institution"
+    : "citizen";
   return {
     id: row.id,
     displayName: row.display_name,
@@ -167,6 +176,12 @@ function mapPerson(row: PersonRow): PublicPersonCard {
     distinctiveFeatures: row.distinguishing_features ?? undefined,
     photoPublicUrl: row.photo_url ?? undefined,
     reportedAt: (row.reported_at ?? "").slice(0, 10),
+    reportOrigin,
+    originOrgId: org?.id ?? undefined,
+    originOrgName: org?.name ?? undefined,
+    originOrgType: org?.organization_type ?? undefined,
+    originOrgCountry: org?.country ?? undefined,
+    originOrgRegion: org?.region ?? undefined,
   };
 }
 
@@ -192,7 +207,7 @@ function mapDisaster(row: EventRow): Disaster {
 }
 
 const PERSON_SELECT =
-  "id, display_name, approximate_age, gender, current_status, event_id, country, nationality, document_number, distinguishing_features, photo_url, reported_at, disappearance_details(last_seen_location, last_seen_date)";
+  "id, display_name, approximate_age, gender, current_status, event_id, country, nationality, document_number, distinguishing_features, photo_url, reported_at, reported_by_organization_id, disappearance_details(last_seen_location, last_seen_date), organizations:reported_by_organization_id(id, name, organization_type, country, region)";
 const EVENT_SELECT =
   "id, name, event_type, custom_type, country, region, start_date, status, description, magnitude, affected_estimate, fatalities, missing_count, created_at";
 

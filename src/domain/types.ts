@@ -38,6 +38,8 @@ export interface Disaster {
   createdByOrg?: string;
 }
 
+export type ReportOrigin = "citizen" | "institution";
+
 /** Perfil público — SIN datos sensibles. Nunca incluye fotos de fallecidos ni contactos. */
 export interface PublicPersonCard {
   id: string;
@@ -54,6 +56,14 @@ export interface PublicPersonCard {
   distinctiveFeatures?: string; // señas visibles no sensibles
   photoPublicUrl?: string; // solo si status !== 'deceased' y consentimiento
   reportedAt: string;
+  // Origen público del reporte — visible en la ficha, sin revelar datos privados
+  // del reportante civil ni del personal institucional.
+  reportOrigin?: ReportOrigin;
+  originOrgId?: string;
+  originOrgName?: string;
+  originOrgType?: string; // enum institution_type
+  originOrgCountry?: string;
+  originOrgRegion?: string;
 }
 
 export interface Country {
