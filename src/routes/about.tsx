@@ -127,6 +127,27 @@ function AboutPage() {
             </p>
           </div>
         </section>
+
+        {/* ¿Qué hace diferente a BASUF? */}
+        <section className="mx-auto max-w-7xl px-4 py-16">
+          <div className="rounded-xl border border-border bg-card p-6 sm:p-8">
+            <h3 className="text-lg font-semibold tracking-tight">
+              {t("about.differenceTitle")}
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
+              {t("about.differenceBody")}
+            </p>
+          </div>
+        </section>
+
+        {/* Cierre */}
+        <section className="mx-auto max-w-7xl px-4 py-16">
+          <div className="rounded-xl border border-border bg-card p-6 sm:p-8">
+            <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
+              {t("about.closing")}
+            </p>
+          </div>
+        </section>
       </main>
       <SiteFooter />
     </div>
