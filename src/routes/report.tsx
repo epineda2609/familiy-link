@@ -511,6 +511,16 @@ function ReportPage() {
             </div>
           )}
 
+          <div className="rounded-xl border border-primary/30 bg-primary/5 p-4">
+            <p className="text-sm font-semibold text-foreground">
+              {t("report.preSubmit.title")}
+            </p>
+            <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
+              <li>• {t("report.preSubmit.desc1")}</li>
+              <li>• {t("report.preSubmit.desc2")}</li>
+            </ul>
+          </div>
+
           {submitError && (
             <div
               role="alert"
