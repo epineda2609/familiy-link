@@ -124,7 +124,7 @@ const esDict = {
   "report.field.country": "País de ocurrencia",
   "report.field.nationality": "Nacionalidad",
   "report.field.nationality.placeholder": "Seleccionar nacionalidad",
-  "report.field.documentId": "Documento de identidad",
+  "report.field.documentId": "Documento o identificación (opcional)",
   "report.field.documentId.placeholder": "Número de documento",
   "report.field.disaster": "Emergencia",
   "report.field.lastSeenLocation": "Lugar del último avistamiento",
