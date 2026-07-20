@@ -156,10 +156,10 @@ function PrivacyPage() {
             <p className="text-muted-foreground">
               Escríbenos a{" "}
               <a
-                href="mailto:privacidad@plataformahumanitaria.org"
+                href="mailto:privacidad@basuf.org"
                 className="font-medium text-primary underline-offset-2 hover:underline"
               >
-                privacidad@plataformahumanitaria.org
+                privacidad@basuf.org
               </a>{" "}
               para ejercer tus derechos o resolver dudas sobre este documento.
             </p>
