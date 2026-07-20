@@ -11,6 +11,10 @@ import {
   MessageSquare,
   Flag,
   Camera,
+  Building2,
+  Users,
+  Clock,
+  Link2,
 } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
@@ -35,6 +39,8 @@ import { useMode } from "../modes/OperationalModeProvider";
 import { ShareDialog } from "../components/ShareDialog";
 import { CaseUpdateDialog } from "../components/CaseUpdateDialog";
 import { useCaseUpdates } from "../repositories/CaseUpdateRepository";
+import { matchingRepository, type EnrichedMatch } from "../repositories/MatchingRepository";
+
 
 export const Route = createFileRoute("/person/$id")({
   loader: async ({ params }) => {
@@ -98,6 +104,33 @@ function PersonDetailPage() {
   useCaseTimeline(person.id);
   const [shareOpen, setShareOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
+  const [matches, setMatches] = useState<EnrichedMatch[]>([]);
+  useEffect(() => {
+    let alive = true;
+    matchingRepository.list().then((all) => {
+      if (!alive) return;
+      setMatches(
+        all.filter(
+          (m) => m.personA_id === person.id || m.personB_id === person.id,
+        ),
+      );
+    });
+    return () => {
+      alive = false;
+    };
+  }, [person.id]);
+  const primaryMatch = matches[0];
+  const orgTypeKey = person.originOrgType
+    ? (`org.type.${person.originOrgType}` as MessageKey)
+    : null;
+  const matchOrgType = (() => {
+    if (!primaryMatch) return null;
+    const otherPerson =
+      primaryMatch.personA?.id === person.id
+        ? primaryMatch.personB
+        : primaryMatch.personA;
+    return otherPerson ?? null;
+  })();
 
 
   const countryName =
@@ -288,6 +321,117 @@ function PersonDetailPage() {
           </aside>
         </div>
 
+        {/* Origen del reporte */}
+        <section className="mt-8 rounded-xl border border-border bg-card p-6 shadow-sm">
+          <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+            {person.reportOrigin === "institution" ? (
+              <Building2 className="h-4 w-4" aria-hidden />
+            ) : (
+              <Users className="h-4 w-4" aria-hidden />
+            )}
+            {t("person.origin.title")}
+          </h2>
+          {person.reportOrigin === "institution" ? (
+            <div className="space-y-3">
+              <p className="text-sm font-semibold text-foreground">
+                {t("person.origin.institution")}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {t("person.origin.institutionDesc")}
+              </p>
+              <dl className="grid gap-2.5 text-sm sm:grid-cols-2">
+                {person.originOrgName && (
+                  <Row
+                    label={t("person.origin.institutionField")}
+                    value={person.originOrgName}
+                  />
+                )}
+                {orgTypeKey && (
+                  <Row
+                    label={t("person.origin.institutionType")}
+                    value={t(orgTypeKey)}
+                  />
+                )}
+                {(person.originOrgRegion || person.originOrgCountry) && (
+                  <Row
+                    label={t("person.origin.region")}
+                    value={[person.originOrgRegion, person.originOrgCountry]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  />
+                )}
+                <Row
+                  label={t("person.origin.reportedAt")}
+                  value={person.reportedAt}
+                />
+              </dl>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <p className="text-sm font-semibold text-foreground">
+                {t("person.origin.citizen")}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {t("person.origin.citizenDesc")}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {t("person.origin.reportedAt")}: {person.reportedAt}
+              </p>
+            </div>
+          )}
+        </section>
+
+        {/* Posible coincidencia */}
+        {primaryMatch && (
+          <section className="mt-6 rounded-xl border border-primary/30 bg-primary/5 p-6">
+            <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-primary">
+              <Link2 className="h-4 w-4" aria-hidden />
+              {person.reportOrigin === "institution"
+                ? t("person.match.civilTitle")
+                : t("person.match.title")}
+            </h2>
+            <p className="text-sm text-foreground/90">
+              {t("person.match.body")}
+            </p>
+            <dl className="mt-4 grid gap-2.5 text-sm sm:grid-cols-2">
+              <Row
+                label={t("person.match.confidence")}
+                value={`${Math.round(primaryMatch.score)}%`}
+              />
+              <Row
+                label={t("person.match.review")}
+                value={t(
+                  `person.match.status.${primaryMatch.status}` as MessageKey,
+                )}
+              />
+              {primaryMatch.reviewedAt && (
+                <Row
+                  label={t("person.match.detectedAt")}
+                  value={primaryMatch.reviewedAt}
+                />
+              )}
+              {matchOrgType?.country && (
+                <Row
+                  label={t("person.match.region")}
+                  value={matchOrgType.country}
+                />
+              )}
+            </dl>
+          </section>
+        )}
+
+        {/* Ver línea temporal */}
+        <div className="mt-8 flex flex-wrap gap-2">
+          <Link
+            to="/person/$id/timeline"
+            params={{ id: person.id }}
+            className="inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
+          >
+            <Clock className="h-4 w-4" aria-hidden />
+            {t("person.match.viewTimeline")}
+          </Link>
+        </div>
+
         <section className="mt-10 rounded-xl border border-border bg-card p-6 shadow-sm">
           <div className="mb-4 flex items-center gap-2">
             <Camera className="h-4 w-4 text-primary" aria-hidden />
@@ -317,10 +461,20 @@ function PersonDetailPage() {
         <section className="mt-10">
           {(() => {
             const history = getCaseHistoryByPerson(person.id);
-            if (!history) return null;
-            return <CaseNarrative history={history} defaultView="narrative" />;
+            if (!history || history.events.length === 0) {
+              return (
+                <div className="rounded-xl border border-border bg-card p-6">
+                  <h2 className="text-xl font-bold">{t("case.timeline.title")}</h2>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {t("case.timeline.empty")}
+                  </p>
+                </div>
+              );
+            }
+            return <CaseNarrative history={history} defaultView="timeline" />;
           })()}
         </section>
+
       </main>
 
       <SiteFooter />

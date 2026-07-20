@@ -13,13 +13,14 @@ import {
   AlertOctagon,
   Skull,
   MessageSquarePlus,
+  Activity,
   type LucideIcon,
 } from "lucide-react";
 import { useT } from "../i18n/LocaleProvider";
 import type { CaseEvent, CaseEventValidation } from "../domain/caseTimeline";
 import type { MessageKey } from "../i18n/messages";
 
-const iconMap: Record<CaseEvent["type"], LucideIcon> = {
+const iconMap: Record<string, LucideIcon> = {
   rescue: ShieldAlert,
   triage: Stethoscope,
   ambulance: Ambulance,
@@ -37,7 +38,7 @@ const iconMap: Record<CaseEvent["type"], LucideIcon> = {
   citizen_update: MessageSquarePlus,
 };
 
-const tintMap: Record<CaseEvent["type"], string> = {
+const tintMap: Record<string, string> = {
   rescue: "bg-urgent/20 text-urgent-foreground",
   triage: "bg-primary/15 text-primary",
   ambulance: "bg-primary/15 text-primary",
@@ -61,8 +62,10 @@ const validationTint: Record<CaseEventValidation, string> = {
   rejected: "border-destructive/40 bg-destructive/10 text-destructive",
 };
 
-function eventLabelKey(t: CaseEvent["type"]): MessageKey {
-  const rescueTypes: CaseEvent["type"][] = [
+// Public-friendly label lookup. Falls back to `case.event.generic` when no
+// message matches — so unfamiliar DB event types never blank the timeline.
+function eventLabelKey(raw: string): MessageKey {
+  const rescueTypes = new Set([
     "rescue",
     "triage",
     "ambulance",
@@ -72,11 +75,9 @@ function eventLabelKey(t: CaseEvent["type"]): MessageKey {
     "match",
     "reunion",
     "review",
-  ];
-  if (rescueTypes.includes(t)) {
-    return `rescue.chain.event.${t}` as MessageKey;
-  }
-  return `case.event.${t}` as MessageKey;
+  ]);
+  if (rescueTypes.has(raw)) return `rescue.chain.event.${raw}` as MessageKey;
+  return `case.event.${raw}` as MessageKey;
 }
 
 function formatDT(iso: string, locale: string) {
@@ -94,14 +95,22 @@ export function CaseTimeline({ events }: { events: CaseEvent[] }) {
   const { t, locale } = useT();
   if (events.length === 0) {
     return (
-      <p className="text-sm text-muted-foreground">{t("case.narrative.empty")}</p>
+      <p className="text-sm text-muted-foreground">{t("case.timeline.empty")}</p>
     );
   }
   return (
     <ol className="relative space-y-4 border-s border-border ps-6">
       {events.map((e) => {
-        const Icon = iconMap[e.type];
-        const tint = tintMap[e.type];
+        const rawType = String(e.type);
+        const Icon = iconMap[rawType] ?? Activity;
+        const tint = tintMap[rawType] ?? "bg-muted text-foreground";
+        const labelKey = eventLabelKey(rawType);
+        const labelResolved = t(labelKey);
+        // If translation returns the key untouched, fall back to summary/generic.
+        const label =
+          labelResolved && labelResolved !== labelKey
+            ? labelResolved
+            : e.summary || t("case.event.generic");
         return (
           <li key={e.id} className="relative">
             <span
@@ -111,7 +120,7 @@ export function CaseTimeline({ events }: { events: CaseEvent[] }) {
             </span>
             <div className="rounded-lg border border-border bg-card p-4 shadow-sm">
               <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <h4 className="text-sm font-semibold">{t(eventLabelKey(e.type))}</h4>
+                <h4 className="text-sm font-semibold">{label}</h4>
                 <time className="text-xs text-muted-foreground">
                   {formatDT(e.at, locale)}
                 </time>
@@ -138,7 +147,7 @@ export function CaseTimeline({ events }: { events: CaseEvent[] }) {
                   </span>
                 </p>
               )}
-              {e.summary && (
+              {e.summary && e.summary !== label && (
                 <p className="mt-2 text-sm text-foreground/90">{e.summary}</p>
               )}
               {e.note && (
@@ -151,3 +160,4 @@ export function CaseTimeline({ events }: { events: CaseEvent[] }) {
     </ol>
   );
 }
+

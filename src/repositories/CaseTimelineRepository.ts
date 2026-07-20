@@ -84,25 +84,41 @@ function isUuid(v: string): boolean {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
 }
 
+// Map raw DB event_type strings to a public, human-friendly domain type.
+// Unknown values are kept as-is; CaseTimeline renders them with a safe fallback.
+function normEventType(raw: string): CaseEventType {
+  const known = new Set<string>([
+    "rescue", "triage", "ambulance", "hospital", "transfer", "shelter",
+    "match", "reunion", "review",
+    "reported_missing", "partial_id", "possible_match",
+    "critical_review", "deceased_review", "citizen_update",
+    "last_seen", "report_received", "case_created",
+    "received_by_organization", "transferred_to_organization",
+    "status_changed", "located", "possible_match_detected",
+    "match_review_started", "match_review_pending", "reunited",
+  ]);
+  const lower = raw.toLowerCase().replace(/\./g, "_");
+  if (known.has(lower)) return lower as CaseEventType;
+  return lower as CaseEventType;
+}
+
+function sourceKindFromType(type: string): CaseSourceKind {
+  if (type.includes("citizen") || type.includes("report_received")) return "citizen";
+  if (type.includes("hospital") || type.includes("received_by")) return "hospital";
+  if (type.includes("shelter") || type.includes("transferred")) return "shelter";
+  if (type.includes("rescue")) return "rescuer";
+  if (type.includes("match") || type.includes("review")) return "ngo";
+  return "system";
+}
+
 function rowToEvent(r: TimelineRow): CaseEvent {
-  const known: CaseEventType[] = [
-    "reported_missing",
-    "partial_id",
-    "possible_match",
-    "critical_review",
-    "deceased_review",
-    "citizen_update",
-  ];
-  const type: CaseEventType =
-    (known as string[]).includes(r.event_type)
-      ? (r.event_type as CaseEventType)
-      : (r.event_type as CaseEventType); // rescue chain types also valid
+  const type = normEventType(r.event_type);
   return {
     id: r.id,
     type,
     at: r.event_date,
     actorOrg: r.source_entity_type ?? "BASUF",
-    sourceKind: "system",
+    sourceKind: sourceKindFromType(String(type)),
     location: r.location ?? undefined,
     note: r.description ?? undefined,
     summary: r.title,
