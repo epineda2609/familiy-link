@@ -10,6 +10,7 @@ import {
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "../integrations/supabase/client";
 import { auditLog } from "../audit/auditLog";
+import { useT } from "../i18n/LocaleProvider";
 
 // ---------------------------------------------------------------------------
 // Fase 4b — Sesión institucional respaldada por Supabase Auth.
@@ -97,9 +98,7 @@ async function deriveSession(
   if (!membership) {
     return { session: null, reason: "no_membership" };
   }
-  const org = membership.organizations as
-    | { name: string; status: string }
-    | null;
+  const org = membership.organizations as { name: string; status: string } | null;
   if (!org || org.status !== "approved") {
     return { session: null, reason: "institution_not_approved" };
   }
@@ -118,45 +117,49 @@ async function deriveSession(
 }
 
 export function InstitutionalSessionProvider({ children }: { children: ReactNode }) {
+  const { t } = useT();
   const [session, setSession] = useState<InstitutionalSession | null>(null);
   const [status, setStatus] = useState<Ctx["status"]>("loading");
   const [error, setError] = useState<string | null>(null);
   const auditedFor = useRef<string | null>(null);
 
-  const applyAuthSession = useCallback(async (authSession: Session | null) => {
-    if (!authSession?.user) {
-      setSession(null);
-      setStatus("unauthenticated");
-      auditedFor.current = null;
-      return;
-    }
-    const { session: derived, reason } = await deriveSession(authSession.user);
-    if (!derived) {
-      setSession(null);
-      setStatus("unauthorized");
-      setError(
-        reason === "institution_not_approved"
-          ? "La institución vinculada a tu cuenta no está aprobada."
-          : "Tu cuenta no tiene una membresía institucional activa.",
-      );
-      return;
-    }
-    setSession(derived);
-    setStatus("authenticated");
-    setError(null);
-    if (auditedFor.current !== authSession.user.id) {
-      auditedFor.current = authSession.user.id;
-      auditLog.record({
-        actor: {
-          operatorName: derived.operatorName,
-          orgName: derived.orgName,
-          role: derived.role,
-        },
-        action: "auth.signIn",
-        metadata: { institutionId: derived.institutionId },
-      });
-    }
-  }, []);
+  const applyAuthSession = useCallback(
+    async (authSession: Session | null) => {
+      if (!authSession?.user) {
+        setSession(null);
+        setStatus("unauthenticated");
+        auditedFor.current = null;
+        return;
+      }
+      const { session: derived, reason } = await deriveSession(authSession.user);
+      if (!derived) {
+        setSession(null);
+        setStatus("unauthorized");
+        setError(
+          reason === "institution_not_approved"
+            ? t("audit.institutional.institutionNotApproved")
+            : t("audit.institutional.membershipInactive"),
+        );
+        return;
+      }
+      setSession(derived);
+      setStatus("authenticated");
+      setError(null);
+      if (auditedFor.current !== authSession.user.id) {
+        auditedFor.current = authSession.user.id;
+        auditLog.record({
+          actor: {
+            operatorName: derived.operatorName,
+            orgName: derived.orgName,
+            role: derived.role,
+          },
+          action: "auth.signIn",
+          metadata: { institutionId: derived.institutionId },
+        });
+      }
+    },
+    [t],
+  );
 
   useEffect(() => {
     let mounted = true;
@@ -173,20 +176,17 @@ export function InstitutionalSessionProvider({ children }: { children: ReactNode
     };
   }, [applyAuthSession]);
 
-  const signInWithPassword = useCallback(
-    async (email: string, password: string) => {
-      setError(null);
-      const { error: err } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password,
-      });
-      if (err) {
-        setError(err.message);
-        throw err;
-      }
-    },
-    [],
-  );
+  const signInWithPassword = useCallback(async (email: string, password: string) => {
+    setError(null);
+    const { error: err } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
+    if (err) {
+      setError(err.message);
+      throw err;
+    }
+  }, []);
 
   const signUp = useCallback(
     async ({
@@ -216,26 +216,29 @@ export function InstitutionalSessionProvider({ children }: { children: ReactNode
     [],
   );
 
-  const claimMasterAdmin = useCallback(async (code: string) => {
-    setError(null);
-    const { data, error: err } = await supabase.rpc("claim_master_admin", {
-      _code: code,
-    });
-    if (err) {
-      setError(err.message);
-      throw err;
-    }
-    if (data !== true) {
-      const msg = "Código interno incorrecto.";
-      setError(msg);
-      throw new Error(msg);
-    }
-    // Re-derive session with new role
-    const { data: userData } = await supabase.auth.getUser();
-    if (userData.user) {
-      await applyAuthSession({ user: userData.user } as Session);
-    }
-  }, [applyAuthSession]);
+  const claimMasterAdmin = useCallback(
+    async (code: string) => {
+      setError(null);
+      const { data, error: err } = await supabase.rpc("claim_master_admin", {
+        _code: code,
+      });
+      if (err) {
+        setError(err.message);
+        throw err;
+      }
+      if (data !== true) {
+        const msg = "Código interno incorrecto.";
+        setError(msg);
+        throw new Error(msg);
+      }
+      // Re-derive session with new role
+      const { data: userData } = await supabase.auth.getUser();
+      if (userData.user) {
+        await applyAuthSession({ user: userData.user } as Session);
+      }
+    },
+    [applyAuthSession],
+  );
 
   const signOut = useCallback(async () => {
     if (session) {
@@ -280,8 +283,6 @@ export function InstitutionalSessionProvider({ children }: { children: ReactNode
 export function useInstitutionalSession() {
   const ctx = useContext(InstitutionalContext);
   if (!ctx)
-    throw new Error(
-      "useInstitutionalSession must be used inside <InstitutionalSessionProvider>",
-    );
+    throw new Error("useInstitutionalSession must be used inside <InstitutionalSessionProvider>");
   return ctx;
 }

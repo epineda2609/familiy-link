@@ -4,6 +4,7 @@ import type { RescueRecord } from "../domain/rescue";
 import { RescueQR } from "./RescueQR";
 import { useT } from "../i18n/LocaleProvider";
 import { findSafeIdByRescueCode } from "../data/mock/safeIds";
+import { T } from "../i18n/T";
 
 export function RescueBadgePreview({ record }: { record: RescueRecord }) {
   const { t } = useT();
@@ -27,26 +28,18 @@ export function RescueBadgePreview({ record }: { record: RescueRecord }) {
           <RescueQR value={`${record.tempId}|${record.code}`} size={128} />
           <div className="flex min-w-0 flex-1 flex-col">
             <p className="text-[10px] font-semibold uppercase tracking-widest text-neutral-500">
-              BASUF · Rescue Intake
+              <T k="audit.components.rescueBadgePreview.bASUFRescueIntake" />
             </p>
-            <p className="mt-1 font-mono text-3xl font-black tracking-wider">
-              {record.code}
-            </p>
-            <p className="mt-1 truncate font-mono text-[11px] text-neutral-600">
-              {record.tempId}
-            </p>
+            <p className="mt-1 font-mono text-3xl font-black tracking-wider">{record.code}</p>
+            <p className="mt-1 truncate font-mono text-[11px] text-neutral-600">{record.tempId}</p>
             {record.displayHint && (
-              <p className="mt-3 text-xs leading-snug text-neutral-700">
-                {record.displayHint}
-              </p>
+              <p className="mt-3 text-xs leading-snug text-neutral-700">{record.displayHint}</p>
             )}
           </div>
         </div>
       </div>
 
-      <p className="mt-3 text-xs text-muted-foreground">
-        {t("rescue.badge.desc")}
-      </p>
+      <p className="mt-3 text-xs text-muted-foreground">{t("rescue.badge.desc")}</p>
 
       {safeId && (
         <Link
@@ -61,4 +54,3 @@ export function RescueBadgePreview({ record }: { record: RescueRecord }) {
     </div>
   );
 }
-
