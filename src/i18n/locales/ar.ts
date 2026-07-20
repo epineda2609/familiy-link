@@ -71,6 +71,7 @@ export const ar: MessageDict = {
   "search.submit": "بحث",
   "search.reset": "إعادة تعيين",
   "search.results": "النتائج",
+  "search.activeOnly": "إظهار الحالات النشطة فقط",
   "search.noResults":
     "لم يُعثر على تطابقات. حاول توسيع عوامل التصفية.",
   "status.missing": "مفقود(ة)",

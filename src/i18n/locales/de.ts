@@ -71,6 +71,7 @@ export const de: MessageDict = {
   "search.submit": "Suchen",
   "search.reset": "Zurücksetzen",
   "search.results": "Ergebnisse",
+  "search.activeOnly": "Nur aktive Fälle anzeigen",
   "search.noResults":
     "Keine Übereinstimmungen gefunden. Versuchen Sie, die Filter zu erweitern.",
   "status.missing": "Vermisst",

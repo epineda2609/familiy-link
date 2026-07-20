@@ -71,6 +71,7 @@ export const da: MessageDict = {
   "search.submit": "Søg",
   "search.reset": "Nulstil",
   "search.results": "Resultater",
+  "search.activeOnly": "Vis kun aktive sager",
   "search.noResults":
     "Ingen matches fundet. Prøv at udvide filtrene.",
   "status.missing": "Savnet",

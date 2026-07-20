@@ -71,6 +71,7 @@ export const pt: MessageDict = {
   "search.submit": "Buscar",
   "search.reset": "Limpar",
   "search.results": "Resultados",
+  "search.activeOnly": "Mostrar apenas casos ativos",
   "search.noResults":
     "Nenhuma correspondência encontrada. Tente ampliar os filtros.",
   "status.missing": "Desaparecida",

@@ -71,6 +71,7 @@ export const tr: MessageDict = {
   "search.submit": "Ara",
   "search.reset": "Sıfırla",
   "search.results": "Sonuçlar",
+  "search.activeOnly": "Sadece aktif olguları göster",
   "search.noResults":
     "Eşleşme bulunamadı. Filtreleri genişletmeyi deneyin.",
   "status.missing": "Kayıp",
