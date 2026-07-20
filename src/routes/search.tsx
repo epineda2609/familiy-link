@@ -15,7 +15,7 @@ import {
   peopleRepository,
   type SearchFilters,
 } from "../repositories/PeopleRepository";
-import type { PublicPersonCard, Disaster, Country } from "../domain/types";
+import type { PublicPersonCard, Disaster, Country, PersonStatus } from "../domain/types";
 
 export const Route = createFileRoute("/search")({
   head: () => ({
