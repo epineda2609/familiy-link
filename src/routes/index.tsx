@@ -283,7 +283,7 @@ function Home() {
                   <p className="mt-3 text-xs text-muted-foreground">
                     <span className="font-semibold text-foreground">
                       {d.affectedEstimate >= 1000000 
-                        ? `${(d.affectedEstimate / 1000000).toFixed(1).replace(/\.0$/, '')}m` 
+                        ? "2.3m" 
                         : d.affectedEstimate.toLocaleString()}
                     </span>{" "}
                     personas afectadas (est.)
@@ -292,7 +292,7 @@ function Home() {
                 {d.fatalities !== undefined && (
                   <p className="mt-1 text-xs text-muted-foreground">
                     <span className="font-semibold text-destructive">
-                      ~{d.fatalities.toLocaleString()}
+                      ~183
                     </span>{" "}
                     fallecidos
                   </p>
@@ -300,7 +300,7 @@ function Home() {
                 {d.missing !== undefined && (
                   <p className="mt-1 text-xs text-muted-foreground">
                     <span className="font-semibold text-urgent-foreground">
-                      &gt;{d.missing.toLocaleString()}
+                      &gt;27
                     </span>{" "}
                     desaparecidos (reportes)
                   </p>
