@@ -4,7 +4,7 @@ export const en: MessageDict = {
   "app.name": "BASUF",
   "app.tagline": "Brother And Sister Reuniting Families",
   "app.mission":
-    "A humanitarian network to reconnect people separated by disasters.",
+    "BASUF is a humanitarian platform designed to help locate, identify and reunify people separated during emergencies, natural disasters and humanitarian crises, connecting families with response organizations safely, responsibly and respecting people's privacy.",
   "demo.banner":
     "Demo environment — All data shown is fictional.",
   "nav.home": "Home",
@@ -27,19 +27,27 @@ export const en: MessageDict = {
   "home.cta.report": "Report a person",
   "mission.title": "Our mission",
   "mission.subtitle":
-    "Three commitments behind every case file, every search and every reunion.",
+    "Three commitments that sustain every search, every report and every possible reunion.",
   "mission.pillar.humanity.title": "Humanity",
   "mission.pillar.humanity.desc":
-    "Every file is a person with a story, not a record. We design with care, respect and dignity.",
+    "Every record represents a person, a family and a story. We designed BASUF with empathy, respect and dignity for those going through the hardest moments.",
   "mission.pillar.traceability.title": "Traceability",
   "mission.pillar.traceability.desc":
-    "Clear origin, verifiable reliability and immutable auditing of every sensitive data point revealed.",
+    "Every data point preserves its origin and verification level, promoting transparency, trust and responsible handling of information throughout the process.",
   "mission.pillar.hope.title": "Hope",
   "mission.pillar.hope.desc":
-    "A bridge between chaos and reunion, built for NGOs, hospitals, shelters and rescue brigades.",
+    "We believe technology can become a bridge between uncertainty and reunion, facilitating collaboration between families and humanitarian organizations.",
   "mission.originTitle": "Why BASUF exists",
   "mission.originBody":
-    "Born from the grief of a devastating catastrophe and the need and goal of two Venezuelan siblings: to build a simple and functional tool that helps real families when traditional systems fail by connecting all links to find the family member.\u00A0\n\n\nToday our portal is an open foundation for humanitarian organizations anywhere in the world.",
+    "BASUF was born from a very simple question:\n\nHow can a family find a loved one when everything else has stopped working?\n\nAfter a natural disaster or humanitarian crisis, communications fail, records fragment and information becomes scattered among hospitals, shelters, brigades and aid organizations.\n\nThe idea came from the shared experience and concern of two Venezuelan siblings who understood that, in an emergency, time and information can make the difference between uncertainty and reunion.\n\nThus BASUF was born: a platform designed to connect those who search with those who can help, always respecting privacy, dignity and humanitarian protocols.",
+  "about.tagline":
+    "We connect information. We reunite families.",
+  "about.differenceTitle":
+    "What makes BASUF different?",
+  "about.differenceBody":
+    "BASUF is not just a registry of missing persons.\n\nIt integrates reports made by citizens with information registered by humanitarian organizations to generate possible matches that help accelerate family location and reunification.\n\nEach match preserves the origin of the information and allows a review process before sharing sensitive data, promoting a more coordinated, secure and reliable response during an emergency.",
+  "about.closing":
+    "Today BASUF is a functional prototype oriented to collaborate with humanitarian organizations, hospitals, shelters and response teams to improve coordination during emergencies.\n\nBecause behind every report there is a family waiting to find each other again.",
   "home.stats.cases": "Registered cases",
   "home.stats.reunions": "Reunions",
   "home.stats.orgs": "Partner organizations",

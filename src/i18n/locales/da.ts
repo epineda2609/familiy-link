@@ -4,7 +4,7 @@ export const da: MessageDict = {
   "app.name": "BASUF",
   "app.tagline": "Bror og søster genforener familier",
   "app.mission":
-    "Et humanitært netværk til at genforene mennesker adskilt af katastrofer.",
+    "BASUF er en humanitær platform designet til at hjælpe med at lokalisere, identificere og genforene mennesker, der er adskilt under nødsituationer, naturkatastrofer og humanitære kriser, og som på sikker, ansvarlig og privatlivsbeskyttende vis forbinder familier med responsorganisationer.",
   "demo.banner":
     "Demo-miljø — Alle viste data er fiktive.",
   "nav.home": "Forside",
@@ -27,19 +27,27 @@ export const da: MessageDict = {
   "home.cta.report": "Anmeld en person",
   "mission.title": "Vores mission",
   "mission.subtitle":
-    "Tre forpligtelser bag hver sag, hver søgning og hver genforening.",
+    "Tre forpligtelser, der bærer hver søgning, hver anmeldelse og hver mulige genforening.",
   "mission.pillar.humanity.title": "Menneskelighed",
   "mission.pillar.humanity.desc":
-    "Hver sag er en person med en historie, ikke en post. Vi designer med omhu, respekt og værdighed.",
+    "Hver sag repræsenterer et menneske, en familie og en historie. Vi designede BASUF med empati, respekt og værdighed for dem, der gennemlever de sværeste øjeblikke.",
   "mission.pillar.traceability.title": "Sporbarhed",
   "mission.pillar.traceability.desc":
-    "Klar oprindelse, verificerbar pålidelighed og uforanderlig revision af hvert følsomt datapunkt, der afsløres.",
+    "Hver datapunkt bevarer sin oprindelse og sit verifikationsniveau, hvilket fremmer gennemsigtighed, tillid og ansvarlig håndtering af information gennem hele processen.",
   "mission.pillar.hope.title": "Håb",
   "mission.pillar.hope.desc":
-    "En bro mellem kaos og genforening — bygget til NGO'er, hospitaler, herberger og redningshold.",
+    "Vi tror på, at teknologi kan blive en bro mellem usikkerhed og genforening, og facilitere samarbejdet mellem familier og humanitære organisationer.",
   "mission.originTitle": "Hvorfor BASUF findes",
   "mission.originBody":
-    "Født af to venezuelanske søskendes sorg og formål: at bygge et seriøst værktøj, der hjælper rigtige familier, når traditionelle systemer svigter. I dag er det en åben base til samarbejde med humanitære organisationer overalt i verden.",
+    "BASUF blev født ud af et meget simpelt spørgsmål:\n\nHvordan kan en familie finde en kær, når alt andet er holdt op med at fungere?\n\nEfter en naturkatastrofe eller humanitær krise svigter kommunikationen, registrene fragmenteres, og information spredes mellem hospitaler, herberger, brigader og hjælpeorganisationer.\n\nIdeen opstod ud af to venezuelanske søskendes fælles erfaring og bekymring, som forstod, at tid og information i en nødsituation kan gøre forskellen mellem usikkerhed og genforening.\n\nSådan blev BASUF født: en platform designet til at forbinde dem, der leder, med dem, der kan hjælpe, og altid med respekt for privatliv, værdighed og humanitære protokoller.",
+  "about.tagline":
+    "Vi forbinder information. Vi genforener familier.",
+  "about.differenceTitle":
+    "Hvad gør BASUF anderledes?",
+  "about.differenceBody":
+    "BASUF er ikke bare et register over savnede personer.\n\nDet integrerer anmeldelser fra borgere med information registreret af humanitære organisationer for at generere mulige match, der hjælper med at fremskynde lokalisering og genforening af familier.\n\nHvert match bevarer oprindelsen af informationen og muliggør en revisionsproces, før følsomme data deles, hvilket fremmer en mere koordineret, sikker og pålidelig indsats under en nødsituation.",
+  "about.closing":
+    "I dag er BASUF en funktionel prototype rettet mod at samarbejde med humanitære organisationer, hospitaler, herberger og responshold for at forbedre koordineringen under nødsituationer.\n\nFor bag hver anmeldelse står der en familie, der venter på at finde hinanden igen.",
   "home.stats.cases": "Registrerede sager",
   "home.stats.reunions": "Genforeninger",
   "home.stats.orgs": "Partnerorganisationer",

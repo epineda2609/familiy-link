@@ -4,7 +4,7 @@ export const it: MessageDict = {
   "app.name": "BASUF",
   "app.tagline": "Fratello e sorella riuniscono le famiglie",
   "app.mission":
-    "Una rete umanitaria per riconnettere le persone separate dalle catastrofi.",
+    "BASUF è una piattaforma umanitaria progettata per aiutare a localizzare, identificare e ricongiungere persone separate durante emergenze, disastri naturali e crisi umanitarie, connettendo le famiglie con le organizzazioni di risposta in modo sicuro, responsabile e rispettoso della privacy delle persone.",
   "demo.banner":
     "Ambiente dimostrativo — Tutti i dati mostrati sono fittizi.",
   "nav.home": "Home",
@@ -27,19 +27,27 @@ export const it: MessageDict = {
   "home.cta.report": "Segnala una persona",
   "mission.title": "La nostra missione",
   "mission.subtitle":
-    "Tre impegni dietro ogni scheda, ogni ricerca e ogni ricongiungimento.",
+    "Tre impegni che sostengono ogni ricerca, ogni segnalazione e ogni possibile ricongiungimento.",
   "mission.pillar.humanity.title": "Umanità",
   "mission.pillar.humanity.desc":
-    "Ogni scheda è una persona con una storia, non un record. Progettiamo con cura, rispetto e dignità.",
+    "Ogni scheda rappresenta una persona, una famiglia e una storia. Abbiamo progettato BASUF con empatia, rispetto e dignità per chi attraversa i momenti più difficili.",
   "mission.pillar.traceability.title": "Tracciabilità",
   "mission.pillar.traceability.desc":
-    "Origine chiara, affidabilità verificabile e audit immutabile di ogni dato sensibile rivelato.",
+    "Ogni dato conserva la propria origine e il proprio livello di verifica, promuovendo trasparenza, fiducia e una gestione responsabile delle informazioni durante tutto il processo.",
   "mission.pillar.hope.title": "Speranza",
   "mission.pillar.hope.desc":
-    "Un ponte tra il caos e il ricongiungimento, costruito per ONG, ospedali, rifugi e squadre di soccorso.",
+    "Crediamo che la tecnologia possa diventare un ponte tra l'incertezza e il ricongiungimento, facilitando la collaborazione tra famiglie e organizzazioni umanitarie.",
   "mission.originTitle": "Perché esiste BASUF",
   "mission.originBody":
-    "Nasce dal dolore e dal proposito di due fratelli venezuelani: creare uno strumento serio che aiuti le famiglie reali quando i sistemi tradizionali falliscono. Oggi è una base aperta per collaborare con organizzazioni umanitarie in ogni parte del mondo.",
+    "BASUF è nata da una domanda molto semplice:\n\nCome può una famiglia trovare una persona cara quando tutto il resto ha smesso di funzionare?\n\nDopo un disastro naturale o una crisi umanitaria, le comunicazioni falliscono, i registri si frammentano e le informazioni rimangono disperse tra ospedali, rifugi, brigate e organizzazioni di aiuto.\n\nL'idea è nata dall'esperienza e dalla preoccupazione condivisa di due fratelli venezuelani che hanno capito che, in un'emergenza, il tempo e le informazioni possono fare la differenza tra l'incertezza e il ricongiungimento.\n\nCosì è nata BASUF: una piattaforma pensata per connettere chi cerca con chi può aiutare, rispettando sempre la privacy, la dignità e i protocolli umanitari.",
+  "about.tagline":
+    "Connettiamo le informazioni. Ricongiungiamo le famiglie.",
+  "about.differenceTitle":
+    "Cosa rende BASUF diversa?",
+  "about.differenceBody":
+    "BASUF non è solo un registro di persone scomparse.\n\nIntegra le segnalazioni dei cittadini con le informazioni registrate dalle organizzazioni umanitarie per generare possibili corrispondenze che aiutano ad accelerare la localizzazione e il ricongiungimento familiare.\n\nOgni corrispondenza conserva l'origine dell'informazione e permette un processo di revisione prima di condividere dati sensibili, promuovendo una risposta più coordinata, sicura e affidabile durante un'emergenza.",
+  "about.closing":
+    "Oggi BASUF è un prototipo funzionale orientato a collaborare con organizzazioni umanitarie, ospedali, rifugi e squadre di risposta per migliorare il coordinamento durante le emergenze.\n\nPerché dietro ogni segnalazione c'è una famiglia che aspetta di ritrovarsi.",
   "home.stats.cases": "Casi registrati",
   "home.stats.reunions": "Ricongiungimenti",
   "home.stats.orgs": "Organizzazioni partner",

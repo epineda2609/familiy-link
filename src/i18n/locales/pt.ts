@@ -4,7 +4,7 @@ export const pt: MessageDict = {
   "app.name": "BASUF",
   "app.tagline": "Brother And Sister Unindo Famílias",
   "app.mission":
-    "Uma rede humanitária para reconectar pessoas separadas por catástrofes.",
+    "A BASUF é uma plataforma humanitária destinada a ajudar a localizar, identificar e reunificar pessoas separadas durante emergências, desastres naturais e crises humanitárias, conectando famílias a organizações de resposta de forma segura, responsável e respeitando a privacidade das pessoas.",
   "demo.banner":
     "Ambiente de demonstração — Todos os dados exibidos são fictícios.",
   "nav.home": "Início",
@@ -27,19 +27,27 @@ export const pt: MessageDict = {
   "home.cta.report": "Reportar pessoa",
   "mission.title": "Nossa missão",
   "mission.subtitle":
-    "Três compromissos por trás de cada ficha, cada busca e cada reencontro.",
+    "Três compromissos que sustentam cada busca, cada relatório e cada possível reencontro.",
   "mission.pillar.humanity.title": "Humanidade",
   "mission.pillar.humanity.desc":
-    "Cada ficha é uma pessoa com história, não um registro. Desenhamos com cuidado, respeito e dignidade.",
+    "Cada ficha representa uma pessoa, uma família e uma história. Desenhamos a BASUF com empatia, respeito e dignidade para quem atravessa os momentos mais difíceis.",
   "mission.pillar.traceability.title": "Rastreabilidade",
   "mission.pillar.traceability.desc":
-    "Origem clara, confiabilidade verificável e auditoria imutável de cada dado sensível revelado.",
+    "Cada dado conserva sua origem e nível de verificação, promovendo transparência, confiança e um manejo responsável da informação durante todo o processo.",
   "mission.pillar.hope.title": "Esperança",
   "mission.pillar.hope.desc":
-    "Uma ponte entre o caos e o reencontro, construída para ONGs, hospitais, abrigos e brigadas.",
+    "Acreditamos que a tecnologia pode se tornar uma ponte entre a incerteza e o reencontro, facilitando a colaboração entre famílias e organizações humanitárias.",
   "mission.originTitle": "Por que a BASUF existe",
   "mission.originBody":
-    "Nasce da dor e do propósito de dois irmãos venezuelanos: criar uma ferramenta séria que ajude famílias reais quando os sistemas tradicionais falham. Hoje é uma base aberta para organizações humanitárias em qualquer parte do mundo.",
+    "A BASUF nasceu de uma pergunta muito simples:\n\nComo uma família pode encontrar um ente querido quando todo o resto deixou de funcionar?\n\nDepois de um desastre natural ou uma crise humanitária, as comunicações falham, os registros se fragmentam e a informação fica dispersa entre hospitais, abrigos, brigadas e organizações de ajuda.\n\nA ideia surgiu da experiência e da preocupação compartilhada por dois irmãos venezuelanos que compreenderam que, numa emergência, o tempo e a informação podem fazer a diferença entre a incerteza e o reencontro.\n\nAssim nasceu a BASUF: uma plataforma projetada para conectar quem busca com quem pode ajudar, respeitando sempre a privacidade, a dignidade e os protocolos humanitários.",
+  "about.tagline":
+    "Conectamos informações. Reunimos famílias.",
+  "about.differenceTitle":
+    "O que torna a BASUF diferente?",
+  "about.differenceBody":
+    "A BASUF não é apenas um registro de pessoas desaparecidas.\n\nIntegra relatórios feitos por cidadãos com informações registradas por organizações humanitárias para gerar possíveis coincidências que ajudam a acelerar a localização e a reunificação familiar.\n\nCada coincidência conserva a origem da informação e permite um processo de revisão antes de compartilhar dados sensíveis, promovendo uma resposta mais coordenada, segura e confiável durante uma emergência.",
+  "about.closing":
+    "Hoje a BASUF é um protótipo funcional orientado a colaborar com organizações humanitárias, hospitais, abrigos e equipes de resposta para melhorar a coordenação durante emergências.\n\nPorque detrás de cada relatório há uma família esperando se reencontrar.",
   "home.stats.cases": "Casos registrados",
   "home.stats.reunions": "Reencontros",
   "home.stats.orgs": "Organizações parceiras",
