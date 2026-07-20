@@ -18,7 +18,7 @@ export const mockDisasters: Disaster[] = [
     id: "d-mx-2024-sismo",
     type: "earthquake",
     name: "Sismo Costa del Pacífico",
-    country: "MEXICO",
+    country: "MX",
     region: "Guerrero",
     startedAt: "2024-11-03",
     active: true,
