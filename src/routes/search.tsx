@@ -43,7 +43,7 @@ function SearchPage() {
   const { t } = useT();
   const [filters, setFilters] = useState<SearchFilters>(emptyFilters);
   const [applied, setApplied] = useState<SearchFilters>(emptyFilters);
-  const [results, setResults] = useState<PublicPersonCard[]>([]);
+  const [activeOnly, setActiveOnly] = useState(true);
   const [disasters, setDisasters] = useState<Disaster[]>([]);
   const [countries, setCountries] = useState<Country[]>([]);
   const [nationalities, setNationalities] = useState<Country[]>([]);
