@@ -23,6 +23,7 @@ export const en: MessageDict = {
   "home.hero.title": "Find your loved ones after an emergency.",
   "home.hero.subtitle":
     "BASUF connects reports from families, rescuers, hospitals, shelters and humanitarian organizations across Latin America to help locate and identify people safely.",
+  "home.hero.slogan": "Connecting information. Reuniting families.",
   "home.cta.search": "Search for a person",
   "home.cta.search.desc": "Look up registered people and possible matches.",
   "home.cta.report": "Report a missing person",
@@ -111,6 +112,7 @@ export const en: MessageDict = {
   "footer.privacy": "Privacy",
   "footer.protocols": "Humanitarian protocols",
   "footer.contact": "Contact",
+  "footer.slogan": "Connecting information. Reuniting families.",
   "footer.rights": "Humanitarian prototype — Restricted use.",
   "person.back": "Back to results",
   "person.notFound.title": "Person not found",

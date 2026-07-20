@@ -9,7 +9,8 @@ export function SiteFooter() {
         <div className="flex flex-col justify-between gap-4 md:flex-row">
           <div>
             <p className="font-semibold text-foreground">{t("app.name")}</p>
-            <p className="text-xs">{t("app.tagline")}</p>
+            <p className="text-sm font-medium text-foreground">{t("footer.slogan")}</p>
+            <p className="text-xs text-muted-foreground">{t("app.tagline")}</p>
           </div>
           <ul className="flex flex-wrap gap-x-6 gap-y-2 text-xs">
             <li>

@@ -23,6 +23,7 @@ export const tr: MessageDict = {
   "home.hero.title": "Aileleri birleştirmek mümkün.",
   "home.hero.subtitle":
     "BASUF, Latin Amerika'da depremler, savaşlar ve seller nedeniyle kaybolan kişilerin bulunmasına yardımcı olur.",
+  "home.hero.slogan": "Connecting information. Reuniting families.",
   "home.cta.search": "Birini ara",
   "home.cta.report": "Bir kişiyi bildir",
   "mission.title": "Misyonumuz",
@@ -95,6 +96,7 @@ export const tr: MessageDict = {
   "footer.privacy": "Gizlilik",
   "footer.protocols": "İnsani protokoller",
   "footer.contact": "İletişim",
+  "footer.slogan": "Connecting information. Reuniting families.",
   "footer.rights": "İnsani prototip — Sınırlı kullanım.",
   "person.back": "Sonuçlara dön",
   "person.notFound.title": "Dosya bulunamadı",

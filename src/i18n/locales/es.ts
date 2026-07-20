@@ -22,6 +22,7 @@ const esDict = {
   "home.hero.title": "Encuentra a tus seres queridos después de una emergencia.",
   "home.hero.subtitle":
     "BASUF conecta reportes de familiares, rescatistas, hospitales, refugios y organizaciones humanitarias en Latinoamérica para ayudar a localizar e identificar personas de forma segura.",
+  "home.hero.slogan": "Conectamos información. Reunimos familias.",
   "home.cta.search": "Buscar una persona",
   "home.cta.search.desc": "Consultar personas registradas y posibles coincidencias.",
   "home.cta.report": "Reportar una persona desaparecida",
@@ -108,6 +109,7 @@ const esDict = {
   "footer.privacy": "Privacidad",
   "footer.protocols": "Protocolos humanitarios",
   "footer.contact": "Contacto",
+  "footer.slogan": "Conectamos información. Reunimos familias.",
   "footer.rights": "Prototipo humanitario — Uso restringido.",
   "person.back": "Volver a resultados",
   "person.notFound.title": "Persona no encontrada",

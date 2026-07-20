@@ -147,10 +147,13 @@ function Home() {
               {t("hero.kicker")}
             </p>
             <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl whitespace-pre-line">
-              {t("home.hero.title")}
+              {t("app.name")}
             </h1>
+            <p className="mt-4 max-w-2xl text-xl font-semibold text-foreground sm:text-2xl">
+              {t("home.hero.slogan")}
+            </p>
             <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-              {t("home.hero.subtitle")}
+              {t("home.hero.title")}
             </p>
             <p className="mt-4 max-w-2xl border-s-2 border-primary/40 ps-4 text-sm italic text-muted-foreground/90">
               {t("hero.contextLine")}
