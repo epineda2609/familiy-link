@@ -23,9 +23,16 @@ import { SiteFooter } from "../components/SiteFooter";
 import { SkipLink } from "../components/SkipLink";
 import { useT } from "../i18n/LocaleProvider";
 import { peopleRepository } from "../repositories/PeopleRepository";
+import { supabase } from "../integrations/supabase/client";
 import type { Disaster } from "../domain/types";
 import type { DisasterType } from "../domain/types";
 import type { MessageKey } from "../i18n/messages";
+
+interface EventCounters {
+  registeredReports: number;
+  potentialMatches: number;
+  verifiedCases: number;
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
