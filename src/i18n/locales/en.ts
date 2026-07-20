@@ -565,6 +565,11 @@ export const en: MessageDict = {
     "Your contribution was recorded as pending review. It will appear in the Case History.",
   "info.pendingNotice":
     "Citizen updates do not automatically modify official data. They are reviewed before being applied.",
+  "info.warning.title": "Before submitting information",
+  "info.warning.body1":
+    "Information submitted will be reviewed by humanitarian organisations before being added to the case.",
+  "info.warning.body2":
+    "Do not publish sensitive information about third parties that is not necessary for the search.",
   "person.origin.title": "Report origin",
   "person.origin.citizen": "Citizen report",
   "person.origin.citizenDesc":
@@ -588,6 +593,15 @@ export const en: MessageDict = {
   "person.match.status.rejected": "Discarded",
   "person.match.instType": "Organisation type",
   "person.match.region": "General region",
+  "person.match.matchedPerson": "Compatible person",
+  "person.match.organization": "Organisation",
+  "person.match.currentStatus": "Current status",
+  "person.match.disclaimer":
+    "Definitive identity will be confirmed only by an authorised organisation.",
+  "person.match.badgeInstitution":
+    "{score}% match with an institutional record",
+  "person.match.badgeCivil":
+    "{score}% match with a citizen report",
   "person.match.viewTimeline": "View timeline",
   "case.timeline.pageTitle": "Case timeline",
   "case.timeline.pageSubtitle":

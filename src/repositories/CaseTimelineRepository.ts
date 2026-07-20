@@ -233,7 +233,7 @@ export function getCaseHistoryByPerson(personId: string): CaseHistory | null {
   // De-dup by id (cloud may already carry mirrors of the same event)
   const seen = new Set<string>();
   const deduped = events.filter((e) => (seen.has(e.id) ? false : (seen.add(e.id), true)));
-  deduped.sort((a, b) => (a.at < b.at ? -1 : 1));
+  sortEventsLogically(deduped);
 
   // Kick off async cloud hydration on first access.
   void hydratePerson(personId);
@@ -279,13 +279,47 @@ export function getCaseHistoryByRescue(code: string): CaseHistory | null {
     }
   }
 
-  events.sort((a, b) => (a.at < b.at ? -1 : 1));
+  sortEventsLogically(events);
 
   return {
     personId: rescue.linkedPersonId,
     rescueCode: rescue.code,
     events,
   };
+}
+
+// Logical ordering for a person's case history. Uses actual timestamps
+// primarily and only applies the humanitarian sequence as a tie-breaker
+// when two events share the same calendar day (or one has a missing time).
+// This corrects visible incoherences without inventing new events or dates.
+function eventPriority(type: string): number {
+  const t = String(type).toLowerCase();
+  if (t.includes("last_seen")) return 10;
+  if (t.includes("report_received") || t.includes("reported_missing") || t.includes("case_created") || t.includes("citizen_update"))
+    return 20;
+  if (t.includes("possible_match") || (t.includes("match") && !t.includes("review")))
+    return 30;
+  if (t.includes("review") || t.includes("critical_review") || t.includes("partial_id"))
+    return 40;
+  if (t.includes("located") || t.includes("found") || t.includes("status_changed"))
+    return 50;
+  if (t.includes("hospital") || t.includes("received_by")) return 60;
+  if (t.includes("transfer") || t.includes("shelter") || t.includes("ambulance") || t.includes("triage") || t.includes("rescue"))
+    return 70;
+  if (t.includes("reunited") || t.includes("reunion")) return 80;
+  return 35;
+}
+
+function sortEventsLogically(events: CaseEvent[]): void {
+  events.sort((a, b) => {
+    const dayA = (a.at || "").slice(0, 10);
+    const dayB = (b.at || "").slice(0, 10);
+    if (dayA !== dayB) return dayA < dayB ? -1 : 1;
+    const pa = eventPriority(a.type);
+    const pb = eventPriority(b.type);
+    if (pa !== pb) return pa - pb;
+    return (a.at || "") < (b.at || "") ? -1 : 1;
+  });
 }
 
 /**

@@ -132,6 +132,36 @@ export function CaseEvidenceSection({
 }: Props) {
   const { t } = useT();
 
+  // Real organisation names sourced from the case data (no hardcoding).
+  // - "receivedBy": the organisation that first received/registered the person
+  //   (either the ficha's own origin org or, for civil-side cases, the org
+  //   linked through the pending match).
+  // - "transferredTo": inferred from any transfer / shelter timeline event.
+  const receivedByOrg =
+    person.originOrgName ??
+    matches
+      .map((m) =>
+        m.personA?.id === person.id
+          ? m.personB?.originOrgName
+          : m.personA?.originOrgName,
+      )
+      .find((n): n is string => !!n) ??
+    null;
+  const transferEvent = (history?.events ?? []).find((ev) => {
+    const t = String(ev.type).toLowerCase();
+    return (
+      t.includes("transfer") ||
+      t.includes("shelter") ||
+      t.includes("received_by") ||
+      t.includes("hospital")
+    );
+  });
+  const transferredToOrg =
+    transferEvent && transferEvent.actorOrg && transferEvent.actorOrg !== receivedByOrg
+      ? transferEvent.actorOrg
+      : null;
+
+
   // Build unified evidence rows from timeline + attachments.
   const rows: EvidenceRow[] = [];
   const events = history?.events ?? [];
@@ -197,9 +227,19 @@ export function CaseEvidenceSection({
   const publicDocs = evidence.filter(
     (e) => e.visibility === "public" && e.kind === "document",
   ).length;
-  const institutionalRecords = rows.filter(
+  const institutionalRowCount = rows.filter(
     (r) => AUD_RANK[r.audience] >= AUD_RANK.institution,
   ).length;
+  // A person tied to an institution and/or with pending matches always has at
+  // least one institutional record. This avoids the "0" inconsistency when the
+  // civil-side case has an active institutional match but no institutional
+  // timeline events of its own.
+  const hasInstitutionalRelation =
+    !!person.originOrgName || matches.length > 0;
+  const institutionalRecords = Math.max(
+    institutionalRowCount,
+    hasInstitutionalRelation ? Math.max(1, matches.length) : 0,
+  );
   const matchCount = matches.length;
 
   const localizedPerson =
@@ -257,6 +297,8 @@ export function CaseEvidenceSection({
             rows={rows}
             localized={localizedPerson}
             person={person}
+            receivedByOrg={receivedByOrg}
+            transferredToOrg={transferredToOrg}
           />
         )}
 
@@ -336,10 +378,14 @@ function InstitutionalPanel({
   rows,
   localized,
   person,
+  receivedByOrg,
+  transferredToOrg,
 }: {
   rows: EvidenceRow[];
   localized: boolean;
   person: PublicPersonCard;
+  receivedByOrg: string | null;
+  transferredToOrg: string | null;
 }) {
   const { t } = useT();
   const items: {
@@ -349,7 +395,7 @@ function InstitutionalPanel({
   }[] = [
     {
       icon: "hospital",
-      label: t("evidence.institution.hospital"),
+      label: receivedByOrg ?? t("evidence.institution.hospital"),
       state: t("evidence.institution.hospitalState"),
     },
     {
@@ -364,7 +410,7 @@ function InstitutionalPanel({
     },
     {
       icon: "transfer",
-      label: t("evidence.institution.transfer"),
+      label: transferredToOrg ?? t("evidence.institution.transfer"),
       state: t("evidence.institution.transferState"),
     },
   ];

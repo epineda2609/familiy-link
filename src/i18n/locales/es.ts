@@ -605,6 +605,11 @@ const esDict = {
     "Tu aporte quedó registrado como pendiente de revisión. Aparecerá en la Historia del caso.",
   "info.pendingNotice":
     "Las actualizaciones ciudadanas no modifican automáticamente los datos oficiales. Se validan antes de aplicarse.",
+  "info.warning.title": "Antes de enviar información",
+  "info.warning.body1":
+    "La información enviada será revisada por organizaciones humanitarias antes de incorporarse al caso.",
+  "info.warning.body2":
+    "No publique información sensible de terceros que no sea necesaria para la búsqueda.",
   // ── Origen del reporte / posible coincidencia (iteración fichas públicas) ──
   "person.origin.title": "Origen del reporte",
   "person.origin.citizen": "Reporte ciudadano",
@@ -629,6 +634,15 @@ const esDict = {
   "person.match.status.rejected": "Descartada",
   "person.match.instType": "Tipo de institución",
   "person.match.region": "Región general",
+  "person.match.matchedPerson": "Persona compatible",
+  "person.match.organization": "Organización",
+  "person.match.currentStatus": "Estado actual",
+  "person.match.disclaimer":
+    "La identidad definitiva será confirmada únicamente por una organización autorizada.",
+  "person.match.badgeInstitution":
+    "{score}% de coincidencia con un registro institucional",
+  "person.match.badgeCivil":
+    "{score}% de coincidencia con un reporte ciudadano",
   "person.match.viewTimeline": "Ver línea temporal",
   "case.timeline.pageTitle": "Línea temporal del caso",
   "case.timeline.pageSubtitle":

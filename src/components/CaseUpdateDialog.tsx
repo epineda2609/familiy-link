@@ -131,6 +131,16 @@ export function CaseUpdateDialog({
           <span>{t("info.pendingNotice")}</span>
         </div>
 
+        <div className="mb-4 rounded-md border border-primary/40 bg-primary/5 p-4">
+          <p className="text-sm font-semibold text-foreground">
+            {t("info.warning.title")}
+          </p>
+          <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
+            <li>• {t("info.warning.body1")}</li>
+            <li>• {t("info.warning.body2")}</li>
+          </ul>
+        </div>
+
         <form onSubmit={submit} className="space-y-5">
           <fieldset className="space-y-3">
             <legend className="text-sm font-semibold text-foreground">
