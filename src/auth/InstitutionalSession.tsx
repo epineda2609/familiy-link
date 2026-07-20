@@ -85,14 +85,29 @@ async function deriveSession(
   }
 
   // 2) Institutional membership (reviewer/viewer)
-  const { data: membership } = await supabase
-    .from("organization_memberships")
-    .select(
-      "id, organization_id, user_name, institutional_role, status, organizations:organization_id(name, status)",
-    )
-    .ilike("user_email", email)
-    .eq("status", "active")
-    .maybeSingle();
+  const readMembership = async () =>
+    supabase
+      .from("organization_memberships")
+      .select(
+        "id, organization_id, user_name, institutional_role, status, organizations:organization_id(name, status)",
+      )
+      .ilike("user_email", email)
+      .eq("status", "active")
+      .maybeSingle();
+
+  let { data: membership } = await readMembership();
+
+  // If no active membership found, try to reconcile any invited row for this
+  // confirmed email whose organization is already approved. Idempotent.
+  if (!membership) {
+    const { error: rpcErr } = await supabase.rpc("accept_institutional_invite");
+    if (rpcErr) {
+      console.warn("[session] accept_institutional_invite failed:", rpcErr.message);
+    } else {
+      const retry = await readMembership();
+      membership = retry.data;
+    }
+  }
 
   if (!membership) {
     return { session: null, reason: "no_membership" };
@@ -116,6 +131,7 @@ async function deriveSession(
     },
   };
 }
+
 
 export function InstitutionalSessionProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<InstitutionalSession | null>(null);
