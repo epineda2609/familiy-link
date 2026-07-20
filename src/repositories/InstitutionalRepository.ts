@@ -138,7 +138,7 @@ class CloudInstitutionalRepository implements IInstitutionalRepository {
   async updateStatus(id: string, status: PersonStatus) {
     const { error } = await supabase
       .from("persons")
-      .update({ current_status: toDbStatus(status) })
+      .update({ current_status: toDbStatus(status) as PersonStatus })
       .eq("id", id);
     if (error) console.error("[institutional.updateStatus]", error);
     return this.getById(id);
