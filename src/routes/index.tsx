@@ -320,30 +320,35 @@ function Home() {
                     </span>
                   </p>
                 )}
-                {d.affectedEstimate && (
-                  <p className="mt-3 text-xs text-muted-foreground">
-                    <span className="font-semibold text-foreground">
-                      {d.id === "d-ve-2026-sismo-yaracuy" ? "68" : "49"}
-                    </span>{" "}
-                    reportes registrados
-                  </p>
-                )}
-                {d.fatalities !== undefined && (
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    <span className="font-semibold text-destructive">
-                      {d.id === "d-ve-2026-sismo-yaracuy" ? "12" : "11"}
-                    </span>{" "}
-                    posibles coincidencias
-                  </p>
-                )}
-                {d.missing !== undefined && (
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    <span className="font-semibold text-urgent-foreground">
-                      {d.id === "d-ve-2026-sismo-yaracuy" ? "3" : "5"}
-                    </span>{" "}
-                    casos verificados
-                  </p>
-                )}
+                {(() => {
+                  const c = counters[d.id] ?? {
+                    registeredReports: 0,
+                    potentialMatches: 0,
+                    verifiedCases: 0,
+                  };
+                  return (
+                    <>
+                      <p className="mt-3 text-xs text-muted-foreground">
+                        <span className="font-semibold text-foreground">
+                          {c.registeredReports}
+                        </span>{" "}
+                        reportes registrados
+                      </p>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        <span className="font-semibold text-destructive">
+                          {c.potentialMatches}
+                        </span>{" "}
+                        posibles coincidencias
+                      </p>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        <span className="font-semibold text-urgent-foreground">
+                          {c.verifiedCases}
+                        </span>{" "}
+                        casos verificados
+                      </p>
+                    </>
+                  );
+                })()}
               </article>
             );
           })}
