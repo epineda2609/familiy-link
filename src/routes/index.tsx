@@ -23,9 +23,16 @@ import { SiteFooter } from "../components/SiteFooter";
 import { SkipLink } from "../components/SkipLink";
 import { useT } from "../i18n/LocaleProvider";
 import { peopleRepository } from "../repositories/PeopleRepository";
+import { supabase } from "../integrations/supabase/client";
 import type { Disaster } from "../domain/types";
 import type { DisasterType } from "../domain/types";
 import type { MessageKey } from "../i18n/messages";
+
+interface EventCounters {
+  registeredReports: number;
+  potentialMatches: number;
+  verifiedCases: number;
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -87,8 +94,33 @@ export function disasterTypeLabel(t: DisasterType): string {
 function Home() {
   const { t } = useT();
   const [disasters, setDisasters] = useState<Disaster[]>([]);
+  const [counters, setCounters] = useState<Record<string, EventCounters>>({});
   useEffect(() => {
     peopleRepository.listDisasters().then(setDisasters);
+  }, []);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data, error } = await supabase.rpc("event_case_counters");
+      if (cancelled || error || !data) return;
+      const map: Record<string, EventCounters> = {};
+      for (const row of data as Array<{
+        event_id: string;
+        registered_reports: number | string;
+        potential_matches: number | string;
+        verified_cases: number | string;
+      }>) {
+        map[row.event_id] = {
+          registeredReports: Number(row.registered_reports) || 0,
+          potentialMatches: Number(row.potential_matches) || 0,
+          verifiedCases: Number(row.verified_cases) || 0,
+        };
+      }
+      setCounters(map);
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
   const activeDisasters = disasters
     .filter((d) => d.active)
@@ -288,30 +320,35 @@ function Home() {
                     </span>
                   </p>
                 )}
-                {d.affectedEstimate && (
-                  <p className="mt-3 text-xs text-muted-foreground">
-                    <span className="font-semibold text-foreground">
-                      {d.id === "d-ve-2026-sismo-yaracuy" ? "68" : "49"}
-                    </span>{" "}
-                    reportes registrados
-                  </p>
-                )}
-                {d.fatalities !== undefined && (
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    <span className="font-semibold text-destructive">
-                      {d.id === "d-ve-2026-sismo-yaracuy" ? "12" : "11"}
-                    </span>{" "}
-                    posibles coincidencias
-                  </p>
-                )}
-                {d.missing !== undefined && (
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    <span className="font-semibold text-urgent-foreground">
-                      {d.id === "d-ve-2026-sismo-yaracuy" ? "3" : "5"}
-                    </span>{" "}
-                    casos verificados
-                  </p>
-                )}
+                {(() => {
+                  const c = counters[d.id] ?? {
+                    registeredReports: 0,
+                    potentialMatches: 0,
+                    verifiedCases: 0,
+                  };
+                  return (
+                    <>
+                      <p className="mt-3 text-xs text-muted-foreground">
+                        <span className="font-semibold text-foreground">
+                          {c.registeredReports}
+                        </span>{" "}
+                        reportes registrados
+                      </p>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        <span className="font-semibold text-destructive">
+                          {c.potentialMatches}
+                        </span>{" "}
+                        posibles coincidencias
+                      </p>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        <span className="font-semibold text-urgent-foreground">
+                          {c.verifiedCases}
+                        </span>{" "}
+                        casos verificados
+                      </p>
+                    </>
+                  );
+                })()}
               </article>
             );
           })}
