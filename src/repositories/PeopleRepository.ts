@@ -350,24 +350,30 @@ class CloudPeopleRepository implements IPeopleRepository {
     const reportedAt = new Date().toISOString();
 
     let insertError: { code?: string } | null = null;
+    let assignedCode: string | null = null;
     try {
-      const { error } = await supabase.from("persons").insert({
-        id,
-        display_name: displayName,
-        approximate_age: input.approximateAge ?? null,
-        gender: input.gender,
-        country,
-        nationality,
-        document_number: input.documentId?.trim() || null,
-        event_id: disasterId,
-        distinguishing_features: input.distinctiveFeatures?.trim() || null,
-        reporter_name: reporterName,
-        reporter_contact: reporterContact,
-        current_status: "missing",
-        privacy_level: "public",
-        reported_at: reportedAt,
-      });
+      const { data, error } = await supabase
+        .from("persons")
+        .insert({
+          id,
+          display_name: displayName,
+          approximate_age: input.approximateAge ?? null,
+          gender: input.gender,
+          country,
+          nationality,
+          document_number: input.documentId?.trim() || null,
+          event_id: disasterId,
+          distinguishing_features: input.distinctiveFeatures?.trim() || null,
+          reporter_name: reporterName,
+          reporter_contact: reporterContact,
+          current_status: "missing",
+          privacy_level: "public",
+          reported_at: reportedAt,
+        })
+        .select("public_case_code")
+        .maybeSingle();
       insertError = error;
+      assignedCode = data?.public_case_code ?? null;
     } catch (error) {
       console.error("[people.createReport.persons]", error);
       throw error instanceof Error ? error : new Error("create_report_failed");
@@ -414,6 +420,7 @@ class CloudPeopleRepository implements IPeopleRepository {
 
     return {
       id,
+      publicCaseCode: assignedCode ?? undefined,
       displayName,
       approximateAge,
       gender: input.gender,
@@ -426,6 +433,7 @@ class CloudPeopleRepository implements IPeopleRepository {
       lastSeenAt: input.lastSeenAt || undefined,
       distinctiveFeatures: input.distinctiveFeatures?.trim() || undefined,
       reportedAt: reportedAt.slice(0, 10),
+      reportOrigin: "citizen",
     };
   }
 
