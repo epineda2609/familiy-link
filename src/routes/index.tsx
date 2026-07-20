@@ -291,27 +291,25 @@ function Home() {
                 {d.affectedEstimate && (
                   <p className="mt-3 text-xs text-muted-foreground">
                     <span className="font-semibold text-foreground">
-                      {d.affectedEstimate >= 1000000 
-                        ? "2.3m" 
-                        : d.affectedEstimate.toLocaleString()}
+                      {d.id === "d-ve-2026-sismo-yaracuy" ? "68" : "39"}
                     </span>{" "}
-                    personas afectadas (est.)
+                    reportes registrados
                   </p>
                 )}
                 {d.fatalities !== undefined && (
                   <p className="mt-1 text-xs text-muted-foreground">
                     <span className="font-semibold text-destructive">
-                      ~183
+                      {d.id === "d-ve-2026-sismo-yaracuy" ? "12" : "15"}
                     </span>{" "}
-                    fallecidos
+                    posibles coincidencias
                   </p>
                 )}
                 {d.missing !== undefined && (
                   <p className="mt-1 text-xs text-muted-foreground">
                     <span className="font-semibold text-urgent-foreground">
-                      &gt;27
+                      {d.id === "d-ve-2026-sismo-yaracuy" ? "3" : "6"}
                     </span>{" "}
-                    desaparecidos (reportes)
+                    casos verificados
                   </p>
                 )}
               </article>
