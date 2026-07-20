@@ -297,6 +297,8 @@ export function CaseEvidenceSection({
             rows={rows}
             localized={localizedPerson}
             person={person}
+            receivedByOrg={receivedByOrg}
+            transferredToOrg={transferredToOrg}
           />
         )}
 
