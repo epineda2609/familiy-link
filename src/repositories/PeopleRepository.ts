@@ -117,9 +117,19 @@ function normGender(g: string | null): Gender {
 }
 
 function normStatus(s: string): PersonStatus {
-  return s === "missing" || s === "searching" || s === "found" || s === "reunited"
-    ? s
-    : "missing";
+  // Map internal Cloud states (located/identified/contacted/possible_match/...) to
+  // the 4 user-facing statuses. "located" is the canonical institutional-found state.
+  if (s === "reunited") return "reunited";
+  if (s === "searching" || s === "possible_match" || s === "information_received")
+    return "searching";
+  if (
+    s === "found" ||
+    s === "located" ||
+    s === "identified" ||
+    s === "contacted"
+  )
+    return "found";
+  return "missing";
 }
 
 function normEventType(t: string): DisasterType {
