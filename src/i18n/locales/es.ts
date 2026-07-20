@@ -67,7 +67,7 @@ const esDict = {
   "search.field.ageRange": "Rango de edad",
   "search.field.gender": "Género",
   "search.field.nationality": "Nacionalidad",
-  "search.field.documentId": "Documento de identidad",
+  "search.field.documentId": "Documento (opcional)",
   "search.field.documentId.ph": "Número de documento",
   "search.field.any": "Cualquiera",
   "search.submit": "Buscar",
