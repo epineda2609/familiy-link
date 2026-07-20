@@ -56,7 +56,7 @@ export const mockDisasters: Disaster[] = [
     id: "d-co-2024-inund",
     type: "flood",
     name: "Inundaciones del Río Cauca",
-    country: "COLOMBIA",
+    country: "CO",
     region: "Valle del Cauca",
     startedAt: "2024-10-14",
     active: false,
