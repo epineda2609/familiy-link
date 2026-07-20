@@ -2,8 +2,6 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   ArrowLeft,
-  MapPin,
-  Calendar,
   User,
   ShieldAlert,
   ShieldCheck,
@@ -11,7 +9,6 @@ import {
   MessageSquare,
   Flag,
   Building2,
-
   Users,
   Link2,
 } from "lucide-react";
