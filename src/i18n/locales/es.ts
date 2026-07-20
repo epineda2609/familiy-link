@@ -331,7 +331,7 @@ const esDict = {
   "rescue.lookup.placeholder": "Ej. BASUF-VE-4K9P",
   "rescue.lookup.submit": "Buscar",
   "rescue.lookup.notFound": "No hay registros con ese identificador. Verifica y vuelve a intentar.",
-  "rescue.lookup.offlineHint": "Funciona con conectividad mínima: si el QR falla, escribe el código humano.",
+  "rescue.lookup.offlineHint": "Funciona con conectividad mínima para lugares con poca señal telefónica.",
   "rescue.lookup.altHint": "También puedes buscar por un código de rescate, como R-4F7K.",
   "rescue.privacy.title": "Código seguro",
   "rescue.privacy.line1": "El ID BASUF no contiene nombres, documentos, teléfonos, direcciones ni información médica.",
