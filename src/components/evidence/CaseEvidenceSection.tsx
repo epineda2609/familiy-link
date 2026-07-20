@@ -378,10 +378,14 @@ function InstitutionalPanel({
   rows,
   localized,
   person,
+  receivedByOrg,
+  transferredToOrg,
 }: {
   rows: EvidenceRow[];
   localized: boolean;
   person: PublicPersonCard;
+  receivedByOrg: string | null;
+  transferredToOrg: string | null;
 }) {
   const { t } = useT();
   const items: {
@@ -391,7 +395,7 @@ function InstitutionalPanel({
   }[] = [
     {
       icon: "hospital",
-      label: t("evidence.institution.hospital"),
+      label: receivedByOrg ?? t("evidence.institution.hospital"),
       state: t("evidence.institution.hospitalState"),
     },
     {
@@ -406,7 +410,7 @@ function InstitutionalPanel({
     },
     {
       icon: "transfer",
-      label: t("evidence.institution.transfer"),
+      label: transferredToOrg ?? t("evidence.institution.transfer"),
       state: t("evidence.institution.transferState"),
     },
   ];
