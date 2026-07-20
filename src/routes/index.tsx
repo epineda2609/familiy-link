@@ -246,6 +246,15 @@ function Home() {
             const typeLabel = isKnown
               ? t(`disaster.${d.type}` as MessageKey)
               : (d.customType || disasterTypeLabel(d.type));
+
+            const countryNameMap: Record<string, string> = {
+              VE: "VENEZUELA",
+              BR: "BRASIL",
+              CL: "CHILE",
+              MX: "MEXICO",
+              CO: "COLOMBIA",
+            };
+            const countryDisplay = countryNameMap[d.country] || d.country;
             return (
               <article
                 key={d.id}
@@ -262,7 +271,7 @@ function Home() {
                 <h3 className="font-semibold leading-tight">{d.name}</h3>
                 <p className="mt-1 text-xs text-muted-foreground">
                   {d.region ? `${d.region} · ` : ""}
-                  {d.country}
+                  <span className="uppercase">{countryDisplay}</span>
                 </p>
                 <p className="mt-1 text-xs text-muted-foreground">
                   {new Date(d.startedAt).toLocaleDateString(undefined, {
