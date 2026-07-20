@@ -10,8 +10,8 @@ import {
   Share2,
   MessageSquare,
   Flag,
-  Camera,
   Building2,
+
   Users,
   Link2,
 } from "lucide-react";
@@ -30,9 +30,9 @@ import type { MessageKey } from "../i18n/messages";
 import { CaseNarrative } from "../components/CaseNarrative";
 import { getCaseHistoryByPerson, useCaseTimeline } from "../repositories/CaseTimelineRepository";
 import { findSafeIdByPersonId } from "../data/mock/safeIds";
-import { EvidenceGallery } from "../components/evidence/EvidenceGallery";
-import { AudiencePreviewTabs } from "../components/evidence/AudiencePreviewTabs";
+import { CaseEvidenceSection } from "../components/evidence/CaseEvidenceSection";
 import { evidenceRepository } from "../repositories/EvidenceRepository";
+
 import { resolveAudience, type SafeIdAudience } from "../domain/safeId";
 import { useMode } from "../modes/OperationalModeProvider";
 import { ShareDialog } from "../components/ShareDialog";
@@ -420,30 +420,15 @@ function PersonDetailPage() {
         )}
 
 
-        <section className="mt-10 rounded-xl border border-border bg-card p-6 shadow-sm">
-          <div className="mb-4 flex items-center gap-2">
-            <Camera className="h-4 w-4 text-primary" aria-hidden />
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-              {t("evidence.title")}
-            </h2>
-          </div>
-          <p className="mb-4 text-xs text-muted-foreground">
-            {t("evidence.subtitle")}
-          </p>
-          <div className="mb-4">
-            <AudiencePreviewTabs
-              value={evidenceAudience}
-              onChange={setEvidenceAudience}
-            />
-          </div>
-          <EvidenceGallery
-            items={evidenceItems}
-            audience={evidenceAudience}
-            actorName="Vista previa"
-            actorOrg="—"
-            actorRole={mode}
-          />
-        </section>
+        <CaseEvidenceSection
+          person={person}
+          history={getCaseHistoryByPerson(person.id)}
+          evidence={evidenceItems}
+          matches={matches}
+          audience={evidenceAudience}
+          onAudienceChange={setEvidenceAudience}
+        />
+
 
 
         <section className="mt-10">
