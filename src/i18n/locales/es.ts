@@ -47,15 +47,15 @@ const esDict = {
   "home.disasters.subtitle":
     "Contextos donde BASUF está coordinando búsquedas.",
   "home.how.title": "Cómo funciona",
-  "home.how.step1.title": "Reporta o busca",
+  "home.how.step1.title": "Busca o reporta",
   "home.how.step1.desc":
-    "Registra a una persona desaparecida o busca coincidencias en nuestra base de datos.",
-  "home.how.step2.title": "Coincidencias verificadas",
+    "Inicia una búsqueda de un familiar o reporta a una persona desaparecida o localizada. Comparte únicamente la información necesaria para ayudar a identificar el caso de forma segura.",
+  "home.how.step2.title": "Detectamos posibles coincidencias",
   "home.how.step2.desc":
-    "El sistema propone posibles coincidencias y las organizaciones aliadas las validan.",
-  "home.how.step3.title": "Recibe/Actualiza el estado y comparte el enlace",
+    "BASUF analiza la información del caso y compara registros relacionados con la emergencia para identificar posibles coincidencias. Todas las coincidencias son preliminares y requieren verificación.",
+  "home.how.step3.title": "Verificación y reunificación",
   "home.how.step3.desc":
-    "Coordinamos el contacto respetando privacidad y protocolos humanitarios.",
+    "Una organización autorizada valida la identidad y el estado de la persona antes de coordinar el contacto entre las familias, respetando la privacidad, el consentimiento y los protocolos humanitarios.\u00a0",
   "search.title": "Buscar personas",
   "search.subtitle":
     "Usa filtros para encontrar coincidencias. Los datos sensibles no se muestran en el panel público.",
