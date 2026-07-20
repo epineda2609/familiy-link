@@ -4,6 +4,7 @@ import type { SafeIdRecord } from "../../domain/safeId";
 import { RescueQR } from "../RescueQR";
 import { BarcodePseudo } from "./BarcodePseudo";
 import { useT } from "../../i18n/LocaleProvider";
+import { T } from "../../i18n/T";
 
 export function SafeIdCard({
   record,
@@ -86,11 +87,9 @@ export function SafeIdCard({
           <RescueQR value={record.barcodeValue} size={128} />
           <div className="flex min-w-0 flex-1 flex-col">
             <p className="text-[10px] font-semibold uppercase tracking-widest text-neutral-500">
-              BASUF · Digital Safe ID
+              <T k="audit.components.safeId.safeIdCard.bASUFDigitalSafeID" />
             </p>
-            <p className="mt-1 font-mono text-2xl font-black tracking-wider">
-              {record.shortCode}
-            </p>
+            <p className="mt-1 font-mono text-2xl font-black tracking-wider">{record.shortCode}</p>
             <p className="mt-1 truncate font-mono text-[10px] text-neutral-600">
               {record.barcodeValue}
             </p>
@@ -101,9 +100,7 @@ export function SafeIdCard({
         </div>
       </div>
 
-      <p className="mt-3 text-xs text-muted-foreground">
-        {t("safeId.print.subtitle")}
-      </p>
+      <p className="mt-3 text-xs text-muted-foreground">{t("safeId.print.subtitle")}</p>
     </div>
   );
 }

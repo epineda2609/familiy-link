@@ -15,22 +15,25 @@ import { LocaleProvider } from "../i18n/LocaleProvider";
 import { OperationalModeProvider } from "../modes/OperationalModeProvider";
 import { InstitutionalSessionProvider } from "../auth/InstitutionalSession";
 import { ToastViewport } from "../components/Toast";
+import { T } from "../i18n/T";
 
 function NotFoundComponent() {
   return (
     <div className="flex min-h-dvh items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">
+          <T k="audit.routes.root.pageNotFound" />
+        </h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+          <T k="audit.routes.root.thePageYouReLookingForDoesn" />
         </p>
         <div className="mt-6">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Go home
+            <T k="audit.routes.root.goHome" />
           </Link>
         </div>
       </div>
@@ -49,10 +52,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     <div className="flex min-h-dvh items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+          <T k="audit.routes.root.thisPageDidnTLoad" />
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+          <T k="audit.routes.root.somethingWentWrongOnOurEndYou" />
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -62,13 +65,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Try again
+            <T k="audit.routes.root.tryAgain" />
           </button>
           <a
             href="/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
-            Go home
+            <T k="audit.routes.root.goHome" />
           </a>
         </div>
       </div>
@@ -97,9 +100,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "BASUF — Brother And Sister Uniendo Familias" },
-      { name: "twitter:description", content: "Red humanitaria para reconectar familias separadas por sismos, guerras e inundaciones en Latinoamérica." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b21e5a8c-5569-46f3-9a73-805e4b8456a7/id-preview-6db3f914--3fb0e8d2-11f1-4b27-86e9-caa5feb596ac.lovable.app-1784065799883.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b21e5a8c-5569-46f3-9a73-805e4b8456a7/id-preview-6db3f914--3fb0e8d2-11f1-4b27-86e9-caa5feb596ac.lovable.app-1784065799883.png" },
+      {
+        name: "twitter:description",
+        content:
+          "Red humanitaria para reconectar familias separadas por sismos, guerras e inundaciones en Latinoamérica.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b21e5a8c-5569-46f3-9a73-805e4b8456a7/id-preview-6db3f914--3fb0e8d2-11f1-4b27-86e9-caa5feb596ac.lovable.app-1784065799883.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b21e5a8c-5569-46f3-9a73-805e4b8456a7/id-preview-6db3f914--3fb0e8d2-11f1-4b27-86e9-caa5feb596ac.lovable.app-1784065799883.png",
+      },
     ],
     links: [
       {

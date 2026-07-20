@@ -18,11 +18,7 @@ import { SiteFooter } from "../components/SiteFooter";
 import { SkipLink } from "../components/SkipLink";
 import { useT } from "../i18n/LocaleProvider";
 import { peopleRepository } from "../repositories/PeopleRepository";
-import type {
-  PublicPersonCard,
-  Disaster,
-  Country,
-} from "../domain/types";
+import type { PublicPersonCard, Disaster, Country } from "../domain/types";
 import type { MessageKey } from "../i18n/messages";
 import { CaseNarrative } from "../components/CaseNarrative";
 import { getCaseHistoryByPerson, useCaseTimeline } from "../repositories/CaseTimelineRepository";
@@ -47,9 +43,7 @@ export const Route = createFileRoute("/person/$id")({
     return { person, disaster, countries };
   },
   head: ({ loaderData }) => {
-    const title = loaderData
-      ? `${loaderData.person.displayName} — BASUF`
-      : "Ficha — BASUF";
+    const title = loaderData ? `${loaderData.person.displayName} — BASUF` : "Ficha — BASUF";
     const description = loaderData
       ? `Ficha pública humanitaria — ${loaderData.person.displayName}. Solo información autorizada.`
       : "Ficha pública humanitaria BASUF.";
@@ -88,10 +82,7 @@ function PersonDetailPage() {
     resolveAudience(mode),
   );
   const [, forceTick] = useState(0);
-  useEffect(
-    () => evidenceRepository.subscribe(() => forceTick((v) => v + 1)),
-    [],
-  );
+  useEffect(() => evidenceRepository.subscribe(() => forceTick((v) => v + 1)), []);
   const evidenceItems = evidenceRepository.listByCase(person.id);
   // Subscribe to citizen updates + cloud timeline hydration so the case history refreshes reactively.
   useCaseUpdates(person.id);
@@ -99,15 +90,11 @@ function PersonDetailPage() {
   const [shareOpen, setShareOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
 
-
   const countryName =
-    countries.find((c: Country) => c.code === person.country)?.name ??
-    person.country;
+    countries.find((c: Country) => c.code === person.country)?.name ?? person.country;
   const statusKey = `status.${person.status}` as MessageKey;
   const genderKey = `gender.${person.gender}` as MessageKey;
-  const disasterTypeKey = disaster
-    ? (`disaster.${disaster.type}` as MessageKey)
-    : null;
+  const disasterTypeKey = disaster ? (`disaster.${disaster.type}` as MessageKey) : null;
 
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 
@@ -127,7 +114,6 @@ function PersonDetailPage() {
     }
     setShareOpen(true);
   };
-
 
   return (
     <div className="min-h-dvh bg-background">
@@ -198,13 +184,7 @@ function PersonDetailPage() {
           url={shareUrl}
           name={person.displayName}
         />
-        <CaseUpdateDialog
-          open={infoOpen}
-          onOpenChange={setInfoOpen}
-          person={person}
-        />
-
-
+        <CaseUpdateDialog open={infoOpen} onOpenChange={setInfoOpen} person={person} />
 
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
@@ -213,14 +193,14 @@ function PersonDetailPage() {
               {t("person.section.identity")}
             </h2>
             <dl className="space-y-2.5 text-sm">
-              <Row label={t("person.field.age")} value={person.approximateAge ? `~${person.approximateAge}` : "—"} />
+              <Row
+                label={t("person.field.age")}
+                value={person.approximateAge ? `~${person.approximateAge}` : "—"}
+              />
               <Row label={t("person.field.gender")} value={t(genderKey)} />
               <Row label={t("person.field.status")} value={t(statusKey)} />
               <Row label={t("person.field.country")} value={countryName} />
-              <Row
-                label={t("person.field.reportedAt")}
-                value={person.reportedAt}
-              />
+              <Row label={t("person.field.reportedAt")} value={person.reportedAt} />
             </dl>
           </section>
 
@@ -230,10 +210,7 @@ function PersonDetailPage() {
               {t("person.section.lastSeen")}
             </h2>
             <dl className="space-y-2.5 text-sm">
-              <Row
-                label={t("person.field.location")}
-                value={person.lastSeenLocation ?? "—"}
-              />
+              <Row label={t("person.field.location")} value={person.lastSeenLocation ?? "—"} />
               <Row
                 label={t("person.field.date")}
                 value={person.lastSeenAt ?? "—"}
@@ -248,9 +225,7 @@ function PersonDetailPage() {
                 <Flag className="h-4 w-4" aria-hidden />
                 {t("person.section.features")}
               </h2>
-              <p className="text-sm text-foreground/90">
-                {person.distinctiveFeatures}
-              </p>
+              <p className="text-sm text-foreground/90">{person.distinctiveFeatures}</p>
             </section>
           )}
 
@@ -261,12 +236,9 @@ function PersonDetailPage() {
               </h2>
               <dl className="grid gap-2.5 text-sm sm:grid-cols-2">
                 <Row label={t("person.field.disaster")} value={disaster.name} />
-                <Row
-                  label={t("search.field.disaster")}
-                  value={t(disasterTypeKey)}
-                />
+                <Row label={t("search.field.disaster")} value={t(disasterTypeKey)} />
                 {disaster.region && (
-                  <Row label="Región" value={disaster.region} />
+                  <Row label={t("audit.person.region")} value={disaster.region} />
                 )}
                 <Row label={t("person.field.date")} value={disaster.startedAt} />
               </dl>
@@ -280,9 +252,7 @@ function PersonDetailPage() {
                 <h3 className="text-sm font-semibold text-foreground">
                   {t("person.privacy.title")}
                 </h3>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {t("person.privacy.desc")}
-                </p>
+                <p className="mt-1 text-sm text-muted-foreground">{t("person.privacy.desc")}</p>
               </div>
             </div>
           </aside>
@@ -295,14 +265,9 @@ function PersonDetailPage() {
               {t("evidence.title")}
             </h2>
           </div>
-          <p className="mb-4 text-xs text-muted-foreground">
-            {t("evidence.subtitle")}
-          </p>
+          <p className="mb-4 text-xs text-muted-foreground">{t("evidence.subtitle")}</p>
           <div className="mb-4">
-            <AudiencePreviewTabs
-              value={evidenceAudience}
-              onChange={setEvidenceAudience}
-            />
+            <AudiencePreviewTabs value={evidenceAudience} onChange={setEvidenceAudience} />
           </div>
           <EvidenceGallery
             items={evidenceItems}
@@ -312,7 +277,6 @@ function PersonDetailPage() {
             actorRole={mode}
           />
         </section>
-
 
         <section className="mt-10">
           {(() => {
@@ -339,9 +303,7 @@ function Row({
 }) {
   return (
     <div className="flex items-start justify-between gap-4 border-b border-border/50 pb-2 last:border-0 last:pb-0">
-      <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-        {label}
-      </dt>
+      <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</dt>
       <dd className="flex items-center gap-1.5 text-right text-foreground">
         {icon}
         <span>{value}</span>
@@ -358,9 +320,7 @@ function PersonNotFound() {
       <SiteHeader />
       <main id="main-content" className="mx-auto max-w-3xl px-4 py-16 text-center">
         <h1 className="text-2xl font-bold">{t("person.notFound.title")}</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {t("person.notFound.desc")}
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">{t("person.notFound.desc")}</p>
         <div className="mt-6">
           <Link
             to="/search"

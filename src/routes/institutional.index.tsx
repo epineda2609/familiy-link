@@ -1,15 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
-import {
-  CheckCircle2,
-  XCircle,
-  ExternalLink,
-  Eye,
-  EyeOff,
-  Plus,
-  X,
-} from "lucide-react";
+import { CheckCircle2, XCircle, ExternalLink, Eye, EyeOff, Plus, X } from "lucide-react";
 import { useT } from "../i18n/LocaleProvider";
 import { useInstitutionalSession } from "../auth/InstitutionalSession";
 import {
@@ -26,6 +18,7 @@ import type { MessageKey } from "../i18n/messages";
 import { auditLog } from "../audit/auditLog";
 import type { AuditActor } from "../audit/auditLog";
 import { toast } from "../components/Toast";
+import { T } from "../i18n/T";
 
 export const Route = createFileRoute("/institutional/")({
   head: () => ({
@@ -64,8 +57,7 @@ function DashboardPage() {
   const [createOpen, setCreateOpen] = useState(false);
 
   const canCreateDisaster = session?.role === "admin";
-  const refreshDisasters = () =>
-    peopleRepository.listDisasters().then(setDisasters);
+  const refreshDisasters = () => peopleRepository.listDisasters().then(setDisasters);
 
   const canEdit = session?.role === "admin" || session?.role === "reviewer";
   const actor: AuditActor | null = session
@@ -83,8 +75,7 @@ function DashboardPage() {
     peopleRepository.listDisasters().then(setDisasters);
   }, []);
 
-  const disasterName = (id: string) =>
-    disasters.find((d) => d.id === id)?.name ?? id;
+  const disasterName = (id: string) => disasters.find((d) => d.id === id)?.name ?? id;
 
   const stats = useMemo(() => {
     const total = cases.length;
@@ -95,9 +86,7 @@ function DashboardPage() {
     return { total, missing, searching, reunited, pending };
   }, [cases]);
 
-  const filtered = statusFilter
-    ? cases.filter((c) => c.status === statusFilter)
-    : cases;
+  const filtered = statusFilter ? cases.filter((c) => c.status === statusFilter) : cases;
 
   const changeStatus = async (c: InstitutionalCase, next: PersonStatus) => {
     if (!actor) return;
@@ -173,7 +162,7 @@ function DashboardPage() {
               className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
             >
               <Plus className="h-4 w-4" aria-hidden />
-              Crear evento
+              <T k="audit.routes.institutionalIndex.crearEvento" />
             </button>
           )}
           <label htmlFor="status-filter" className="text-xs font-medium text-muted-foreground">
@@ -221,7 +210,10 @@ function DashboardPage() {
             {filtered.map((c) => {
               const isRevealed = revealed.has(c.id);
               return (
-                <tr key={c.id} className="border-b border-border/50 last:border-0 hover:bg-muted/30">
+                <tr
+                  key={c.id}
+                  className="border-b border-border/50 last:border-0 hover:bg-muted/30"
+                >
                   <td className="px-4 py-3">
                     <div className="font-medium">{c.displayName}</div>
                     <div className="text-xs text-muted-foreground">
@@ -358,7 +350,7 @@ function DashboardPage() {
                 },
               });
             }
-            toast.success("Evento creado", d.name);
+            toast.success(t("audit.disasters.createdToast"), d.name);
             refreshDisasters();
             setCreateOpen(false);
           }}
@@ -573,19 +565,19 @@ const allCountriesEs = Array.from(
   ),
 ).sort((a, b) => a.localeCompare(b, "es"));
 
-const disasterTypeOptions: { value: DisasterType; label: string }[] = [
-  { value: "earthquake", label: "Sismo" },
-  { value: "flood", label: "Inundación" },
-  { value: "tsunami", label: "Tsunami" },
-  { value: "hurricane", label: "Huracán / ciclón" },
-  { value: "storm", label: "Tormenta severa" },
-  { value: "landslide", label: "Deslizamiento" },
-  { value: "wildfire", label: "Incendio forestal" },
-  { value: "volcano", label: "Erupción volcánica" },
-  { value: "war", label: "Conflicto armado" },
-  { value: "humanitarian", label: "Emergencia humanitaria" },
-  { value: "accident", label: "Accidente de gran magnitud" },
-  { value: "other", label: "Otro" },
+const disasterTypes: DisasterType[] = [
+  "earthquake",
+  "flood",
+  "tsunami",
+  "hurricane",
+  "storm",
+  "landslide",
+  "wildfire",
+  "volcano",
+  "war",
+  "humanitarian",
+  "accident",
+  "other",
 ];
 
 function CreateDisasterModal({
@@ -601,14 +593,13 @@ function CreateDisasterModal({
   orgName?: string;
   countries: string[];
 }) {
+  const { t } = useT();
   const [name, setName] = useState("");
   const [type, setType] = useState<DisasterType>("earthquake");
   const [customType, setCustomType] = useState("");
   const [country, setCountry] = useState("");
   const [region, setRegion] = useState("");
-  const [startedAt, setStartedAt] = useState(
-    new Date().toISOString().slice(0, 10),
-  );
+  const [startedAt, setStartedAt] = useState(new Date().toISOString().slice(0, 10));
   const [description, setDescription] = useState("");
   const [magnitude, setMagnitude] = useState("");
   const [affected, setAffected] = useState("");
@@ -625,13 +616,12 @@ function CreateDisasterModal({
 
   const validate = () => {
     const e: Record<string, string> = {};
-    if (!name.trim()) e.name = "Requerido";
-    if (!type) e.type = "Requerido";
-    if (type === "other" && !customType.trim())
-      e.customType = "Especifica el tipo";
-    if (!country.trim()) e.country = "Requerido";
-    if (!region.trim()) e.region = "Requerido";
-    if (!startedAt) e.startedAt = "Requerido";
+    if (!name.trim()) e.name = t("report.field.required");
+    if (!type) e.type = t("report.field.required");
+    if (type === "other" && !customType.trim()) e.customType = t("audit.disasters.specifyType");
+    if (!country.trim()) e.country = t("report.field.required");
+    if (!region.trim()) e.region = t("report.field.required");
+    if (!startedAt) e.startedAt = t("report.field.required");
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -649,8 +639,7 @@ function CreateDisasterModal({
         region: region.trim(),
         startedAt,
         description: description.trim() || undefined,
-        magnitude:
-          type === "earthquake" && magnitude.trim() ? magnitude.trim() : undefined,
+        magnitude: type === "earthquake" && magnitude.trim() ? magnitude.trim() : undefined,
         affectedEstimate: toNum(affected),
         fatalities: toNum(fatalities),
         missing: toNum(missing),
@@ -662,12 +651,12 @@ function CreateDisasterModal({
     } catch (err) {
       if (err instanceof DuplicateDisasterError) {
         setErrors({
-          name: "Ya existe un evento con el mismo nombre, país y fecha.",
+          name: t("audit.disasters.duplicateError"),
         });
       } else {
         toast.error(
-          "No se pudo crear el evento",
-          err instanceof Error ? err.message : "Error desconocido",
+          t("audit.disasters.createError"),
+          err instanceof Error ? err.message : t("audit.disasters.unknownError"),
         );
       }
     } finally {
@@ -683,7 +672,7 @@ function CreateDisasterModal({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Crear evento"
+      aria-label={t("audit.disasters.createEvent")}
       className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 p-4"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
@@ -692,16 +681,18 @@ function CreateDisasterModal({
       <div className="my-10 w-full max-w-2xl rounded-2xl border border-border bg-card shadow-xl">
         <div className="flex items-center justify-between border-b border-border px-5 py-4">
           <div>
-            <h2 className="text-lg font-bold">Crear evento</h2>
+            <h2 className="text-lg font-bold">
+              <T k="audit.routes.institutionalIndex.crearEvento" />
+            </h2>
             <p className="text-xs text-muted-foreground">
-              Registra una nueva catástrofe. Quedará disponible en Reportar.
+              <T k="audit.routes.institutionalIndex.registraUnaNuevaCatastrofeQuedaraDisponibleEn" />
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
             className="rounded-md p-1 text-muted-foreground transition hover:bg-accent"
-            aria-label="Cerrar"
+            aria-label={t("audit.common.close")}
           >
             <X className="h-5 w-5" />
           </button>
@@ -711,22 +702,20 @@ function CreateDisasterModal({
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
               <label className={labelCls} htmlFor="ev-name">
-                Nombre del evento *
+                <T k="audit.routes.institutionalIndex.nombreDelEvento" />
               </label>
               <input
                 id="ev-name"
                 className={fieldCls}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Ej. Inundaciones en Bolivia 2026"
+                placeholder={t("audit.disasters.eventNamePlaceholder")}
               />
-              {errors.name && (
-                <p className="mt-1 text-xs text-destructive">{errors.name}</p>
-              )}
+              {errors.name && <p className="mt-1 text-xs text-destructive">{errors.name}</p>}
             </div>
             <div>
               <label className={labelCls} htmlFor="ev-type">
-                Tipo *
+                <T k="audit.routes.institutionalIndex.tipo" />
               </label>
               <select
                 id="ev-type"
@@ -734,9 +723,9 @@ function CreateDisasterModal({
                 value={type}
                 onChange={(e) => setType(e.target.value as DisasterType)}
               >
-                {disasterTypeOptions.map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.label}
+                {disasterTypes.map((disasterType) => (
+                  <option key={disasterType} value={disasterType}>
+                    {t(`audit.disasters.type.${disasterType}` as MessageKey)}
                   </option>
                 ))}
               </select>
@@ -744,7 +733,7 @@ function CreateDisasterModal({
             {type === "other" && (
               <div>
                 <label className={labelCls} htmlFor="ev-customType">
-                  Especifica el tipo *
+                  <T k="audit.routes.institutionalIndex.especificaElTipo" />
                 </label>
                 <input
                   id="ev-customType"
@@ -753,15 +742,13 @@ function CreateDisasterModal({
                   onChange={(e) => setCustomType(e.target.value)}
                 />
                 {errors.customType && (
-                  <p className="mt-1 text-xs text-destructive">
-                    {errors.customType}
-                  </p>
+                  <p className="mt-1 text-xs text-destructive">{errors.customType}</p>
                 )}
               </div>
             )}
             <div>
               <label className={labelCls} htmlFor="ev-country">
-                País *
+                <T k="audit.routes.institutionalIndex.pais" />
               </label>
               <input
                 id="ev-country"
@@ -769,35 +756,31 @@ function CreateDisasterModal({
                 className={fieldCls}
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
-                placeholder="Ej. BOLIVIA"
+                placeholder={t("audit.disasters.countryPlaceholder")}
               />
               <datalist id="ev-country-list">
                 {countries.map((c) => (
                   <option key={c} value={c} />
                 ))}
               </datalist>
-              {errors.country && (
-                <p className="mt-1 text-xs text-destructive">{errors.country}</p>
-              )}
+              {errors.country && <p className="mt-1 text-xs text-destructive">{errors.country}</p>}
             </div>
             <div>
               <label className={labelCls} htmlFor="ev-region">
-                Zona afectada *
+                <T k="audit.routes.institutionalIndex.zonaAfectada" />
               </label>
               <input
                 id="ev-region"
                 className={fieldCls}
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
-                placeholder="Provincia, ciudad, área"
+                placeholder={t("audit.disasters.areaPlaceholder")}
               />
-              {errors.region && (
-                <p className="mt-1 text-xs text-destructive">{errors.region}</p>
-              )}
+              {errors.region && <p className="mt-1 text-xs text-destructive">{errors.region}</p>}
             </div>
             <div>
               <label className={labelCls} htmlFor="ev-date">
-                Fecha de inicio *
+                <T k="audit.routes.institutionalIndex.fechaDeInicio" />
               </label>
               <input
                 id="ev-date"
@@ -807,14 +790,12 @@ function CreateDisasterModal({
                 onChange={(e) => setStartedAt(e.target.value)}
               />
               {errors.startedAt && (
-                <p className="mt-1 text-xs text-destructive">
-                  {errors.startedAt}
-                </p>
+                <p className="mt-1 text-xs text-destructive">{errors.startedAt}</p>
               )}
             </div>
             <div className="sm:col-span-2">
               <label className={labelCls} htmlFor="ev-desc">
-                Descripción breve
+                <T k="audit.routes.institutionalIndex.descripcionBreve" />
               </label>
               <textarea
                 id="ev-desc"
@@ -827,20 +808,20 @@ function CreateDisasterModal({
             {type === "earthquake" && (
               <div className="sm:col-span-2">
                 <label className={labelCls} htmlFor="ev-mag">
-                  Magnitud
+                  <T k="audit.routes.institutionalIndex.magnitud" />
                 </label>
                 <input
                   id="ev-mag"
                   className={fieldCls}
                   value={magnitude}
                   onChange={(e) => setMagnitude(e.target.value)}
-                  placeholder="Ej. 6.8"
+                  placeholder={t("audit.disasters.magnitudePlaceholder")}
                 />
               </div>
             )}
             <div>
               <label className={labelCls} htmlFor="ev-aff">
-                Personas afectadas (est.)
+                <T k="audit.routes.institutionalIndex.personasAfectadasEst" />
               </label>
               <input
                 id="ev-aff"
@@ -853,7 +834,7 @@ function CreateDisasterModal({
             </div>
             <div>
               <label className={labelCls} htmlFor="ev-fat">
-                Fallecidos
+                <T k="audit.routes.institutionalIndex.fallecidos" />
               </label>
               <input
                 id="ev-fat"
@@ -866,7 +847,7 @@ function CreateDisasterModal({
             </div>
             <div>
               <label className={labelCls} htmlFor="ev-mis">
-                Desaparecidos
+                <T k="audit.routes.institutionalIndex.desaparecidos" />
               </label>
               <input
                 id="ev-mis"
@@ -880,8 +861,11 @@ function CreateDisasterModal({
           </div>
 
           <div className="rounded-md border border-primary/30 bg-primary/5 p-3 text-xs text-muted-foreground">
-            El evento se creará con estado <strong>Activo</strong> y quedará
-            disponible en el formulario de Reportar.
+            <T k="audit.routes.institutionalIndex.elEventoSeCrearaConEstado" />
+            <strong>
+              <T k="audit.routes.institutionalIndex.activo" />
+            </strong>{" "}
+            <T k="audit.routes.institutionalIndex.yQuedaraDisponibleEnElFormularioDe" />
           </div>
 
           <div className="flex flex-wrap justify-end gap-2 pt-2">
@@ -890,7 +874,7 @@ function CreateDisasterModal({
               onClick={onClose}
               className="rounded-md border border-input bg-background px-4 py-2 text-sm font-medium transition hover:bg-accent"
             >
-              Cancelar
+              <T k="audit.routes.institutionalIndex.cancelar" />
             </button>
             <button
               type="submit"
@@ -898,7 +882,7 @@ function CreateDisasterModal({
               className="inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:opacity-60"
             >
               <Plus className="h-4 w-4" aria-hidden />
-              {submitting ? "Creando…" : "Crear evento"}
+              {submitting ? t("audit.institutional.creating") : t("audit.disasters.createEvent")}
             </button>
           </div>
         </form>

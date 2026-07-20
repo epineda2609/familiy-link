@@ -3,13 +3,18 @@ import { Slot } from "@radix-ui/react-slot";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { T } from "../../i18n/T";
+import { useT } from "../../i18n/LocaleProvider";
 
 const Breadcrumb = React.forwardRef<
   HTMLElement,
   React.ComponentPropsWithoutRef<"nav"> & {
     separator?: React.ReactNode;
   }
->(({ ...props }, ref) => <nav ref={ref} aria-label="breadcrumb" {...props} />);
+>(({ ...props }, ref) => {
+  const { t } = useT();
+  return <nav ref={ref} aria-label={t("audit.common.breadcrumb")} {...props} />;
+});
 Breadcrumb.displayName = "Breadcrumb";
 
 const BreadcrumbList = React.forwardRef<HTMLOListElement, React.ComponentPropsWithoutRef<"ol">>(
@@ -85,7 +90,9 @@ const BreadcrumbEllipsis = ({ className, ...props }: React.ComponentProps<"span"
     {...props}
   >
     <MoreHorizontal className="h-4 w-4" />
-    <span className="sr-only">More</span>
+    <span className="sr-only">
+      <T k="audit.components.ui.breadcrumb.more" />
+    </span>
   </span>
 );
 BreadcrumbEllipsis.displayName = "BreadcrumbElipssis";

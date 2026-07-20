@@ -1,22 +1,10 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
-import {
-  messages,
-  isLocale,
-  localeMeta,
-  type Locale,
-  type MessageKey,
-} from "./messages";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { messages, isLocale, localeMeta, type Locale, type MessageKey } from "./messages";
 
 type Ctx = {
   locale: Locale;
   setLocale: (l: Locale) => void;
-  t: (key: MessageKey) => string;
+  t: (key: MessageKey, values?: Record<string, string | number>) => string;
   dir: "ltr" | "rtl";
 };
 
@@ -65,8 +53,12 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const t = (key: MessageKey) =>
-    messages[locale][key] ?? messages.en[key] ?? messages.es[key] ?? key;
+  const t = (key: MessageKey, values: Record<string, string | number> = {}) => {
+    const template = messages[locale][key] ?? messages.en[key] ?? messages.es[key] ?? key;
+    return template.replace(/\{(\w+)\}/g, (match: string, name: string) =>
+      Object.hasOwn(values, name) ? String(values[name]) : match,
+    );
+  };
 
   return (
     <LocaleContext.Provider value={{ locale, setLocale, t, dir }}>
