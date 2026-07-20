@@ -179,6 +179,19 @@ function PersonDetailPage() {
               <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 {person.displayName}
               </h1>
+              {person.publicCaseCode && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    void navigator.clipboard?.writeText(person.publicCaseCode!);
+                  }}
+                  title="Copiar ID BASUF"
+                  className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-primary/30 bg-primary/5 px-2.5 py-1 font-mono text-xs font-semibold tracking-wide text-primary hover:bg-primary/10"
+                >
+                  <ShieldCheck className="h-3.5 w-3.5" aria-hidden />
+                  {person.publicCaseCode}
+                </button>
+              )}
               <p className="mt-1 text-sm text-muted-foreground">
                 {person.approximateAge ? `~${person.approximateAge} · ` : ""}
                 {t(genderKey)} · {countryName}
