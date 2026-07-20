@@ -79,6 +79,7 @@ export interface IPeopleRepository {
 
 interface PersonRow {
   id: string;
+  public_case_code: string | null;
   display_name: string;
   approximate_age: number | null;
   gender: string | null;
@@ -163,6 +164,7 @@ function mapPerson(row: PersonRow): PublicPersonCard {
     : "citizen";
   return {
     id: row.id,
+    publicCaseCode: row.public_case_code ?? undefined,
     displayName: row.display_name,
     approximateAge: row.approximate_age ?? undefined,
     gender: normGender(row.gender),
@@ -207,7 +209,7 @@ function mapDisaster(row: EventRow): Disaster {
 }
 
 const PERSON_SELECT =
-  "id, display_name, approximate_age, gender, current_status, event_id, country, nationality, document_number, distinguishing_features, photo_url, reported_at, reported_by_organization_id, disappearance_details(last_seen_location, last_seen_date), organizations:reported_by_organization_id(id, name, organization_type, country, region)";
+  "id, public_case_code, display_name, approximate_age, gender, current_status, event_id, country, nationality, document_number, distinguishing_features, photo_url, reported_at, reported_by_organization_id, disappearance_details(last_seen_location, last_seen_date), organizations:reported_by_organization_id(id, name, organization_type, country, region)";
 const EVENT_SELECT =
   "id, name, event_type, custom_type, country, region, start_date, status, description, magnitude, affected_estimate, fatalities, missing_count, created_at";
 
