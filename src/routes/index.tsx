@@ -324,7 +324,7 @@ function Home() {
                 </p>
                 {d.magnitude && (
                   <p className="mt-2 text-xs text-muted-foreground">
-                    Magnitud:{" "}
+                    {t("home.disaster.magnitude")}:{" "}
                     <span className="font-semibold text-foreground">
                       {d.magnitude}
                     </span>
@@ -342,19 +342,19 @@ function Home() {
                         <span className="font-semibold text-foreground">
                           {c.registeredReports}
                         </span>{" "}
-                        reportes registrados
+                        {t("home.disaster.reports")}
                       </p>
                       <p className="mt-1 text-xs text-muted-foreground">
                         <span className="font-semibold text-destructive">
                           {c.potentialMatches}
                         </span>{" "}
-                        posibles coincidencias
+                        {t("home.disaster.matches")}
                       </p>
                       <p className="mt-1 text-xs text-muted-foreground">
                         <span className="font-semibold text-urgent-foreground">
                           {c.verifiedCases}
                         </span>{" "}
-                        casos verificados
+                        {t("home.disaster.verified")}
                       </p>
                     </>
                   );

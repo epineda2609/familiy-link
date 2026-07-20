@@ -19,9 +19,9 @@ const esDict = {
   "hero.kicker": "Plataforma Humanitaria de reunificación y trazabilidad de personas por evento",
   "hero.contextLine":
     "Inspirada por la urgencia evidenciada tras los sismos de Venezuela del 24 de junio de 2026, BASUF ayuda a encontrar seres queridos cuando los registros, las comunicaciones y la coordinación fallan.",
-  "home.hero.title": "Reunir familias es posible\nEncuentra a tus seres queridos despues de una emergencia.\u00a0",
+  "home.hero.title": "Encuentra a tus seres queridos después de una emergencia.",
   "home.hero.subtitle":
-    "BASUF conecta reportes de familiares, rescatistas, hospitales, refugios y organizaciones humanitarias en Latinoamerica para ayudar a localizar e identificar personas de forma segura.",
+    "BASUF conecta reportes de familiares, rescatistas, hospitales, refugios y organizaciones humanitarias en Latinoamérica para ayudar a localizar e identificar personas de forma segura.",
   "home.cta.search": "Buscar una persona",
   "home.cta.search.desc": "Consultar personas registradas y posibles coincidencias.",
   "home.cta.report": "Reportar una persona desaparecida",
@@ -61,6 +61,10 @@ const esDict = {
   "home.disasters.title": "Emergencias activas",
   "home.disasters.subtitle":
     "Contextos donde BASUF está coordinando búsquedas.",
+  "home.disaster.magnitude": "Magnitud",
+  "home.disaster.reports": "reportes registrados",
+  "home.disaster.matches": "posibles coincidencias",
+  "home.disaster.verified": "casos verificados",
   "home.how.title": "Cómo funciona",
   "home.how.step1.title": "Busca o reporta",
   "home.how.step1.desc":
@@ -70,7 +74,7 @@ const esDict = {
     "BASUF analiza la información del caso y compara registros relacionados con la emergencia para identificar posibles coincidencias. Todas las coincidencias son preliminares y requieren verificación.",
   "home.how.step3.title": "Verificación y reunificación",
   "home.how.step3.desc":
-    "Una organización autorizada valida la identidad y el estado de la persona antes de coordinar el contacto entre las familias, respetando la privacidad, el consentimiento y los protocolos humanitarios.\u00a0",
+    "Una organización autorizada valida la identidad y el estado de la persona antes de coordinar el contacto entre las familias, respetando la privacidad, el consentimiento y los protocolos humanitarios.",
   "search.title": "Buscar personas",
   "search.subtitle":
     "Usa filtros para encontrar coincidencias. Los datos sensibles no se muestran en el panel público.",
