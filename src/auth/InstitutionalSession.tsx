@@ -44,7 +44,7 @@ type Ctx = {
     password: string;
     fullName: string;
   }) => Promise<{ needsConfirmation: boolean }>;
-  claimMasterAdmin: (code: string) => Promise<void>;
+  
   signOut: () => Promise<void>;
   refresh: () => Promise<void>;
 };
@@ -216,26 +216,6 @@ export function InstitutionalSessionProvider({ children }: { children: ReactNode
     [],
   );
 
-  const claimMasterAdmin = useCallback(async (code: string) => {
-    setError(null);
-    const { data, error: err } = await supabase.rpc("claim_master_admin", {
-      _code: code,
-    });
-    if (err) {
-      setError(err.message);
-      throw err;
-    }
-    if (data !== true) {
-      const msg = "Código interno incorrecto.";
-      setError(msg);
-      throw new Error(msg);
-    }
-    // Re-derive session with new role
-    const { data: userData } = await supabase.auth.getUser();
-    if (userData.user) {
-      await applyAuthSession({ user: userData.user } as Session);
-    }
-  }, [applyAuthSession]);
 
   const signOut = useCallback(async () => {
     if (session) {
@@ -267,7 +247,7 @@ export function InstitutionalSessionProvider({ children }: { children: ReactNode
         error,
         signInWithPassword,
         signUp,
-        claimMasterAdmin,
+        
         signOut,
         refresh,
       }}
