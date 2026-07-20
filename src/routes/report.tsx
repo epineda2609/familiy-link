@@ -169,6 +169,19 @@ function ReportPage() {
             <p className="mt-2 text-sm text-muted-foreground">
               {t("report.success.desc")}
             </p>
+            {created.publicCaseCode && (
+              <div className="mx-auto mt-5 inline-flex flex-col items-center gap-1 rounded-lg border border-primary/40 bg-primary/5 px-5 py-3">
+                <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                  {t("report.success.basufTitle")}
+                </span>
+                <span className="font-mono text-lg font-semibold text-foreground">
+                  {created.publicCaseCode}
+                </span>
+              </div>
+            )}
+            <p className="mt-4 text-xs text-muted-foreground">
+              {t("report.success.matching")}
+            </p>
             <div className="mt-6 flex flex-wrap justify-center gap-2">
               <Link
                 to="/person/$id"
