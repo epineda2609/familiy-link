@@ -11,7 +11,7 @@ export const en: MessageDict = {
   "nav.search": "Search",
   "nav.report": "Report",
   "nav.about": "About us",
-  "nav.institutional": "Institutional access",
+  "nav.institutional": "Organization Portal",
   "nav.language": "Language",
   "nav.primary": "Primary navigation",
   "nav.open": "Open menu",
