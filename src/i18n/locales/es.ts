@@ -72,7 +72,7 @@ const esDict = {
   "search.field.any": "Cualquiera",
   "search.submit": "Buscar",
   "search.reset": "Limpiar",
-  "search.results": "Resultados",
+  "search.results": "Posibles coincidencias -\u00a0Las coincidencias mostradas requieren verificación humana antes de confirmar la identidad.\u00a0",
   "search.noResults":
     "No se encontraron coincidencias. Intenta ampliar los filtros.",
   "status.missing": "Desaparecida",
