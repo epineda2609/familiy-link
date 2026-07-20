@@ -459,7 +459,7 @@ function PersonDetailPage() {
                 </div>
               );
             }
-            return <CaseNarrative history={history} defaultView="timeline" />;
+            return <CaseNarrative history={history} />;
           })()}
         </section>
 
