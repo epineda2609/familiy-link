@@ -139,9 +139,15 @@ const esDict = {
   "report.field.required": "Requerido",
   "report.field.select": "Selecciona…",
   "report.submit": "Enviar reporte",
+  "report.submitting": "Enviando reporte…",
   "report.cancel": "Cancelar",
   "report.error.title": "Revisa los campos",
   "report.error.desc": "Hay campos requeridos sin completar.",
+  "report.submitError.title": "No se pudo enviar el reporte",
+  "report.submitError.generic":
+    "Ocurrió un problema al guardar el reporte. Comprueba tu conexión e inténtalo nuevamente.",
+  "report.submitError.notAuthorized":
+    "No tienes autorización para crear reportes. Inténtalo nuevamente o contacta al equipo de soporte.",
   "report.success.title": "Reporte recibido",
   "report.success.desc":
     "Gracias. En una implementación real, las organizaciones aliadas revisarán y validarán este reporte antes de publicarlo.",

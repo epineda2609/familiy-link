@@ -140,9 +140,15 @@ export const en: MessageDict = {
   "report.field.required": "Required",
   "report.field.select": "Select…",
   "report.submit": "Submit report",
+  "report.submitting": "Submitting report…",
   "report.cancel": "Cancel",
   "report.error.title": "Check the fields",
   "report.error.desc": "There are required fields that are not filled in.",
+  "report.submitError.title": "The report could not be submitted",
+  "report.submitError.generic":
+    "There was a problem saving the report. Check your connection and try again.",
+  "report.submitError.notAuthorized":
+    "You are not authorized to create reports. Try again or contact support.",
   "report.success.title": "Report received",
   "report.success.desc":
     "Thank you. In a real deployment, partner organizations would review and validate this report before publishing it.",
