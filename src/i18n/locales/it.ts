@@ -23,6 +23,7 @@ export const it: MessageDict = {
   "home.hero.title": "Riunire le famiglie è possibile.",
   "home.hero.subtitle":
     "BASUF aiuta a localizzare persone disperse a causa di terremoti, guerre e inondazioni in America Latina.",
+  "home.hero.slogan": "Connecting information. Reuniting families.",
   "home.cta.search": "Cerca qualcuno",
   "home.cta.report": "Segnala una persona",
   "mission.title": "La nostra missione",
@@ -95,6 +96,7 @@ export const it: MessageDict = {
   "footer.privacy": "Privacy",
   "footer.protocols": "Protocolli umanitari",
   "footer.contact": "Contatto",
+  "footer.slogan": "Connecting information. Reuniting families.",
   "footer.rights": "Prototipo umanitario — Uso limitato.",
   "person.back": "Torna ai risultati",
   "person.notFound.title": "Scheda non trovata",

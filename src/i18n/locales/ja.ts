@@ -23,6 +23,7 @@ export const ja: MessageDict = {
   "home.hero.title": "家族の再会は可能です。",
   "home.hero.subtitle":
     "BASUFは、地震・戦争・洪水によりラテンアメリカで行方不明になった人々の発見を支援します。",
+  "home.hero.slogan": "Connecting information. Reuniting families.",
   "home.cta.search": "人を探す",
   "home.cta.report": "人を報告する",
   "mission.title": "私たちの使命",
@@ -95,6 +96,7 @@ export const ja: MessageDict = {
   "footer.privacy": "プライバシー",
   "footer.protocols": "人道プロトコル",
   "footer.contact": "お問い合わせ",
+  "footer.slogan": "Connecting information. Reuniting families.",
   "footer.rights": "人道支援プロトタイプ — 利用制限あり。",
   "person.back": "結果に戻る",
   "person.notFound.title": "記録が見つかりません",
