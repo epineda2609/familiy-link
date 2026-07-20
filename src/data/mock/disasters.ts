@@ -44,7 +44,7 @@ export const mockDisasters: Disaster[] = [
     id: "d-br-2025-inund",
     type: "flood",
     name: "Enchentes do Rio Grande do Sul",
-    country: "BRASIL",
+    country: "BR",
     region: "Rio Grande do Sul",
     startedAt: "2025-05-02",
     active: true,
