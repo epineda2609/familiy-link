@@ -175,7 +175,7 @@ function PersonDetailPage() {
 
         <header className="mt-4 rounded-xl border border-border bg-card p-6 shadow-sm">
           <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
+            <div className="min-w-0">
               <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
                 {person.displayName}
               </h1>
@@ -183,6 +183,23 @@ function PersonDetailPage() {
                 {person.approximateAge ? `~${person.approximateAge} · ` : ""}
                 {t(genderKey)} · {countryName}
               </p>
+              {primaryMatch && primaryMatch.status === "pending" && (
+                <div
+                  className="mt-3 inline-flex flex-wrap items-center gap-2 rounded-full border border-urgent/40 bg-urgent/10 px-3 py-1 text-xs font-medium text-urgent-foreground"
+                  role="status"
+                >
+                  <span className="inline-block h-2 w-2 rounded-full bg-urgent" aria-hidden />
+                  <span>
+                    {t(
+                      person.reportOrigin === "institution"
+                        ? "person.match.badgeCivil"
+                        : "person.match.badgeInstitution",
+                    ).replace("{score}", String(Math.round(primaryMatch.score)))}
+                  </span>
+                  <span className="opacity-70">·</span>
+                  <span>{t("person.match.status.pending")}</span>
+                </div>
+              )}
             </div>
             <span
               className={`rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide ${statusStyles[person.status]}`}
@@ -220,6 +237,7 @@ function PersonDetailPage() {
             )}
           </div>
         </header>
+
 
         <ShareDialog
           open={shareOpen}
