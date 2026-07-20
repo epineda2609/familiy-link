@@ -31,7 +31,7 @@ export const mockDisasters: Disaster[] = [
     id: "d-cl-2025-sismo",
     type: "earthquake",
     name: "Sismo Región de Valparaíso",
-    country: "CHILE",
+    country: "CL",
     region: "Valparaíso",
     startedAt: "2025-03-18",
     active: true,
