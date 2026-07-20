@@ -155,20 +155,48 @@ function Home() {
             <p className="mt-4 max-w-2xl border-s-2 border-primary/40 ps-4 text-sm italic text-muted-foreground/90">
               {t("hero.contextLine")}
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 grid gap-3 sm:grid-cols-3">
               <Link
                 to="/search"
-                className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
+                className="group flex flex-col rounded-xl bg-primary p-5 text-primary-foreground shadow-sm transition hover:bg-primary/90"
               >
-                <Search className="h-4 w-4" aria-hidden />
-                {t("home.cta.search")}
+                <span className="inline-flex items-center gap-2 text-sm font-semibold">
+                  <Search className="h-4 w-4" aria-hidden />
+                  {t("home.cta.search")}
+                </span>
+                <span className="mt-2 text-xs opacity-90">
+                  {t("home.cta.search.desc")}
+                </span>
               </Link>
               <Link
                 to="/report"
-                className="inline-flex items-center gap-2 rounded-md border border-input bg-card px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-accent"
+                className="group flex flex-col rounded-xl border border-input bg-card p-5 shadow-sm transition hover:bg-accent"
               >
-                <UserPlus className="h-4 w-4" aria-hidden />
-                {t("home.cta.report")}
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-foreground">
+                  <UserPlus className="h-4 w-4" aria-hidden />
+                  {t("home.cta.report")}
+                </span>
+                <span className="mt-1 text-[11px] font-medium uppercase tracking-wide text-primary">
+                  {t("home.cta.report.audience")}
+                </span>
+                <span className="mt-1 text-xs text-muted-foreground">
+                  {t("home.cta.report.desc")}
+                </span>
+              </Link>
+              <Link
+                to="/institutional"
+                className="group flex flex-col rounded-xl border border-input bg-card p-5 shadow-sm transition hover:bg-accent"
+              >
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-foreground">
+                  <HeartHandshake className="h-4 w-4" aria-hidden />
+                  {t("home.cta.institutional")}
+                </span>
+                <span className="mt-1 text-[11px] font-medium uppercase tracking-wide text-primary">
+                  {t("home.cta.institutional.audience")}
+                </span>
+                <span className="mt-1 text-xs text-muted-foreground">
+                  {t("home.cta.institutional.desc")}
+                </span>
               </Link>
             </div>
           </div>

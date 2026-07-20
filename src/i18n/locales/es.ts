@@ -23,7 +23,16 @@ const esDict = {
   "home.hero.subtitle":
     "BASUF conecta reportes de familiares, rescatistas, hospitales, refugios y organizaciones humanitarias en Latinoamerica para ayudar a localizar e identificar personas de forma segura.",
   "home.cta.search": "Buscar una persona",
-  "home.cta.report": "Reportar una persona",
+  "home.cta.search.desc": "Consultar personas registradas y posibles coincidencias.",
+  "home.cta.report": "Reportar una persona desaparecida",
+  "home.cta.report.audience": "Para familiares y ciudadanos.",
+  "home.cta.report.desc":
+    "Cualquier persona puede reportar un familiar o una persona desaparecida durante una emergencia.",
+  "home.cta.institutional": "Registrar desde una organización",
+  "home.cta.institutional.audience":
+    "Hospitales, brigadas, refugios y organizaciones autorizadas.",
+  "home.cta.institutional.desc":
+    "Registrar personas localizadas, rescatadas, trasladadas o atendidas por una organización.",
   "about.tagline": "Conectamos información. Reunimos familias.",
   "mission.title": "Nuestra misión",
   "mission.subtitle":
@@ -117,9 +126,17 @@ const esDict = {
     "Esta ficha muestra únicamente información pública autorizada. Los datos sensibles, fotografías restringidas y contactos están reservados a organizaciones aliadas verificadas.",
   "person.actions.report": "Tengo información",
   "person.actions.share": "Compartir ficha",
-  "report.title": "Reportar persona desaparecida",
+  "report.title": "Reportar una persona desaparecida",
   "report.subtitle":
-    "Los datos que aportes ayudarán a coordinar búsquedas. Solo información pública se mostrará en la ficha.",
+    "Este formulario está disponible para cualquier persona que desee reportar un familiar o una persona desaparecida durante una emergencia.",
+  "report.preSubmit.title": "Antes de enviar información",
+  "report.preSubmit.desc1":
+    "La información enviada será revisada por organizaciones humanitarias antes de incorporarse al caso.",
+  "report.preSubmit.desc2":
+    "No publique información sensible de terceros que no sea necesaria para facilitar la búsqueda.",
+  "report.success.basufTitle": "ID BASUF del caso",
+  "report.success.matching":
+    "Nuestro sistema comenzará a buscar posibles coincidencias con registros ciudadanos e institucionales.",
   "report.section.person": "Sobre la persona",
   "report.section.lastSeen": "Último contacto",
   "report.section.reporter": "Sobre ti",

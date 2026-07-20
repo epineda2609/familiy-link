@@ -23,8 +23,17 @@ export const en: MessageDict = {
   "home.hero.title": "Reuniting families is possible.",
   "home.hero.subtitle":
     "BASUF helps locate people missing due to natural disasters, wars and conflicts across Latin America.",
-  "home.cta.search": "Search for someone",
-  "home.cta.report": "Report a person",
+  "home.cta.search": "Search for a person",
+  "home.cta.search.desc": "Look up registered people and possible matches.",
+  "home.cta.report": "Report a missing person",
+  "home.cta.report.audience": "For families and citizens.",
+  "home.cta.report.desc":
+    "Anyone can report a relative or a missing person during an emergency.",
+  "home.cta.institutional": "Register from an organization",
+  "home.cta.institutional.audience":
+    "Hospitals, rescue brigades, shelters and authorized organizations.",
+  "home.cta.institutional.desc":
+    "Register people located, rescued, transferred or attended by an organization.",
   "mission.title": "Our mission",
   "mission.subtitle":
     "Three commitments that sustain every search, every report and every possible reunion.",
@@ -122,7 +131,15 @@ export const en: MessageDict = {
   "person.actions.share": "Share file",
   "report.title": "Report a missing person",
   "report.subtitle":
-    "The information you provide will help coordinate searches. Only public information will be displayed in the file.",
+    "This form is available to anyone who wants to report a relative or a missing person during an emergency.",
+  "report.preSubmit.title": "Before submitting information",
+  "report.preSubmit.desc1":
+    "The information submitted will be reviewed by humanitarian organizations before being incorporated into the case.",
+  "report.preSubmit.desc2":
+    "Do not publish third-party sensitive information that is not necessary to facilitate the search.",
+  "report.success.basufTitle": "Case BASUF ID",
+  "report.success.matching":
+    "Our system will begin searching for possible matches with citizen and institutional records.",
   "report.section.person": "About the person",
   "report.section.lastSeen": "Last contact",
   "report.section.reporter": "About you",
