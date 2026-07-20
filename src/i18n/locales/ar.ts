@@ -23,7 +23,6 @@ export const ar: MessageDict = {
   "home.hero.title": "لمّ شمل العائلات ممكن.",
   "home.hero.subtitle":
     "تساعد BASUF على تحديد أماكن المفقودين بسبب الزلازل والحروب والفيضانات في أمريكا اللاتينية.",
-  "home.hero.slogan": "Connecting information. Reuniting families.",
   "home.cta.search": "ابحث عن شخص",
   "home.cta.report": "أبلغ عن شخص",
   "mission.title": "مهمتنا",
@@ -96,7 +95,6 @@ export const ar: MessageDict = {
   "footer.privacy": "الخصوصية",
   "footer.protocols": "البروتوكولات الإنسانية",
   "footer.contact": "تواصل",
-  "footer.slogan": "Connecting information. Reuniting families.",
   "footer.rights": "نموذج أولي إنساني — استخدام مقيّد.",
   "person.back": "العودة إلى النتائج",
   "person.notFound.title": "الملف غير موجود",
