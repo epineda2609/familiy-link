@@ -5,7 +5,7 @@ export const mockDisasters: Disaster[] = [
     id: "d-ve-2026-sismo-yaracuy",
     type: "earthquake",
     name: "Sismo en Yaracuy (doblete sísmico)",
-    country: "VENEZUELA",
+    country: "VE",
     region: "Yaracuy (San Felipe / Yumare)",
     startedAt: "2026-06-24",
     active: true,
