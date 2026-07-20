@@ -420,17 +420,6 @@ function PersonDetailPage() {
           </section>
         )}
 
-        {/* Ver línea temporal */}
-        <div className="mt-8 flex flex-wrap gap-2">
-          <Link
-            to="/person/$id/timeline"
-            params={{ id: person.id }}
-            className="inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
-          >
-            <Clock className="h-4 w-4" aria-hidden />
-            {t("person.match.viewTimeline")}
-          </Link>
-        </div>
 
         <section className="mt-10 rounded-xl border border-border bg-card p-6 shadow-sm">
           <div className="mb-4 flex items-center gap-2">
