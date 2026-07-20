@@ -13,7 +13,6 @@ import {
   Camera,
   Building2,
   Users,
-  Clock,
   Link2,
 } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
