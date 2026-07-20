@@ -93,8 +93,7 @@ function RescuePage() {
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const records = useRescueList();
-  const featured = useFeaturedRealCase();
+  const cases = useRealCases();
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
