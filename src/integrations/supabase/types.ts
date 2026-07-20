@@ -1260,7 +1260,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      claim_master_admin: { Args: { _code: string }; Returns: boolean }
       compute_person_matches: { Args: { _person_id: string }; Returns: number }
       event_case_counters: {
         Args: never
