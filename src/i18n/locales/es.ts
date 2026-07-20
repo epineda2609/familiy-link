@@ -19,9 +19,9 @@ const esDict = {
   "hero.kicker": "Plataforma Humanitaria de reunificación y trazabilidad de personas por evento",
   "hero.contextLine":
     "Inspirada por la urgencia evidenciada tras los sismos de Venezuela del 24 de junio de 2026, BASUF ayuda a encontrar seres queridos cuando los registros, las comunicaciones y la coordinación fallan.",
-  "home.hero.title": "Reunir familias es posible.",
+  "home.hero.title": "Reunir familias es posible\nEncuentra a tus seres queridos despues de una emergencia.\u00a0",
   "home.hero.subtitle":
-    "BASUF ayuda a localizar personas desaparecidas por catástrofes naturales, guerras y conflictos en Latinoamérica.",
+    "BASUF conecta reportes de familiares, rescatistas, hospitales, refugios y organizaciones humanitarias en Latinoamerica para ayudar a localizar e identificar personas de forma segura.",
   "home.cta.search": "Buscar a alguien",
   "home.cta.report": "Reportar persona",
   "mission.title": "Nuestra misión",
