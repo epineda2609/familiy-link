@@ -30,9 +30,9 @@ import type { MessageKey } from "../i18n/messages";
 import { CaseNarrative } from "../components/CaseNarrative";
 import { getCaseHistoryByPerson, useCaseTimeline } from "../repositories/CaseTimelineRepository";
 import { findSafeIdByPersonId } from "../data/mock/safeIds";
-import { EvidenceGallery } from "../components/evidence/EvidenceGallery";
-import { AudiencePreviewTabs } from "../components/evidence/AudiencePreviewTabs";
+import { CaseEvidenceSection } from "../components/evidence/CaseEvidenceSection";
 import { evidenceRepository } from "../repositories/EvidenceRepository";
+
 import { resolveAudience, type SafeIdAudience } from "../domain/safeId";
 import { useMode } from "../modes/OperationalModeProvider";
 import { ShareDialog } from "../components/ShareDialog";
