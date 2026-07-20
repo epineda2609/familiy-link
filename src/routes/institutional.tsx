@@ -105,8 +105,8 @@ function SignInGate() {
 
           <p className="mt-4 text-[11px] leading-relaxed text-muted-foreground">
             Los usuarios institucionales deben haber sido invitados previamente por
-            un administrador BASUF. El personal interno usa el código maestro
-            <span className="font-mono"> BASUF-MASTER</span> tras iniciar sesión.
+            un administrador BASUF. El acceso de administrador se otorga
+            manualmente desde la base de datos por seguridad.
           </p>
         </div>
       </main>
@@ -259,23 +259,7 @@ function Field({
 }
 
 function UnauthorizedGate() {
-  const { error, signOut, claimMasterAdmin } = useInstitutionalSession();
-  const [code, setCode] = useState("");
-  const [claimError, setClaimError] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
-
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
-    setClaimError(null);
-    setBusy(true);
-    try {
-      await claimMasterAdmin(code);
-    } catch (err) {
-      setClaimError(err instanceof Error ? err.message : "Código inválido.");
-    } finally {
-      setBusy(false);
-    }
-  };
+  const { error, signOut } = useInstitutionalSession();
 
   return (
     <div className="min-h-dvh bg-background">
@@ -306,43 +290,17 @@ function UnauthorizedGate() {
               <li>Solicita al administrador BASUF una invitación al correo con que iniciaste sesión.</li>
               <li>Una vez enviada la invitación, cierra sesión y vuelve a entrar para activarla.</li>
             </ul>
+            <p className="pt-2 text-[11px]">
+              El rol de administrador BASUF sólo se otorga manualmente por
+              motivos de seguridad. Contacta al equipo interno si necesitas
+              acceso.
+            </p>
           </div>
-
-          <form onSubmit={submit} className="space-y-3 rounded-lg border border-primary/30 bg-primary/5 p-4">
-            <p className="text-xs font-semibold text-foreground">
-              ¿Personal interno BASUF? Ingresa el código maestro para obtener rol
-              de administrador.
-            </p>
-            <input
-              type="password"
-              required
-              placeholder="Código interno BASUF"
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-ring"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-            />
-            <p className="text-[11px] text-muted-foreground">
-              Demo: <span className="font-mono">BASUF-MASTER</span>
-            </p>
-            {claimError && (
-              <p className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-xs text-destructive">
-                {claimError}
-              </p>
-            )}
-            <button
-              type="submit"
-              disabled={busy}
-              className="inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:opacity-60"
-            >
-              <KeyRound className="h-4 w-4" aria-hidden />
-              {busy ? "Verificando…" : "Reclamar rol BASUF Master"}
-            </button>
-          </form>
 
           <button
             type="button"
             onClick={() => void signOut()}
-            className="mt-6 inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium transition hover:bg-accent"
+            className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium transition hover:bg-accent"
           >
             <LogOut className="h-4 w-4" aria-hidden />
             Cerrar sesión
