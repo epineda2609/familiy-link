@@ -233,7 +233,7 @@ export function getCaseHistoryByPerson(personId: string): CaseHistory | null {
   // De-dup by id (cloud may already carry mirrors of the same event)
   const seen = new Set<string>();
   const deduped = events.filter((e) => (seen.has(e.id) ? false : (seen.add(e.id), true)));
-  deduped.sort((a, b) => (a.at < b.at ? -1 : 1));
+  sortEventsLogically(deduped);
 
   // Kick off async cloud hydration on first access.
   void hydratePerson(personId);
