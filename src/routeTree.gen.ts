@@ -28,6 +28,7 @@ import { Route as InstitutionalIntegrationsRouteImport } from './routes/institut
 import { Route as InstitutionalInstitutionsRouteImport } from './routes/institutional.institutions'
 import { Route as InstitutionalAuditRouteImport } from './routes/institutional.audit'
 import { Route as InstitutionalAcceptInviteRouteImport } from './routes/institutional.accept-invite'
+import { Route as PersonIdTimelineRouteImport } from './routes/person.$id.timeline'
 
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
@@ -127,6 +128,11 @@ const InstitutionalAcceptInviteRoute =
     path: '/accept-invite',
     getParentRoute: () => InstitutionalRoute,
   } as any)
+const PersonIdTimelineRoute = PersonIdTimelineRouteImport.update({
+  id: '/timeline',
+  path: '/timeline',
+  getParentRoute: () => PersonIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -144,10 +150,11 @@ export interface FileRoutesByFullPath {
   '/institutional/institutions': typeof InstitutionalInstitutionsRoute
   '/institutional/integrations': typeof InstitutionalIntegrationsRoute
   '/institutional/matches': typeof InstitutionalMatchesRoute
-  '/person/$id': typeof PersonIdRoute
+  '/person/$id': typeof PersonIdRouteWithChildren
   '/rescue/$code': typeof RescueCodeRoute
   '/safe-id/$code': typeof SafeIdCodeRoute
   '/institutional/': typeof InstitutionalIndexRoute
+  '/person/$id/timeline': typeof PersonIdTimelineRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -164,10 +171,11 @@ export interface FileRoutesByTo {
   '/institutional/institutions': typeof InstitutionalInstitutionsRoute
   '/institutional/integrations': typeof InstitutionalIntegrationsRoute
   '/institutional/matches': typeof InstitutionalMatchesRoute
-  '/person/$id': typeof PersonIdRoute
+  '/person/$id': typeof PersonIdRouteWithChildren
   '/rescue/$code': typeof RescueCodeRoute
   '/safe-id/$code': typeof SafeIdCodeRoute
   '/institutional': typeof InstitutionalIndexRoute
+  '/person/$id/timeline': typeof PersonIdTimelineRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -186,10 +194,11 @@ export interface FileRoutesById {
   '/institutional/institutions': typeof InstitutionalInstitutionsRoute
   '/institutional/integrations': typeof InstitutionalIntegrationsRoute
   '/institutional/matches': typeof InstitutionalMatchesRoute
-  '/person/$id': typeof PersonIdRoute
+  '/person/$id': typeof PersonIdRouteWithChildren
   '/rescue/$code': typeof RescueCodeRoute
   '/safe-id/$code': typeof SafeIdCodeRoute
   '/institutional/': typeof InstitutionalIndexRoute
+  '/person/$id/timeline': typeof PersonIdTimelineRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -213,6 +222,7 @@ export interface FileRouteTypes {
     | '/rescue/$code'
     | '/safe-id/$code'
     | '/institutional/'
+    | '/person/$id/timeline'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -233,6 +243,7 @@ export interface FileRouteTypes {
     | '/rescue/$code'
     | '/safe-id/$code'
     | '/institutional'
+    | '/person/$id/timeline'
   id:
     | '__root__'
     | '/'
@@ -254,6 +265,7 @@ export interface FileRouteTypes {
     | '/rescue/$code'
     | '/safe-id/$code'
     | '/institutional/'
+    | '/person/$id/timeline'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -267,7 +279,7 @@ export interface RootRouteChildren {
   ReportRoute: typeof ReportRoute
   RescueRoute: typeof RescueRouteWithChildren
   SearchRoute: typeof SearchRoute
-  PersonIdRoute: typeof PersonIdRoute
+  PersonIdRoute: typeof PersonIdRouteWithChildren
   SafeIdCodeRoute: typeof SafeIdCodeRoute
 }
 
@@ -406,6 +418,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstitutionalAcceptInviteRouteImport
       parentRoute: typeof InstitutionalRoute
     }
+    '/person/$id/timeline': {
+      id: '/person/$id/timeline'
+      path: '/timeline'
+      fullPath: '/person/$id/timeline'
+      preLoaderRoute: typeof PersonIdTimelineRouteImport
+      parentRoute: typeof PersonIdRoute
+    }
   }
 }
 
@@ -442,6 +461,18 @@ const RescueRouteChildren: RescueRouteChildren = {
 const RescueRouteWithChildren =
   RescueRoute._addFileChildren(RescueRouteChildren)
 
+interface PersonIdRouteChildren {
+  PersonIdTimelineRoute: typeof PersonIdTimelineRoute
+}
+
+const PersonIdRouteChildren: PersonIdRouteChildren = {
+  PersonIdTimelineRoute: PersonIdTimelineRoute,
+}
+
+const PersonIdRouteWithChildren = PersonIdRoute._addFileChildren(
+  PersonIdRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
@@ -453,7 +484,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReportRoute: ReportRoute,
   RescueRoute: RescueRouteWithChildren,
   SearchRoute: SearchRoute,
-  PersonIdRoute: PersonIdRoute,
+  PersonIdRoute: PersonIdRouteWithChildren,
   SafeIdCodeRoute: SafeIdCodeRoute,
 }
 export const routeTree = rootRouteImport

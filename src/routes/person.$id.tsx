@@ -11,6 +11,10 @@ import {
   MessageSquare,
   Flag,
   Camera,
+  Building2,
+  Users,
+  Clock,
+  Link2,
 } from "lucide-react";
 import { DemoBanner } from "../components/DemoBanner";
 import { SiteHeader } from "../components/SiteHeader";
@@ -35,6 +39,8 @@ import { useMode } from "../modes/OperationalModeProvider";
 import { ShareDialog } from "../components/ShareDialog";
 import { CaseUpdateDialog } from "../components/CaseUpdateDialog";
 import { useCaseUpdates } from "../repositories/CaseUpdateRepository";
+import { matchingRepository, type EnrichedMatch } from "../repositories/MatchingRepository";
+
 
 export const Route = createFileRoute("/person/$id")({
   loader: async ({ params }) => {
