@@ -9,64 +9,29 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as InstitutionalRouteImport } from './routes/institutional'
-import { Route as ModesRouteImport } from './routes/modes'
-import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as ProtocolsRouteImport } from './routes/protocols'
-import { Route as ReportRouteImport } from './routes/report'
-import { Route as RescueRouteImport } from './routes/rescue'
 import { Route as SearchRouteImport } from './routes/search'
+import { Route as RescueRouteImport } from './routes/rescue'
+import { Route as ReportRouteImport } from './routes/report'
+import { Route as ProtocolsRouteImport } from './routes/protocols'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ModesRouteImport } from './routes/modes'
+import { Route as InstitutionalRouteImport } from './routes/institutional'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as InstitutionalIndexRouteImport } from './routes/institutional.index'
-import { Route as InstitutionalAcceptInviteRouteImport } from './routes/institutional.accept-invite'
-import { Route as InstitutionalAuditRouteImport } from './routes/institutional.audit'
-import { Route as InstitutionalInstitutionsRouteImport } from './routes/institutional.institutions'
-import { Route as InstitutionalIntegrationsRouteImport } from './routes/institutional.integrations'
-import { Route as InstitutionalMatchesRouteImport } from './routes/institutional.matches'
-import { Route as PersonIdRouteImport } from './routes/person.$id'
-import { Route as RescueCodeRouteImport } from './routes/rescue.$code'
 import { Route as SafeIdCodeRouteImport } from './routes/safe-id.$code'
+import { Route as RescueCodeRouteImport } from './routes/rescue.$code'
+import { Route as PersonIdRouteImport } from './routes/person.$id'
+import { Route as InstitutionalMatchesRouteImport } from './routes/institutional.matches'
+import { Route as InstitutionalIntegrationsRouteImport } from './routes/institutional.integrations'
+import { Route as InstitutionalInstitutionsRouteImport } from './routes/institutional.institutions'
+import { Route as InstitutionalAuditRouteImport } from './routes/institutional.audit'
+import { Route as InstitutionalAcceptInviteRouteImport } from './routes/institutional.accept-invite'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InstitutionalRoute = InstitutionalRouteImport.update({
-  id: '/institutional',
-  path: '/institutional',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ModesRoute = ModesRouteImport.update({
-  id: '/modes',
-  path: '/modes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyRoute = PrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProtocolsRoute = ProtocolsRouteImport.update({
-  id: '/protocols',
-  path: '/protocols',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReportRoute = ReportRouteImport.update({
-  id: '/report',
-  path: '/report',
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RescueRoute = RescueRouteImport.update({
@@ -74,14 +39,86 @@ const RescueRoute = RescueRouteImport.update({
   path: '/rescue',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SearchRoute = SearchRouteImport.update({
-  id: '/search',
-  path: '/search',
+const ReportRoute = ReportRouteImport.update({
+  id: '/report',
+  path: '/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProtocolsRoute = ProtocolsRouteImport.update({
+  id: '/protocols',
+  path: '/protocols',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModesRoute = ModesRouteImport.update({
+  id: '/modes',
+  path: '/modes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstitutionalRoute = InstitutionalRouteImport.update({
+  id: '/institutional',
+  path: '/institutional',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InstitutionalIndexRoute = InstitutionalIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => InstitutionalRoute,
+} as any)
+const SafeIdCodeRoute = SafeIdCodeRouteImport.update({
+  id: '/safe-id/$code',
+  path: '/safe-id/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RescueCodeRoute = RescueCodeRouteImport.update({
+  id: '/$code',
+  path: '/$code',
+  getParentRoute: () => RescueRoute,
+} as any)
+const PersonIdRoute = PersonIdRouteImport.update({
+  id: '/person/$id',
+  path: '/person/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstitutionalMatchesRoute = InstitutionalMatchesRouteImport.update({
+  id: '/matches',
+  path: '/matches',
+  getParentRoute: () => InstitutionalRoute,
+} as any)
+const InstitutionalIntegrationsRoute =
+  InstitutionalIntegrationsRouteImport.update({
+    id: '/integrations',
+    path: '/integrations',
+    getParentRoute: () => InstitutionalRoute,
+  } as any)
+const InstitutionalInstitutionsRoute =
+  InstitutionalInstitutionsRouteImport.update({
+    id: '/institutions',
+    path: '/institutions',
+    getParentRoute: () => InstitutionalRoute,
+  } as any)
+const InstitutionalAuditRoute = InstitutionalAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
   getParentRoute: () => InstitutionalRoute,
 } as any)
 const InstitutionalAcceptInviteRoute =
@@ -90,43 +127,6 @@ const InstitutionalAcceptInviteRoute =
     path: '/accept-invite',
     getParentRoute: () => InstitutionalRoute,
   } as any)
-const InstitutionalAuditRoute = InstitutionalAuditRouteImport.update({
-  id: '/audit',
-  path: '/audit',
-  getParentRoute: () => InstitutionalRoute,
-} as any)
-const InstitutionalInstitutionsRoute =
-  InstitutionalInstitutionsRouteImport.update({
-    id: '/institutions',
-    path: '/institutions',
-    getParentRoute: () => InstitutionalRoute,
-  } as any)
-const InstitutionalIntegrationsRoute =
-  InstitutionalIntegrationsRouteImport.update({
-    id: '/integrations',
-    path: '/integrations',
-    getParentRoute: () => InstitutionalRoute,
-  } as any)
-const InstitutionalMatchesRoute = InstitutionalMatchesRouteImport.update({
-  id: '/matches',
-  path: '/matches',
-  getParentRoute: () => InstitutionalRoute,
-} as any)
-const PersonIdRoute = PersonIdRouteImport.update({
-  id: '/person/$id',
-  path: '/person/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RescueCodeRoute = RescueCodeRouteImport.update({
-  id: '/$code',
-  path: '/$code',
-  getParentRoute: () => RescueRoute,
-} as any)
-const SafeIdCodeRoute = SafeIdCodeRouteImport.update({
-  id: '/safe-id/$code',
-  path: '/safe-id/$code',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -273,60 +273,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/institutional': {
-      id: '/institutional'
-      path: '/institutional'
-      fullPath: '/institutional'
-      preLoaderRoute: typeof InstitutionalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/modes': {
-      id: '/modes'
-      path: '/modes'
-      fullPath: '/modes'
-      preLoaderRoute: typeof ModesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/protocols': {
-      id: '/protocols'
-      path: '/protocols'
-      fullPath: '/protocols'
-      preLoaderRoute: typeof ProtocolsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/report': {
-      id: '/report'
-      path: '/report'
-      fullPath: '/report'
-      preLoaderRoute: typeof ReportRouteImport
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rescue': {
@@ -336,11 +287,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RescueRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/search': {
-      id: '/search'
-      path: '/search'
-      fullPath: '/search'
-      preLoaderRoute: typeof SearchRouteImport
+    '/report': {
+      id: '/report'
+      path: '/report'
+      fullPath: '/report'
+      preLoaderRoute: typeof ReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/protocols': {
+      id: '/protocols'
+      path: '/protocols'
+      fullPath: '/protocols'
+      preLoaderRoute: typeof ProtocolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/modes': {
+      id: '/modes'
+      path: '/modes'
+      fullPath: '/modes'
+      preLoaderRoute: typeof ModesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/institutional': {
+      id: '/institutional'
+      path: '/institutional'
+      fullPath: '/institutional'
+      preLoaderRoute: typeof InstitutionalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/institutional/': {
@@ -350,46 +350,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstitutionalIndexRouteImport
       parentRoute: typeof InstitutionalRoute
     }
-    '/institutional/accept-invite': {
-      id: '/institutional/accept-invite'
-      path: '/accept-invite'
-      fullPath: '/institutional/accept-invite'
-      preLoaderRoute: typeof InstitutionalAcceptInviteRouteImport
-      parentRoute: typeof InstitutionalRoute
-    }
-    '/institutional/audit': {
-      id: '/institutional/audit'
-      path: '/audit'
-      fullPath: '/institutional/audit'
-      preLoaderRoute: typeof InstitutionalAuditRouteImport
-      parentRoute: typeof InstitutionalRoute
-    }
-    '/institutional/institutions': {
-      id: '/institutional/institutions'
-      path: '/institutions'
-      fullPath: '/institutional/institutions'
-      preLoaderRoute: typeof InstitutionalInstitutionsRouteImport
-      parentRoute: typeof InstitutionalRoute
-    }
-    '/institutional/integrations': {
-      id: '/institutional/integrations'
-      path: '/integrations'
-      fullPath: '/institutional/integrations'
-      preLoaderRoute: typeof InstitutionalIntegrationsRouteImport
-      parentRoute: typeof InstitutionalRoute
-    }
-    '/institutional/matches': {
-      id: '/institutional/matches'
-      path: '/matches'
-      fullPath: '/institutional/matches'
-      preLoaderRoute: typeof InstitutionalMatchesRouteImport
-      parentRoute: typeof InstitutionalRoute
-    }
-    '/person/$id': {
-      id: '/person/$id'
-      path: '/person/$id'
-      fullPath: '/person/$id'
-      preLoaderRoute: typeof PersonIdRouteImport
+    '/safe-id/$code': {
+      id: '/safe-id/$code'
+      path: '/safe-id/$code'
+      fullPath: '/safe-id/$code'
+      preLoaderRoute: typeof SafeIdCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rescue/$code': {
@@ -399,12 +364,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RescueCodeRouteImport
       parentRoute: typeof RescueRoute
     }
-    '/safe-id/$code': {
-      id: '/safe-id/$code'
-      path: '/safe-id/$code'
-      fullPath: '/safe-id/$code'
-      preLoaderRoute: typeof SafeIdCodeRouteImport
+    '/person/$id': {
+      id: '/person/$id'
+      path: '/person/$id'
+      fullPath: '/person/$id'
+      preLoaderRoute: typeof PersonIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/institutional/matches': {
+      id: '/institutional/matches'
+      path: '/matches'
+      fullPath: '/institutional/matches'
+      preLoaderRoute: typeof InstitutionalMatchesRouteImport
+      parentRoute: typeof InstitutionalRoute
+    }
+    '/institutional/integrations': {
+      id: '/institutional/integrations'
+      path: '/integrations'
+      fullPath: '/institutional/integrations'
+      preLoaderRoute: typeof InstitutionalIntegrationsRouteImport
+      parentRoute: typeof InstitutionalRoute
+    }
+    '/institutional/institutions': {
+      id: '/institutional/institutions'
+      path: '/institutions'
+      fullPath: '/institutional/institutions'
+      preLoaderRoute: typeof InstitutionalInstitutionsRouteImport
+      parentRoute: typeof InstitutionalRoute
+    }
+    '/institutional/audit': {
+      id: '/institutional/audit'
+      path: '/audit'
+      fullPath: '/institutional/audit'
+      preLoaderRoute: typeof InstitutionalAuditRouteImport
+      parentRoute: typeof InstitutionalRoute
+    }
+    '/institutional/accept-invite': {
+      id: '/institutional/accept-invite'
+      path: '/accept-invite'
+      fullPath: '/institutional/accept-invite'
+      preLoaderRoute: typeof InstitutionalAcceptInviteRouteImport
+      parentRoute: typeof InstitutionalRoute
     }
   }
 }
@@ -459,3 +459,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
