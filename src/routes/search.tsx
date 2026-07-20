@@ -106,11 +106,24 @@ function SearchPage() {
           <div className="mb-4 flex items-baseline justify-between">
             <h2 className="text-lg font-semibold">{t("search.results")}</h2>
             <span className="text-sm text-muted-foreground">
-              {results.length}
+              {visibleResults.length}
             </span>
           </div>
 
-          {results.length === 0 ? (
+          <div className="mb-4 flex items-center gap-2">
+            <input
+              id="active-only"
+              type="checkbox"
+              className="h-4 w-4 rounded border-input"
+              checked={activeOnly}
+              onChange={(e) => setActiveOnly(e.target.checked)}
+            />
+            <label htmlFor="active-only" className="text-sm text-foreground">
+              {t("search.activeOnly")}
+            </label>
+          </div>
+
+          {visibleResults.length === 0 ? (
             <EmptyState
               icon={SearchX}
               title={t("empty.search.title")}
@@ -121,7 +134,7 @@ function SearchPage() {
               key={JSON.stringify(applied)}
               className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 animate-in fade-in duration-300"
             >
-              {results.map((p) => (
+              {visibleResults.map((p) => (
                 <PersonCard key={p.id} person={p} />
               ))}
             </div>
