@@ -15,6 +15,7 @@ import { Route as ReportRouteImport } from './routes/report'
 import { Route as ProtocolsRouteImport } from './routes/protocols'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ModesRouteImport } from './routes/modes'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as InstitutionalRouteImport } from './routes/institutional'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
@@ -28,7 +29,10 @@ import { Route as InstitutionalIntegrationsRouteImport } from './routes/institut
 import { Route as InstitutionalInstitutionsRouteImport } from './routes/institutional.institutions'
 import { Route as InstitutionalAuditRouteImport } from './routes/institutional.audit'
 import { Route as InstitutionalAcceptInviteRouteImport } from './routes/institutional.accept-invite'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as PersonIdTimelineRouteImport } from './routes/person.$id.timeline'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
@@ -58,6 +62,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const ModesRoute = ModesRouteImport.update({
   id: '/modes',
   path: '/modes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InstitutionalRoute = InstitutionalRouteImport.update({
@@ -128,23 +137,44 @@ const InstitutionalAcceptInviteRoute =
     path: '/accept-invite',
     getParentRoute: () => InstitutionalRoute,
   } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const PersonIdTimelineRoute = PersonIdTimelineRouteImport.update({
   id: '/timeline',
   path: '/timeline',
   getParentRoute: () => PersonIdRoute,
 } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/institutional': typeof InstitutionalRouteWithChildren
+  '/mcp': typeof McpRoute
   '/modes': typeof ModesRoute
   '/privacy': typeof PrivacyRoute
   '/protocols': typeof ProtocolsRoute
   '/report': typeof ReportRoute
   '/rescue': typeof RescueRouteWithChildren
   '/search': typeof SearchRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/institutional/accept-invite': typeof InstitutionalAcceptInviteRoute
   '/institutional/audit': typeof InstitutionalAuditRoute
   '/institutional/institutions': typeof InstitutionalInstitutionsRoute
@@ -154,18 +184,22 @@ export interface FileRoutesByFullPath {
   '/rescue/$code': typeof RescueCodeRoute
   '/safe-id/$code': typeof SafeIdCodeRoute
   '/institutional/': typeof InstitutionalIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/person/$id/timeline': typeof PersonIdTimelineRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/mcp': typeof McpRoute
   '/modes': typeof ModesRoute
   '/privacy': typeof PrivacyRoute
   '/protocols': typeof ProtocolsRoute
   '/report': typeof ReportRoute
   '/rescue': typeof RescueRouteWithChildren
   '/search': typeof SearchRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/institutional/accept-invite': typeof InstitutionalAcceptInviteRoute
   '/institutional/audit': typeof InstitutionalAuditRoute
   '/institutional/institutions': typeof InstitutionalInstitutionsRoute
@@ -175,6 +209,7 @@ export interface FileRoutesByTo {
   '/rescue/$code': typeof RescueCodeRoute
   '/safe-id/$code': typeof SafeIdCodeRoute
   '/institutional': typeof InstitutionalIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/person/$id/timeline': typeof PersonIdTimelineRoute
 }
 export interface FileRoutesById {
@@ -183,12 +218,15 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/institutional': typeof InstitutionalRouteWithChildren
+  '/mcp': typeof McpRoute
   '/modes': typeof ModesRoute
   '/privacy': typeof PrivacyRoute
   '/protocols': typeof ProtocolsRoute
   '/report': typeof ReportRoute
   '/rescue': typeof RescueRouteWithChildren
   '/search': typeof SearchRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/institutional/accept-invite': typeof InstitutionalAcceptInviteRoute
   '/institutional/audit': typeof InstitutionalAuditRoute
   '/institutional/institutions': typeof InstitutionalInstitutionsRoute
@@ -198,6 +236,7 @@ export interface FileRoutesById {
   '/rescue/$code': typeof RescueCodeRoute
   '/safe-id/$code': typeof SafeIdCodeRoute
   '/institutional/': typeof InstitutionalIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/person/$id/timeline': typeof PersonIdTimelineRoute
 }
 export interface FileRouteTypes {
@@ -207,12 +246,15 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/institutional'
+    | '/mcp'
     | '/modes'
     | '/privacy'
     | '/protocols'
     | '/report'
     | '/rescue'
     | '/search'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/institutional/accept-invite'
     | '/institutional/audit'
     | '/institutional/institutions'
@@ -222,18 +264,22 @@ export interface FileRouteTypes {
     | '/rescue/$code'
     | '/safe-id/$code'
     | '/institutional/'
+    | '/.mcp/invoke-tool/$tool'
     | '/person/$id/timeline'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/contact'
+    | '/mcp'
     | '/modes'
     | '/privacy'
     | '/protocols'
     | '/report'
     | '/rescue'
     | '/search'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/institutional/accept-invite'
     | '/institutional/audit'
     | '/institutional/institutions'
@@ -243,6 +289,7 @@ export interface FileRouteTypes {
     | '/rescue/$code'
     | '/safe-id/$code'
     | '/institutional'
+    | '/.mcp/invoke-tool/$tool'
     | '/person/$id/timeline'
   id:
     | '__root__'
@@ -250,12 +297,15 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/institutional'
+    | '/mcp'
     | '/modes'
     | '/privacy'
     | '/protocols'
     | '/report'
     | '/rescue'
     | '/search'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/institutional/accept-invite'
     | '/institutional/audit'
     | '/institutional/institutions'
@@ -265,6 +315,7 @@ export interface FileRouteTypes {
     | '/rescue/$code'
     | '/safe-id/$code'
     | '/institutional/'
+    | '/.mcp/invoke-tool/$tool'
     | '/person/$id/timeline'
   fileRoutesById: FileRoutesById
 }
@@ -273,14 +324,18 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   InstitutionalRoute: typeof InstitutionalRouteWithChildren
+  McpRoute: typeof McpRoute
   ModesRoute: typeof ModesRoute
   PrivacyRoute: typeof PrivacyRoute
   ProtocolsRoute: typeof ProtocolsRoute
   ReportRoute: typeof ReportRoute
   RescueRoute: typeof RescueRouteWithChildren
   SearchRoute: typeof SearchRoute
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   PersonIdRoute: typeof PersonIdRouteWithChildren
   SafeIdCodeRoute: typeof SafeIdCodeRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -325,6 +380,13 @@ declare module '@tanstack/react-router' {
       path: '/modes'
       fullPath: '/modes'
       preLoaderRoute: typeof ModesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/institutional': {
@@ -418,12 +480,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstitutionalAcceptInviteRouteImport
       parentRoute: typeof InstitutionalRoute
     }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/person/$id/timeline': {
       id: '/person/$id/timeline'
       path: '/timeline'
       fullPath: '/person/$id/timeline'
       preLoaderRoute: typeof PersonIdTimelineRouteImport
       parentRoute: typeof PersonIdRoute
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -478,14 +561,19 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   InstitutionalRoute: InstitutionalRouteWithChildren,
+  McpRoute: McpRoute,
   ModesRoute: ModesRoute,
   PrivacyRoute: PrivacyRoute,
   ProtocolsRoute: ProtocolsRoute,
   ReportRoute: ReportRoute,
   RescueRoute: RescueRouteWithChildren,
   SearchRoute: SearchRoute,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   PersonIdRoute: PersonIdRouteWithChildren,
   SafeIdCodeRoute: SafeIdCodeRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
