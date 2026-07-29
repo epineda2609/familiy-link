@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "sdk_version": "0.25.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://vikixhakmfkcmwrhbkjo.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "familiy-link",
+      "version": "0.1.0",
+      "title": "Familiy Link"
+    },
+    "tools": [
+      {
+        "name": "list_emergencies",
+        "title": "Listar emergencias",
+        "description": "Lista los eventos humanitarios (emergencias) registrados en BASUF, del más reciente al más antiguo.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "status": {
+              "description": "Filtrar por estado del evento, por ejemplo active.",
+              "type": "string"
+            },
+            "limit": {
+              "description": "Máximo de resultados (por defecto 20).",
+              "type": "number"
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_persons",
+        "title": "Buscar personas",
+        "description": "Busca fichas de personas registradas en BASUF por nombre, país o estado del caso.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "query": {
+              "description": "Texto parcial del nombre de la persona.",
+              "type": "string"
+            },
+            "country": {
+              "description": "Código o nombre del país.",
+              "type": "string"
+            },
+            "status": {
+              "description": "Estado del caso, por ejemplo missing, searching, located, reunited.",
+              "type": "string"
+            },
+            "limit": {
+              "description": "Máximo de resultados (por defecto 20).",
+              "type": "number"
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_person_by_code",
+        "title": "Ver ficha por ID BASUF",
+        "description": "Obtiene la ficha de una persona a partir de su identificador público BASUF (por ejemplo BASUF-VE-9AA3).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "ID BASUF público de la persona."
+            }
+          },
+          "required": [
+            "code"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_potential_matches",
+        "title": "Listar posibles coincidencias",
+        "description": "Lista posibles coincidencias entre fichas de personas, pendientes de revisión humana.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "person_id": {
+              "description": "UUID de una persona para filtrar sus coincidencias.",
+              "type": "string"
+            },
+            "limit": {
+              "description": "Máximo de resultados (por defecto 20).",
+              "type": "number"
+            }
+          }
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
