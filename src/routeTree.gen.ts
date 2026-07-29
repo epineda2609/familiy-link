@@ -33,6 +33,7 @@ import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } fr
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as PersonIdTimelineRouteImport } from './routes/person.$id.timeline'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
@@ -160,6 +161,11 @@ const Char91DotmcpChar93InvokeToolToolRoute =
     path: '/.mcp/invoke-tool/$tool',
     getParentRoute: () => rootRouteImport,
   } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -184,6 +190,7 @@ export interface FileRoutesByFullPath {
   '/rescue/$code': typeof RescueCodeRoute
   '/safe-id/$code': typeof SafeIdCodeRoute
   '/institutional/': typeof InstitutionalIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/person/$id/timeline': typeof PersonIdTimelineRoute
 }
@@ -209,6 +216,7 @@ export interface FileRoutesByTo {
   '/rescue/$code': typeof RescueCodeRoute
   '/safe-id/$code': typeof SafeIdCodeRoute
   '/institutional': typeof InstitutionalIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/person/$id/timeline': typeof PersonIdTimelineRoute
 }
@@ -236,6 +244,7 @@ export interface FileRoutesById {
   '/rescue/$code': typeof RescueCodeRoute
   '/safe-id/$code': typeof SafeIdCodeRoute
   '/institutional/': typeof InstitutionalIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/person/$id/timeline': typeof PersonIdTimelineRoute
 }
@@ -264,6 +273,7 @@ export interface FileRouteTypes {
     | '/rescue/$code'
     | '/safe-id/$code'
     | '/institutional/'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/person/$id/timeline'
   fileRoutesByTo: FileRoutesByTo
@@ -289,6 +299,7 @@ export interface FileRouteTypes {
     | '/rescue/$code'
     | '/safe-id/$code'
     | '/institutional'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/person/$id/timeline'
   id:
@@ -315,6 +326,7 @@ export interface FileRouteTypes {
     | '/rescue/$code'
     | '/safe-id/$code'
     | '/institutional/'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/person/$id/timeline'
   fileRoutesById: FileRoutesById
@@ -335,6 +347,7 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   PersonIdRoute: typeof PersonIdRouteWithChildren
   SafeIdCodeRoute: typeof SafeIdCodeRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
 }
 
@@ -508,6 +521,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -573,6 +593,7 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   PersonIdRoute: PersonIdRouteWithChildren,
   SafeIdCodeRoute: SafeIdCodeRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
 }
 export const routeTree = rootRouteImport
